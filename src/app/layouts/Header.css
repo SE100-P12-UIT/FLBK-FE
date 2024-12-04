@@ -1,0 +1,31 @@
+.navbar {
+    padding: 10px 0;
+  }
+  
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-brand img {
+    margin-right: 10px; /* Space between the image and text */
+  }
+  
+  .navbar-text {
+    flex-shrink: 0;
+    color: #000;
+    font-family: Unbounded;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-nav button {
+    margin-left: 10px; /* Space between buttons */
+  }

@@ -1,0 +1,143 @@
+.main-content {
+    text-align: center;
+    padding: 50px 20px;
+  }
+  
+  .hero-image h1{
+    color: var(--Neutrals, #FFF);
+    text-align: center;
+    font-family: Unbounded;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+  }
+
+  .hero-image p{
+    color: #FFF;
+    text-align: center;
+
+    /* Unbounded/Regular/32px */
+    font-family: Unbounded;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .hero-image {
+    width: 1380px;
+    height: 581px;
+    flex-shrink: 0;
+    border-radius: 0 0 24px 24px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.60) 100%), url('/public/travel.png'); /* Adjust the path */
+    background-size: cover;
+    color: white; /* Change text color for visibility */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .booking-section {
+    display: flex;
+    width: 1232px; /* Set the width */
+    padding: 16px 32px 32px 32px; /* Padding */
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the start */
+    gap: 32px; /* Space between items */
+    border-radius: 16px; /* Rounded corners */
+    background: var(--Neutrals, #FFF); /* Background color */
+    box-shadow: 0px 4px 16px 0px rgba(141, 211, 187, 0.15); /* Shadow effect */
+    margin: -100px auto 20px; /* Negative margin to pull it up over the image */
+    position: relative; /* Position relative for stacking context */
+    z-index: 1; /* Ensure it appears above the hero image */
+  }
+  
+  .booking-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 10px 0;
+  }
+  
+  .booking-section .btn{
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background-color: #8DD3BB; /* Button color */
+    color: rgb(0, 0, 0); /* Button text color */
+    border: none; /* Remove border */
+    border-radius: 5px; 
+  }
+
+  input {
+    padding: 10px;
+    width: 300px; /* Adjust width as necessary */
+    border: none;
+    border-radius: 5px;
+  }
+
+  .flight-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align text */
+    position: absolute; /* Position absolute to overlap the second image */
+    bottom: 25px; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center the section */
+    padding: 20px; /* Padding around the text */
+    border-radius: 10px; /* Rounded corners */
+    z-index: 2; /* Ensure it appears above the second image */
+    text-align: center; /* Center text */
+  }
+  
+  .flight-section h2{
+    color: var(--Neutrals, #FFF);
+    text-align: center;
+    /* TradeGothic/Bold/40px */
+    font-family: TradeGothic,Bold;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .flight-section p {
+    color: var(--Neutrals, #FFF);
+    text-align: center;
+    /* Montserrat/Regular/16px */
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .flight-section .btn {
+    margin-top: 10px; /* Space above the button */
+    padding: 10px 20px; /* Button padding */
+    background-color: #8DD3BB; /* Button color */
+    color: rgb(0, 0, 0); /* Button text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+  }
+  
+  .second-image {
+    width: 1235px;
+    height: 559px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: url('/public/airport.jfif') lightgray -2.087px 0px / 123.536% 100% no-repeat; /* Adjust the path */
+    margin: 40px auto; /* Center the image */
+    position: relative;
+  }
