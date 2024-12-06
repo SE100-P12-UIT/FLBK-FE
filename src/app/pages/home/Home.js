@@ -102,7 +102,7 @@ const Home = () => {
 
   return (
     <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      sx={{ display: "flex", minWidth:'300px',flexDirection: "column", alignItems: "center" }}
     >
       <Header />
 
@@ -112,6 +112,7 @@ const Home = () => {
           position: "relative",
           height: "50vh",
           width: "90vw",
+          minWidth:'300px',
           backgroundImage: `url(${homepage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -171,7 +172,7 @@ const Home = () => {
         </Box>
 
         <Grid container spacing={2} alignItems="center" sx={{ p: 2 }}>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Autocomplete
               value={departure}
               onChange={(event, newValue) => setDeparture(newValue)}
@@ -182,7 +183,7 @@ const Home = () => {
             />
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Autocomplete
               value={destination}
               onChange={(event, newValue) => setDestination(newValue)}
@@ -193,7 +194,7 @@ const Home = () => {
             />
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Autocomplete
               value={passengerCount}
               onChange={(event, newValue) => setPassengerCount(newValue)}
@@ -204,7 +205,7 @@ const Home = () => {
             />
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Autocomplete
               value={ticketType}
               onChange={(event, newValue) => setTicketType(newValue)}
@@ -228,7 +229,7 @@ const Home = () => {
         sx={{
           display: "flex",
           position: "relative",
-          height: "50vh",
+          height: "fit-content",
           width: "80vw",
           backgroundImage: `url(${flight})`,
           backgroundSize: "cover",
@@ -276,7 +277,7 @@ const Home = () => {
             variant="contained"
             onClick={handleSearch}
             color="primary"
-            sx={{ width: "25%", alignSelf: "center" }}
+            sx={{ width: "25%", alignSelf: "center",marginBottom:2, }}
           >
             <SendIcon />
             <Typography variant="h6">Tìm kiếm chuyến bay</Typography>

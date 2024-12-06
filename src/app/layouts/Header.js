@@ -9,9 +9,10 @@ const Header = () => {
       sx={{
         backgroundColor: 'transparent', 
         boxShadow: 'none', 
+        minWidth:'400px'
       }}
     >
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
+      <Toolbar sx={{ justifyContent: 'space-between', flexDirection: { xs: 'column', sm: 'row' }}}>
         {/* Left Section: Icon Button + Text */}
         <Box sx={{ display: 'flex', alignItems: 'center', marginLeft:8, }}>
           <IconButton color="inherit" >
@@ -28,7 +29,7 @@ const Header = () => {
         </Box>
 
         {/* Right Section: Login and Register Buttons */}
-        <Box sx={{marginRight:8}}>
+        <Box sx={{marginRight:8, }}>
           <Button variant='outlined' sx={{ marginRight: 2,textShadow: `
           2px 2px 4px white, 
           -2px -2px 4px white, 
