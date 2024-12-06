@@ -277,7 +277,7 @@ const Home = () => {
             variant="contained"
             onClick={handleSearch}
             color="primary"
-            sx={{ width: "25%", alignSelf: "center",marginBottom:2, }}
+            sx={{ width: "fit-content", alignSelf: "center",marginBottom:2, }}
           >
             <SendIcon />
             <Typography variant="h6">Tìm kiếm chuyến bay</Typography>
