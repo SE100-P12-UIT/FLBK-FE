@@ -13,6 +13,7 @@ import homepage from "./../../assets/images/homepage.png";
 import flight from "./../../assets/images/flight.png";
 import SendIcon from "@mui/icons-material/Send";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import ScrollToTopButton from "../../components/ScrollToTopButton";
 
 const vietnamCities = [
   "Hà Nội",
@@ -284,7 +285,7 @@ const Home = () => {
           </Button>
         </Box>
       </Box>
-
+          <ScrollToTopButton/>
       <Box sx={{ display: "flex", width: "100vw" }}>
         <Footer />
       </Box>

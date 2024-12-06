@@ -5,7 +5,7 @@ import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 const Header = () => {
   return (
     <AppBar 
-      position="sticky" 
+      position="static" 
       sx={{
         backgroundColor: 'transparent', 
         boxShadow: 'none', 
@@ -17,7 +17,7 @@ const Header = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', marginLeft:8, }}>
           <IconButton color="inherit" >
             <AirplaneTicketIcon />
-            <Typography variant="h6" sx={{ ml: 1, textShadow: `
+            <Typography variant="h6" sx={{ ml: 1, color:'#000000',textShadow: `
           2px 2px 4px white, 
           -2px -2px 4px white, 
           2px -2px 4px white, 
@@ -30,7 +30,7 @@ const Header = () => {
 
         {/* Right Section: Login and Register Buttons */}
         <Box sx={{marginRight:8, }}>
-          <Button variant='outlined' sx={{ marginRight: 2,textShadow: `
+          <Button variant='outlined' sx={{ marginRight: 2,color:'#000000',textShadow: `
           2px 2px 4px white, 
           -2px -2px 4px white, 
           2px -2px 4px white, 
