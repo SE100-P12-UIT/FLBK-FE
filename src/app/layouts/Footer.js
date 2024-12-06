@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Grid, Link, SvgIcon, IconButton } from '@mui/material';
-import Logo from '/quanlybanvemaybay_fe/src/app/assets/icon/Logo.svg';
+import Logo from './../assets/icon/Logo.svg';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
