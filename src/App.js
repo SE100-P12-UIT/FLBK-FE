@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import { ThemeProvider, CssBaseline } from '@mui/material';
+import { ThemeProvider} from '@mui/material';
 import theme from './app/styles/muiOverride.js';
 const Home = lazy(() => import('./app/pages/home/Home.js'))
  

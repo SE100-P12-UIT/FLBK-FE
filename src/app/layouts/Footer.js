@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Grid, Link, SvgIcon, IconButton } from '@mui/material';
+import { Box, Typography, Grid, Link, IconButton } from '@mui/material';
 import Logo from './../assets/icon/Logo.svg';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import XIcon from '@mui/icons-material/X';
