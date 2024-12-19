@@ -3,58 +3,57 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import Logo from 'D://FLBK-FE/src/app/assets/icon/Logo.svg';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
+import PersonIcon from '@mui/icons-material/Person';
+import FlightIcon from '@mui/icons-material/Flight';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
 
 const NAVIGATION = [
   {
-    kind: 'header',
-    title: 'Main items',
+    segment: 'Khachhang',
+    title: 'Khách hàng',
+    icon: <PersonIcon />,
   },
   {
-    segment: 'dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
+    segment: 'Lichchuyenbay',
+    title: 'Lịch chuyến bay',
+    icon: <FlightIcon />,
   },
   {
-    segment: 'orders',
-    title: 'Orders',
+    segment: 'Ghinhandatve',
+    title: 'Ghi nhận đặt vé',
     icon: <ShoppingCartIcon />,
   },
   {
-    kind: 'divider',
+    segment: 'Ghinhanhuyve',
+    title: 'Ghi nhận hủy vé',
+    icon: <DeleteForeverIcon />,
   },
   {
-    kind: 'header',
-    title: 'Analytics',
-  },
-  {
-    segment: 'reports',
-    title: 'Reports',
+    segment: 'Lapbaocao',
+    title: 'Lập báo cáo',
     icon: <BarChartIcon />,
     children: [
       {
-        segment: 'sales',
-        title: 'Sales',
+        segment: 'Doanhthutheothang',
+        title: 'Doanh thu theo tháng',
         icon: <DescriptionIcon />,
       },
       {
-        segment: 'traffic',
-        title: 'Traffic',
+        segment: 'Doanhthutheonam',
+        title: 'Doanh thu theo năm',
         icon: <DescriptionIcon />,
       },
     ],
   },
   {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
+    kind: 'divider',
   },
 ];
 
@@ -106,11 +105,17 @@ function Dashboard(props) {
     // preview-start
     <AppProvider
       navigation={NAVIGATION}
+      branding={{
+        logo: <img src={Logo} alt="Logo" />,
+        title: 'FLBK',
+        homeUrl: '/toolpad/core/introduction',
+      }}
       router={router}
       theme={demoTheme}
       window={demoWindow}
     >
       <DashboardLayout>
+        
         <DemoPageContent pathname={router.pathname} />
       </DashboardLayout>
     </AppProvider>
