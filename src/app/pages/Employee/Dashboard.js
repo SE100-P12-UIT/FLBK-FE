@@ -1,8 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
 import Logo from 'D://FLBK-FE/src/app/assets/icon/Logo.svg';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -13,6 +10,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
+import { Box, createTheme } from '@mui/material';
+import CustomerList from './CustomerList';
 
 const NAVIGATION = [
   {
@@ -73,6 +72,7 @@ const demoTheme = createTheme({
   },
 });
 
+
 function DemoPageContent({ pathname }) {
   return (
     <Box
@@ -80,11 +80,13 @@ function DemoPageContent({ pathname }) {
         py: 4,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
+        padding: '10px'
+        // alignItems: 'center',
+        // textAlign: 'center',
       }}
     >
-      <Typography>Dashboard content for {pathname}</Typography>
+      {pathname === "/Khachhang" ? (<CustomerList />) : <></>}
+      {/* <Typography>Dashboard content for {pathname}</Typography> */}
     </Box>
   );
 }
@@ -108,14 +110,13 @@ function Dashboard(props) {
       branding={{
         logo: <img src={Logo} alt="Logo" />,
         title: 'FLBK',
-        homeUrl: '/toolpad/core/introduction',
       }}
       router={router}
       theme={demoTheme}
       window={demoWindow}
     >
       <DashboardLayout>
-        
+
         <DemoPageContent pathname={router.pathname} />
       </DashboardLayout>
     </AppProvider>
