@@ -3,30 +3,60 @@ import {
     TextField, InputAdornment, TablePagination
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
 
-const data = [
-    { id: '#0001', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
-    { id: '#0002', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
-    { id: '#0003', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
-    { id: '#0004', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
-    { id: '#0005', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
-    { id: '#0006', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
-    { id: '#0007', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
-    { id: '#0008', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
-    { id: '#0009', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
-    { id: '#0010', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
-    { id: '#0011', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
-    { id: '#0012', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
-]; // đổi data nếu call API
+// const data1 = [
+//     { id: '#0001', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
+//     { id: '#0002', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
+//     { id: '#0003', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
+//     { id: '#0004', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
+//     { id: '#0005', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
+//     { id: '#0006', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
+//     { id: '#0007', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
+//     { id: '#0008', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
+//     { id: '#0009', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
+//     { id: '#0010', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
+//     { id: '#0011', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
+//     { id: '#0012', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
+// ]; // đổi data nếu call API
 
 const CustomerList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [page, setPage] = useState(0); // Trang hiện tại
     const [rowsPerPage, setRowsPerPage] = useState(5); // Số dòng trên mỗi trang
 
-    const filteredData = data.filter((item) =>
-        item.phone.includes(searchTerm)
+    const [data, setData] = useState([]); // State để lưu dữ liệu
+    const [loading, setLoading] = useState(true); // Trạng thái loading
+    const [error, setError] = useState(null); // Trạng thái lỗi
+
+    // Gọi API 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('https://dummyjson.com/users'); // Thay API đúng vào đây
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
+                console.log('Dữ liệu từ API:', result);
+                setData(result.users || []); // Lưu dữ liệu vào state
+                setLoading(false); // Tắt trạng thái loading
+            } catch (error) {
+                console.error('Lỗi khi gọi API:', error);
+                setError('Không thể tải dữ liệu');
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Hiển thị trạng thái loading hoặc lỗi
+    if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
+    if (error) return <Typography color="error">{error}</Typography>;
+
+    const filteredData = data.filter(
+        (item) => item.phone && item.phone.includes(searchTerm)
     );
 
     const paginatedData = filteredData.slice(
