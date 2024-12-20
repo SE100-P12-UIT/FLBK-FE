@@ -13,6 +13,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
+import { colors } from '@mui/material';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const NAVIGATION = [
   {
@@ -61,7 +63,41 @@ const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
   },
-  colorSchemes: { light: true, dark: true },
+  colorSchemes: {
+    
+    light: {
+      palette: {
+        primary: {
+          main: '#8DD3BB',
+          light: '#DDFAF0',
+          dark:'#112211',
+        },
+        background: {
+          default: '#F0F3F5',
+          paper: '#FFFFFF',
+        },
+      },
+    },
+    dark: {
+      palette: {
+        primary: {
+          main: '#FFFFFF',
+          light: '#FFFFFF',
+          dark:'#DDFAF0',
+        },
+        background: {
+          default: '#11221160',
+          paper: '#112211',
+        },
+      },
+    },
+  },
+  typography: {
+    fontFamily: [
+      'unbounded', 'sans-serif'
+    ].join(','),
+    
+  },
   breakpoints: {
     values: {
       xs: 0,
@@ -71,9 +107,12 @@ const demoTheme = createTheme({
       xl: 1536,
     },
   },
+  
 });
 
 function DemoPageContent({ pathname }) {
+  const Navigate = useNavigate();
+  Navigate(pathname);
   return (
     <Box
       sx={{
@@ -84,7 +123,8 @@ function DemoPageContent({ pathname }) {
         textAlign: 'center',
       }}
     >
-      <Typography>Dashboard content for {pathname}</Typography>
+      
+      {pathname}
     </Box>
   );
 }
@@ -104,6 +144,7 @@ function Dashboard(props) {
   return (
     // preview-start
     <AppProvider
+      
       navigation={NAVIGATION}
       branding={{
         logo: <img src={Logo} alt="Logo" />,
