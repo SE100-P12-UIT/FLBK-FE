@@ -6,6 +6,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PersonIcon from '@mui/icons-material/Person';
 import FlightIcon from '@mui/icons-material/Flight';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
@@ -54,7 +56,22 @@ const NAVIGATION = [
   {
     kind: 'divider',
   },
+  {
+    kind: 'divider',
+  },
+  {
+    segment: 'Caidat',
+    title: 'Cài đặt',
+    icon: <SettingsIcon />,
+  },
+  {
+    segment: 'Dangxuat',
+    title: 'Đăng xuất',
+    icon: <LogoutIcon />,
+  },
 ];
+
+
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -116,7 +133,6 @@ function Dashboard(props) {
       window={demoWindow}
     >
       <DashboardLayout>
-
         <DemoPageContent pathname={router.pathname} />
       </DashboardLayout>
     </AppProvider>

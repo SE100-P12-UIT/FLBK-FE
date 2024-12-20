@@ -18,7 +18,7 @@ const data = [
     { id: '#0010', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
     { id: '#0011', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
     { id: '#0012', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
-];
+]; // đổi data nếu call API
 
 const CustomerList = () => {
     const [searchTerm, setSearchTerm] = useState('');
