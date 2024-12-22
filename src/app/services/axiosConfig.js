@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
 import Cookies from 'js-cookie';
-import AuthService from '../services/auth.service';
+import AuthService from '../services/authService';
 
 const axiosConfig = axios.create({
   baseURL: API_BASE_URL,

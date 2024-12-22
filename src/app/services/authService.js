@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
-import axiosConfig from '../utils/axiosConfig';
+import axiosConfig from './axiosConfig';
 import Cookies from 'js-cookie';
 
 const AUTH_ENDPOINT = `${API_BASE_URL}/auth`;
