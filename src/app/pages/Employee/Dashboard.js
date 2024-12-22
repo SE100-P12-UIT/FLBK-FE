@@ -14,6 +14,8 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
 import { Box, createTheme } from '@mui/material';
 import CustomerList from './CustomerList';
+import FlightManagement from './FlightManagement';
+
 
 const NAVIGATION = [
   {
@@ -103,6 +105,7 @@ function DemoPageContent({ pathname }) {
       }}
     >
       {pathname === "/Khachhang" ? (<CustomerList />) : <></>}
+      {pathname === "/Lichchuyenbay" ? (<FlightManagement />) : <></>}
       {/* <Typography>Dashboard content for {pathname}</Typography> */}
     </Box>
   );

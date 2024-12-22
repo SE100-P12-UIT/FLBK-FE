@@ -1,6 +1,6 @@
 import {
     Box, Card, CardContent, Typography, Table, TableHead, TableRow, TableCell, TableBody,
-    TextField, InputAdornment, TablePagination
+    TextField, InputAdornment, TablePagination,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useState, useEffect } from 'react';
@@ -41,7 +41,7 @@ const CustomerList = () => {
                 const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
                 console.log('Dữ liệu từ API:', result);
                 setData(result.users || []); // Lưu dữ liệu vào state
-                setLoading(false); // Tắt trạng thái loading
+                setLoading(false); // Tắt trạng thái loadingSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);
                 setError('Không thể tải dữ liệu');
@@ -103,7 +103,7 @@ const CustomerList = () => {
                     ),
                 }}
             />
-            <Table>
+            <Table sx={{ borderBottom: '1px solid #ddd' }}>
                 <TableHead>
                     <TableRow>
                         <TableCell>Số thứ tự</TableCell>
