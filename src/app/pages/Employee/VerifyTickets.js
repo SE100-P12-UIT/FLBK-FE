@@ -1,18 +1,14 @@
 import {
     Box, Card, CardContent, Typography, Table, TableHead, TableRow, TableCell, TableBody,
     TextField, InputAdornment, TablePagination,
-    IconButton,
     Button,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useState, useEffect } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
 
+const apiurl = 'https://dummyjson.com/products' // api 
 
-
-const FlightManagement = () => {
+const VerifyTickets = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [page, setPage] = useState(0); // Trang hiện tại
     const [rowsPerPage, setRowsPerPage] = useState(10); // Số dòng trên mỗi trang
@@ -25,13 +21,13 @@ const FlightManagement = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://dummyjson.com/users'); // Thay API đúng vào đây
+                const response = await fetch(apiurl);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
                 console.log('Dữ liệu từ API:', result);
-                setData(result.users || []); // Lưu dữ liệu vào state
+                setData(result.products || []); // Lưu dữ liệu vào state
                 setLoading(false); // Tắt trạng thái loadingSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);
@@ -46,9 +42,9 @@ const FlightManagement = () => {
     if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
     if (error) return <Typography color="error">{error}</Typography>;
 
-    const filteredData = data.filter(
-        (item) => item.phone && item.phone.includes(searchTerm)
-    );
+    const filteredData = Array.isArray(data) ? data.filter(
+        (item) => item.title && item.title.includes(searchTerm)
+    ) : [];
 
     const paginatedData = filteredData.slice(
         page * rowsPerPage,
@@ -66,31 +62,30 @@ const FlightManagement = () => {
         setPage(0);
     };
 
+    const handleConfirmClick = () => {
+        alert("Button xác nhận đã được nhấn!");
+    };
+
+    const handleCancelClick = () => {
+        alert("Button từ chối đã được nhấn!");
+    };
+
     return (
         <Box sx={{}}>
             <Box sx={{ borderBottom: '1px solid #ddd' }}>
-                <Typography variant="h4">Danh sách chuyến bay</Typography>
-                <Typography variant="body2">Toàn bộ danh sách chuyến bay sẽ hiển thị ở đây</Typography>
+                <Typography variant="h4">Danh sách vé chờ xác nhận</Typography>
+                <Typography variant="body2">Toàn bộ danh sách vé sẽ hiển thị ở đây</Typography>
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
                 <CardContent sx={{ bgcolor: '#DDFAF0' }}>
                     <Typography variant="h4">{data.length}</Typography>
-                    <Typography variant="body2">Số lượng chuyến bay</Typography>
+                    <Typography variant="body2">Số lượng Vé chờ xác nhận</Typography>
                 </CardContent>
             </Card>
-            <Box mt={2} textAlign="right">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                >
-                    Thêm chuyến bay
-                </Button>
-            </Box>
             <Box>
                 <TextField
-                    placeholder="Tìm kiếm theo..."
-                    type="number"
+                    placeholder="Tìm kiếm theo số điện thoại hoặc email"
+                    // type="number"
                     // variant="outlined"
                     fullWidth
                     margin="normal"
@@ -105,38 +100,47 @@ const FlightManagement = () => {
                     }}
                 />
             </Box>
+
             <Box sx={{ overflowX: 'auto' }}>
-                <Table sx={{ borderBottom: '1px solid #ddd', whiteSpace: 'nowrap' }}>
+                <Table sx={{ borderBottom: '1px solid #ddd' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Mã chuyến bay</TableCell>
+                            <TableCell>Số thứ tự</TableCell>
+                            <TableCell>Tên khách hàng</TableCell>
+                            <TableCell>Số điện thoại</TableCell>
+                            <TableCell>Email</TableCell>
                             <TableCell>Hãng</TableCell>
                             <TableCell>Điểm đi</TableCell>
                             <TableCell>Điểm đến</TableCell>
                             <TableCell>Thời gian khởi hành</TableCell>
-                            <TableCell>Thời gian bay dự kiến</TableCell>
-                            <TableCell>Giá vé</TableCell>
-                            <TableCell></TableCell>
+                            <TableCell>Tùy chọn</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {paginatedData.map((item, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{item.id}</TableCell>
-                                <TableCell>{item.phone}</TableCell>
-                                <TableCell>{item.phone}</TableCell>
-                                <TableCell>{item.email}</TableCell>
-                                <TableCell>{item.email}</TableCell>
-                                <TableCell>{item.phone}</TableCell>
-                                <TableCell>{item.email}</TableCell>
-                                <TableCell>
-                                    <IconButton><EditIcon></EditIcon>
-                                    </IconButton>
-                                    <IconButton><DeleteIcon></DeleteIcon>
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {paginatedData.map((item, index) => {
+                            const createdAt = new Date(item.meta.createdAt);
+                            // Chỉ hiển thị ngày (theo định dạng địa phương, ví dụ: dd/mm/yyyy hoặc mm/dd/yyyy tùy vào cài đặt)
+                            const formattedDate = createdAt.toLocaleString("en-GB");
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell>{item.id}</TableCell>
+                                    <TableCell>{item.title}</TableCell>
+                                    <TableCell>{item.title}</TableCell>
+                                    <TableCell>{item.title}</TableCell>
+                                    <TableCell>{item.title}</TableCell>
+                                    <TableCell>{formattedDate}</TableCell>
+                                    <TableCell>{item.meta.updatedAt}</TableCell>
+                                    <TableCell>{formattedDate}</TableCell>
+                                    <TableCell>
+                                        <Button variant="contained" color="success" size='small' sx={{ width: '100px' }} onClick={handleConfirmClick}>
+                                            Xác nhận
+                                        </Button>
+                                        <Button variant="outlined" color="error" size='small' sx={{ width: '100px' }} onClick={handleCancelClick}>
+                                            Từ chối
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>);
+                        })}
                     </TableBody>
                 </Table>
             </Box>
@@ -152,4 +156,5 @@ const FlightManagement = () => {
         </Box>
     )
 };
-export default FlightManagement
+
+export default VerifyTickets
