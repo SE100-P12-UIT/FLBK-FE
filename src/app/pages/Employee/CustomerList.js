@@ -20,8 +20,8 @@ import React, { useState, useEffect } from 'react';
 //     { id: '#0011', name: 'Thái Tuấn', phone: '0976865145', email: 'tthai@example.com' },
 //     { id: '#0012', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
 // ]; // đổi data nếu call API
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzY1YTg1ZTBjOGU5N2M3YmRhOGY2Y2UiLCJpYXQiOjE3MzUwMzM2MTIsImV4cCI6MTczNTAzNTQxMiwidHlwZSI6ImFjY2VzcyJ9.Igb75pH0Y7Nq70pEGbn03wlX75sqDcS_i6aRbxz3FzQ'
-const apiurl = 'https://flbk-be.up.railway.app/v1/user'
+
+const apiurl = 'https://dummyjson.com/users'
 
 const CustomerList = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -36,19 +36,13 @@ const CustomerList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(apiurl, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }); // Thay API đúng vào đây
+                const response = await fetch(apiurl); // Thay API đúng vào đây
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
                 console.log('Dữ liệu từ API:', result);
-                setData(result.results || []); // Lưu dữ liệu vào state
+                setData(result.users || []); // Lưu dữ liệu vào state
                 setLoading(false); // Tắt trạng thái loadingSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);

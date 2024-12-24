@@ -66,6 +66,15 @@ const FlightManagement = () => {
         setPage(0);
     };
 
+    const handleAddButton = () => {
+        alert("Thêm chuyến bay");
+    }
+    const handleEditButton = () => {
+        alert("Sửa chuyến bay");
+    }
+    const handleDeleteButton = () => {
+        alert("Xóa chuyến bay");
+    }
     return (
         <Box sx={{}}>
             <Box sx={{ borderBottom: '1px solid #ddd' }}>
@@ -82,6 +91,7 @@ const FlightManagement = () => {
                 <Button
                     variant="contained"
                     color="primary"
+                    onClick={handleAddButton}
                     startIcon={<AddIcon />}
                 >
                     Thêm chuyến bay
@@ -130,9 +140,9 @@ const FlightManagement = () => {
                                 <TableCell>{item.phone}</TableCell>
                                 <TableCell>{item.email}</TableCell>
                                 <TableCell>
-                                    <IconButton><EditIcon></EditIcon>
+                                    <IconButton onClick={handleEditButton}><EditIcon></EditIcon>
                                     </IconButton>
-                                    <IconButton><DeleteIcon></DeleteIcon>
+                                    <IconButton onClick={handleDeleteButton}><DeleteIcon></DeleteIcon>
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
