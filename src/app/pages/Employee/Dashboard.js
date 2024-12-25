@@ -1,18 +1,23 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
-import Logo from 'D://FLBK-FE/src/app/assets/icon/Logo.svg';
+import Logo from '../../assets/icon/Logo.svg';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PersonIcon from '@mui/icons-material/Person';
 import FlightIcon from '@mui/icons-material/Flight';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
+import { Box, createTheme } from '@mui/material';
+import CustomerList from './CustomerList';
+import FlightManagement from './FlightManagement';
+import VerifyTickets from './VerifyTickets';
+import CancelTickets from './CancelTickets';
+
 
 const NAVIGATION = [
   {
@@ -55,13 +60,77 @@ const NAVIGATION = [
   {
     kind: 'divider',
   },
+  {
+    kind: 'divider',
+  },
+  {
+    segment: 'Caidat',
+    title: 'Cài đặt',
+    icon: <SettingsIcon />,
+  },
+  {
+    segment: 'Dangxuat',
+    title: 'Đăng xuất',
+    icon: <LogoutIcon />,
+  },
 ];
+
+
 
 const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
   },
-  colorSchemes: { light: true, dark: true },
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: '#8DD3BB',
+          light: '#DDFAF0',
+          dark: '#11221190',
+        },
+        background: {
+          default: '#F0F3F5',
+          paper: '#FFFFFF',
+        },
+        action: {
+          hover: '#B2E8D6',
+          selected: '#78C8A5', 
+          focus: '#78C8A5', 
+          hoverOpacity: 0.1, 
+          selectedOpacity:0.3,
+          activatedOpacity: 0.12, 
+        },
+      },
+    },
+    dark: {
+      palette: {
+        primary: {
+          main: '#FFFFFF',
+          light: '#FFFFFF',
+          dark: '#DDFAF0',
+        },
+        background: {
+          default: '#11221160',
+          paper: '#112211',
+        },
+        action: {
+          hover: '#2A433A', 
+          selected: '#FFFFFF', 
+          focus: '#A3D6C6', 
+          hoverOpacity: 0.1,
+          selectedOpacity:0.5,
+          activatedOpacity: 0.12,
+        },
+      },
+    },
+  },
+  typography: {
+    fontFamily: [
+      'unbounded', 'sans-serif','montserrat'
+    ].join(','),
+    
+  },
   breakpoints: {
     values: {
       xs: 0,
@@ -71,7 +140,9 @@ const demoTheme = createTheme({
       xl: 1536,
     },
   },
+  
 });
+
 
 function DemoPageContent({ pathname }) {
   return (
@@ -80,11 +151,16 @@ function DemoPageContent({ pathname }) {
         py: 4,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
+        padding: '10px'
+        // alignItems: 'center',
+        // textAlign: 'center',
       }}
     >
-      <Typography>Dashboard content for {pathname}</Typography>
+      {pathname === "/Khachhang" ? (<CustomerList />) : <></>}
+      {pathname === "/Lichchuyenbay" ? (<FlightManagement />) : <></>}
+      {pathname === "/Ghinhandatve" ? (<VerifyTickets />) : <></>}
+      {pathname === "/Ghinhanhuyve" ? (<CancelTickets />) : <></>}
+      {/* <Typography>Dashboard content for {pathname}</Typography> */}
     </Box>
   );
 }
@@ -108,14 +184,12 @@ function Dashboard(props) {
       branding={{
         logo: <img src={Logo} alt="Logo" />,
         title: 'FLBK',
-        homeUrl: '/toolpad/core/introduction',
       }}
       router={router}
       theme={demoTheme}
       window={demoWindow}
     >
       <DashboardLayout>
-        
         <DemoPageContent pathname={router.pathname} />
       </DashboardLayout>
     </AppProvider>
