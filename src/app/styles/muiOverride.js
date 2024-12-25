@@ -84,7 +84,7 @@ const theme = createTheme({
     components: {
         MuiButtonBase: {
             defaultProps: {
-                disableRipple: true, // Tắt ripple cho tất cả các thành phần sử dụng ButtonBase (Button, IconButton, v.v.)
+                disableRipple: true, 
             },
         },
         MuiButton: {
@@ -98,7 +98,7 @@ const theme = createTheme({
                     color: '#000000',
                     '&:hover': {
                         backgroundColor: '#DDFAF0',
-                        color: '#112211',
+                        color: '#FFFFFF',
                     },
                 },
                 outlined: {
@@ -160,7 +160,16 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     backgroundColor: '#F9F9F9',
-                    borderRadius: '12px',
+                    borderRadius: '16px',
+                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+                },
+            },
+        },
+        MuiCardContent: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#F9F9F9',
+                    borderRadius: '16px',
                     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
                 },
             },
@@ -189,6 +198,62 @@ const theme = createTheme({
     },
 },
         },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    fontFamily: "'Montserrat', sans-serif",
+                    borderRadius: 2,
+                    
+              },
+          }  ,
+        },
+        MuiTable: {
+            styleOverrides: {
+                root: {
+                    fontFamily: "'Montserrat', sans-serif",
+                backgroundColor: '#f5f5f5', // Màu nền của Table
+                borderCollapse: 'collapse', // Gộp border của Table
+              },
+            },
+          },
+          MuiTableRow: {
+            styleOverrides: {
+                  root: {
+                    fontFamily: "'Montserrat', sans-serif",
+                '&:nth-of-type(odd)': {
+                  backgroundColor: '#eaeaea', // Màu nền cho dòng lẻ
+                },
+                '&:nth-of-type(even)': {
+                  backgroundColor: '#ffffff', // Màu nền cho dòng chẵn
+                },
+                '&:hover': {
+                  backgroundColor: '#c1e1c5', // Màu khi hover
+                },
+              },
+                  head: {
+                    fontFamily: "'Montserrat', sans-serif",
+                backgroundColor: '#8DD3BB', // Màu nền của header
+              },
+            },
+          },
+          MuiTableCell: {
+            styleOverrides: {
+                  root: {
+                    fontFamily: "'Montserrat', sans-serif",
+                padding: '12px 16px', // Padding cho ô
+                border: '1px solid #ddd', // Border của ô
+              },
+                  head: {
+                    fontFamily: "'Montserrat', sans-serif",
+                fontWeight: 'bold', // Font đậm cho header
+                color: '#112211', // Màu chữ cho header
+              },
+                  body: {
+                    fontFamily: "'Montserrat', sans-serif",
+                fontSize: '14px', // Font chữ cho body
+              },
+            },
+          },
     },
 });
 
