@@ -2,6 +2,8 @@ import {
     Box, Card, CardContent, Typography, Table, TableHead, TableRow, TableCell, TableBody,
     TextField, InputAdornment, TablePagination,
     Button,
+    TableContainer,
+    Paper,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useState, useEffect } from 'react';
@@ -75,7 +77,7 @@ const CancelTickets = () => {
                 <Typography variant="body2">Toàn bộ danh sách vé sẽ hiển thị ở đây</Typography>
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
-                <CardContent sx={{ bgcolor: '#DDFAF0' }}>
+                <CardContent sx={{  }}>
                     <Typography variant="h4">{data.length}</Typography>
                     <Typography variant="body2">Số lượng Vé chờ hủy</Typography>
                 </CardContent>
@@ -99,7 +101,7 @@ const CancelTickets = () => {
                 />
             </Box>
 
-            <Box sx={{ overflowX: 'auto' }}>
+            <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
                 <Table sx={{ borderBottom: '1px solid #ddd' }}>
                     <TableHead>
                         <TableRow>
@@ -141,7 +143,7 @@ const CancelTickets = () => {
                         })}
                     </TableBody>
                 </Table>
-            </Box>
+            </TableContainer>
 
             <TablePagination
                 component="div"

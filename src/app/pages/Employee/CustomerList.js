@@ -1,6 +1,8 @@
 import {
     Box, Card, CardContent, Typography, Table, TableHead, TableRow, TableCell, TableBody,
     TextField, InputAdornment, TablePagination,
+    TableContainer,
+    Paper,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useState, useEffect } from 'react';
@@ -84,7 +86,7 @@ const CustomerList = () => {
                 <Typography variant="body2">Toàn bộ danh sách khách hàng sẽ hiển thị ở đây</Typography>
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
-                <CardContent sx={{ bgcolor: '#DDFAF0' }}>
+                <CardContent sx={{  }}>
                     <Typography variant="h4">{data.length}</Typography>
                     <Typography variant="body2">Số lượng khách hàng</Typography>
                 </CardContent>
@@ -105,6 +107,7 @@ const CustomerList = () => {
                     ),
                 }}
             />
+            <TableContainer component={Paper} sx={{ overflowX: 'auto' }} >
             <Table sx={{ borderBottom: '1px solid #ddd' }}>
                 <TableHead>
                     <TableRow>
@@ -125,6 +128,8 @@ const CustomerList = () => {
                     ))}
                 </TableBody>
             </Table>
+            </TableContainer>
+           
             <TablePagination
                 component="div"
                 count={filteredData.length}

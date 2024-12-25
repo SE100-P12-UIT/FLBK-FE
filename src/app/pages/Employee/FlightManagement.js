@@ -4,6 +4,8 @@ import {
     IconButton, Button,
     Dialog, DialogActions, DialogContent, DialogTitle,
     FormControl, InputLabel, Select, MenuItem,
+    TableContainer,
+    Paper,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useState, useEffect } from 'react';
@@ -156,7 +158,7 @@ const FlightManagement = () => {
                 <Typography variant="body2">Toàn bộ danh sách chuyến bay sẽ hiển thị ở đây</Typography>
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
-                <CardContent sx={{ bgcolor: '#DDFAF0' }}>
+                <CardContent sx={{  }}>
                     <Typography variant="h4">{data.length}</Typography>
                     <Typography variant="body2">Số lượng chuyến bay</Typography>
                 </CardContent>
@@ -188,7 +190,7 @@ const FlightManagement = () => {
                     }}
                 />
             </Box>
-            <Box sx={{ overflowX: 'auto' }}>
+            <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
                 <Table sx={{ borderBottom: '1px solid #ddd', whiteSpace: 'nowrap' }}>
                     <TableHead>
                         <TableRow>
@@ -220,7 +222,7 @@ const FlightManagement = () => {
                         ))}
                     </TableBody>
                 </Table>
-            </Box>
+            </TableContainer>
 
             <TablePagination
                 component="div"

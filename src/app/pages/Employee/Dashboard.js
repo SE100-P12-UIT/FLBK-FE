@@ -81,7 +81,56 @@ const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
   },
-  colorSchemes: { light: true, dark: true },
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: '#8DD3BB',
+          light: '#DDFAF0',
+          dark: '#11221190',
+        },
+        background: {
+          default: '#F0F3F5',
+          paper: '#FFFFFF',
+        },
+        action: {
+          hover: '#B2E8D6',
+          selected: '#78C8A5', 
+          focus: '#78C8A5', 
+          hoverOpacity: 0.1, 
+          selectedOpacity:0.3,
+          activatedOpacity: 0.12, 
+        },
+      },
+    },
+    dark: {
+      palette: {
+        primary: {
+          main: '#FFFFFF',
+          light: '#FFFFFF',
+          dark: '#DDFAF0',
+        },
+        background: {
+          default: '#11221160',
+          paper: '#112211',
+        },
+        action: {
+          hover: '#2A433A', 
+          selected: '#FFFFFF', 
+          focus: '#A3D6C6', 
+          hoverOpacity: 0.1,
+          selectedOpacity:0.5,
+          activatedOpacity: 0.12,
+        },
+      },
+    },
+  },
+  typography: {
+    fontFamily: [
+      'unbounded', 'sans-serif','montserrat'
+    ].join(','),
+    
+  },
   breakpoints: {
     values: {
       xs: 0,
@@ -91,6 +140,7 @@ const demoTheme = createTheme({
       xl: 1536,
     },
   },
+  
 });
 
 
