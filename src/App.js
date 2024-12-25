@@ -9,16 +9,19 @@ import NotFoundPage from './app/pages/NotFound/NotFound.js';
 import SignIn from './app/pages/Authentication/SignIn/SignIn.js';
 import SignUp from './app/pages/Authentication/SignUp/SignUp.js';
 import { ToastContainer } from 'react-toastify';
+import UserProfile from './app/pages/Customer/Profile/UserProfile.js';
 
 
 const Home = lazy(() => import('./app/pages/home/Home.js'));
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Lấy trạng thái đăng nhập
-  const userRole = useSelector((state) => state.auth.role); // Lấy vai trò từ Redux
-
+  
+  const userRole = JSON.parse(localStorage.getItem("userInfo")).role;
+  
   useEffect(() => {
     console.log(userRole);
+    
   },[])
   const PublicRoutes = () => (
     <Routes>
@@ -57,8 +60,9 @@ function App() {
   // Route cho user
   const UserRoutes = () => (
     <Routes>
-      <Route path="/user/dashboard" element={<Dashboard />} /> {/* Sửa thành trang giao diện của người dùng sau */}
-      <Route path="*" element={<Navigate to="/user/dashboard" replace />} />
+      <Route path="/user/profile" element={<UserProfile />} /> {/* Sửa thành trang giao diện của người dùng sau */}
+      <Route path="/" element={<Navigate to="/user/profile" replace />} />
+      <Route path="*" element={<Navigate to="/user/profile" replace />} />
     </Routes>
   );
 
