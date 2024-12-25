@@ -1,36 +1,26 @@
+import HeartIcon from "@mui/icons-material/FavoriteBorder";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import SendIcon from "@mui/icons-material/Send";
 import {
-    Autocomplete,
-    Box,
-    Checkbox,
-    FormGroup, 
-    FormControlLabel, 
-    Slider,
-    Button,
-    Grid,
-    TextField,
-    Typography,
-  } from "@mui/material";
-  import React from "react";
-  import Header from "../../layouts/Header";
-  import Footer from "../../layouts/Footer";
-  import Emirates from "./../../assets/images/Emirates.png";
-  import FlyDubai from "./../../assets/images/FlyDubai.png";
-  import Qatar from "./../../assets/images/Qatar.png";
-  import Etihad from "./../../assets/images/Etihad.png";
-  import Melbourne from "./../../assets/images/Melbourne.png";
-  import Paris from "./../../assets/images/Paris.png";
-  import London from "./../../assets/images/London.png";
-  import Columbia from "./../../assets/images/Columbia.png";
-  import SriLanka from "./../../assets/images/SriLanka.png";
-  import SriLanka2 from "./../../assets/images/SriLanka2.png";
-  import SriLanka3 from "./../../assets/images/SriLanka3.png";
-  import SriLanka4 from "./../../assets/images/SriLanka4.png";
-  import SendIcon from "@mui/icons-material/Send";
-  import HeartIcon from "@mui/icons-material/FavoriteBorder";
-  import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-  import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-  import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-  import ScrollToTopButton from "../../components/ScrollToTopButton";
+  Autocomplete,
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Slider,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React from "react";
+import ScrollToTopButton from "../../components/ScrollToTopButton";
+import Footer from "../../layouts/Footer";
+import Header from "../../layouts/Header";
+import Emirates from "./../../assets/images/Emirates.png";
+import Etihad from "./../../assets/images/Etihad.png";
+import FlyDubai from "./../../assets/images/FlyDubai.png";
+import Qatar from "./../../assets/images/Qatar.png";
   
   const vietnamCities = [
     "Hà Nội",
