@@ -12,7 +12,8 @@ export default function SignUp() {
     <Box sx={{
       width: '100vw',
       height: '100vh',
-      
+      justifyContent: 'center',
+  gap: { xs: 8, sm: 12 },
     }}>
       <Stack
         direction="column"
@@ -49,16 +50,17 @@ export default function SignUp() {
               justifyContent: 'center',
               height: { xs: 'auto', md: '100%' },
               maxWidth: '300px',
-              width: '100%',
+              width: { xs: 'auto', md: '100%' },
+              margin: '0 auto',
             }}
           >
             <img
               src={SignupStatic1}
               alt="map"
               style={{
-                width: '120%',
-                height: '120%',
-                objectFit: 'scale-down',
+                maxWidth: '100%',
+  height: 'auto',
+  objectFit: 'contain',
                 borderRadius:2,
               }}
             />

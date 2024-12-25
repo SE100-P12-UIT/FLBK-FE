@@ -40,16 +40,12 @@ const refreshAccessToken = async (refreshToken) => {
   });
 };
 
-const register = async (name, email, password) => {
+const register = async (payload) => {
   try {
-    const response = await axios.post(`${AUTH_ENDPOINT}/register`, {
-      name,
-      email,
-      password,
-    });
+    const response = await axios.post(`${AUTH_ENDPOINT}/register`, payload);
 
     if (response.status === 201) {
-      return response.data;
+      return response;
     }
   } catch (error) {
     if (error.response) {

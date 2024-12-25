@@ -136,6 +136,19 @@ const theme = createTheme({
                 },
             },
         },
+        MuiSelect: {
+            styleOverrides: {
+                root: {
+                    borderRadius:'8px',
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '8px',
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#8DD3BB',
+                        },
+                    },
+                },
+            },
+        },
         MuiTypography: {
             styleOverrides: {
                 root: {

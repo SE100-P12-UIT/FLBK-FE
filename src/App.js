@@ -10,6 +10,7 @@ import SignIn from './app/pages/Authentication/SignIn/SignIn.js';
 import SignUp from './app/pages/Authentication/SignUp/SignUp.js';
 import { ToastContainer } from 'react-toastify';
 
+
 const Home = lazy(() => import('./app/pages/home/Home.js'));
 
 function App() {
