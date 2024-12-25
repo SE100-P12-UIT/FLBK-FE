@@ -36,19 +36,27 @@ function App() {
     <Routes>
       <Route
         path="/"
-        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'user' ? '/user/dashboard' : '/dashboard'} replace /> : <Home />}
+        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'employee' ? '/employee/dashboard' : '/search'} replace /> : <Home />}
       />
       <Route
         path="/signin"
-        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'user' ? '/user/dashboard' : '/dashboard'} replace /> : <SignIn />}
+        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'employee' ? '/employee/dashboard' : '/search'} replace /> : <SignIn />}
       />
       <Route
         path="/signup"
-        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'user' ? '/user/dashboard' : '/dashboard'} replace /> : <SignUp />}
+        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'employee' ? '/employee/dashboard' : '/search'} replace /> : <SignUp />}
       />
       <Route
         path="/home"
-        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'user' ? '/user/dashboard' : '/dashboard'} replace /> : <Home />}
+        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'employee' ? '/employee/dashboard' : '/search'} replace /> : <Home />}
+      />
+      <Route
+        path="/search"
+        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'employee' ? '/employee/dashboard' : '/search'} replace /> : <FlightSearch />}
+      />
+      <Route
+        path="/booking"
+        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'employee' ? '/employee/dashboard' : '/search'} replace /> : <BookFlight />}
       />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
@@ -57,8 +65,8 @@ function App() {
   // Route cho nhân viên
   const EmployeeRoutes = () => (
     <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/employee/dashboard" element={<Dashboard />} />
+      <Route path="*" element={<Navigate to="/employee/dashboard" replace />} />
     </Routes>
   );
 
@@ -74,8 +82,10 @@ function App() {
   const UserRoutes = () => (
     <Routes>
       <Route path="/user/profile" element={<UserProfile />} /> {/* Sửa thành trang giao diện của người dùng sau */}
-      <Route path="/" element={<Navigate to="/user/profile" replace />} />
-      <Route path="*" element={<Navigate to="/user/profile" replace />} />
+      <Route path="/search" element={<FlightSearch />} />
+      <Route path="/booking" element={<BookFlight/>}/>
+      <Route path="/" element={<Navigate to="/search" replace />} />
+      <Route path="*" element={<Navigate to="/search" replace />} />
     </Routes>
   );
 

@@ -12,9 +12,12 @@ import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import { useNavigate } from "react-router-dom";
 import SignIn from "../pages/Authentication/SignIn/SignIn";
 import Logo from "./../assets/icon/Logo.svg";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const Navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   return (
     <AppBar
       position="static"
@@ -33,7 +36,7 @@ const Header = () => {
       >
         {/* Left Section: Icon Button + Text */}
         <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
-          <IconButton color="inherit">
+          <IconButton href="/booking" color="inherit">
             <AirplaneTicketIcon />
             <Typography
               variant="h6"
@@ -71,10 +74,10 @@ const Header = () => {
         </Box>
 
         {/* Right Section: Login and Register Buttons */}
-        <Box sx={{ m: "auto" }}>
+        {(!isAuthenticated) ? (<Box sx={{ m: "auto" }}>
           <Button
             variant="outlined"
-            onClick={() => Navigate("signin")}
+            onClick={() => Navigate("/signin")}
             sx={{
               marginRight: 2,
               color: "#000000",
@@ -87,10 +90,28 @@ const Header = () => {
           >
             Đăng nhập
           </Button>
-          <Button variant="contained" onClick={() => Navigate("signup")}>
+          <Button variant="contained" onClick={() => Navigate("/signup")}>
             Đăng ký
           </Button>
-        </Box>
+        </Box>) : (
+            <Box sx={{ m: "auto" }}>
+              <Button disabled="true" variant="outlined" sx={{
+                marginRight: 2,
+                visibility: 'hidden',
+}}>
+                Đăng nhập
+              </Button>
+              
+              <Button disabled="true" variant="contained" sx={{
+                visibility: 'hidden',
+              }}>
+                Đăng ký
+                </Button>
+            </Box>
+            
+            
+        )}
+        
       </Toolbar>
     </AppBar>
   );

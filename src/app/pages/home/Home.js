@@ -14,6 +14,7 @@ import flight from "./../../assets/images/flight.png";
 import SendIcon from "@mui/icons-material/Send";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import ScrollToTopButton from "../../components/ScrollToTopButton";
+import { useNavigate } from "react-router-dom";
 
 const vietnamCities = [
   "Hà Nội",
@@ -96,9 +97,10 @@ const Home = () => {
   const [destination, setDestination] = React.useState(null);
   const [ticketType, setTicketType] = React.useState(null);
   const [passengerCount, setPassengerCount] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleSearch = () => {
-    alert("Searching flights...");
+    navigate('/search');
   };
 
   return (
