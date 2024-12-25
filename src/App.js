@@ -14,6 +14,8 @@ import { useState } from 'react';
 
 
 const Home = lazy(() => import('./app/pages/home/Home.js'));
+const FlightSearch = lazy(() => import('./app/pages/search/FlightSearch.js'))
+const BookFlight = lazy(() => import('./app/pages/search/BookFlight.js'))
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Lấy trạng thái đăng nhập
