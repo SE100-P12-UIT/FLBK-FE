@@ -10,19 +10,26 @@ import SignIn from './app/pages/Authentication/SignIn/SignIn.js';
 import SignUp from './app/pages/Authentication/SignUp/SignUp.js';
 import { ToastContainer } from 'react-toastify';
 import UserProfile from './app/pages/Customer/Profile/UserProfile.js';
+import { useState } from 'react';
 
 
 const Home = lazy(() => import('./app/pages/home/Home.js'));
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Lấy trạng thái đăng nhập
+  const [userRole, setUserRole] = useState(" ");
   
-  const userRole = JSON.parse(localStorage.getItem("userInfo")).role;
+    useEffect(() => {
+      const storedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
+  if (storedUserInfo && storedUserInfo.role) {
+    setUserRole(storedUserInfo.role);
+  }
+    }, [])
   
-  useEffect(() => {
-    console.log(userRole);
-    
-  },[])
+    useEffect(() => {
+      console.log("Updated userRole:", userRole);
+    }, [userRole]);
+  
   const PublicRoutes = () => (
     <Routes>
       <Route
@@ -36,6 +43,10 @@ function App() {
       <Route
         path="/signup"
         element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'user' ? '/user/dashboard' : '/dashboard'} replace /> : <SignUp />}
+      />
+      <Route
+        path="/home"
+        element={isAuthenticated ? <Navigate to={userRole === 'admin' ? '/admin/dashboard' : userRole === 'user' ? '/user/dashboard' : '/dashboard'} replace /> : <Home />}
       />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

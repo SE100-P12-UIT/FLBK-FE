@@ -6,10 +6,12 @@ import {
   Button,
   Typography,
   Box,
+  Icon,
 } from "@mui/material";
 import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import { useNavigate } from "react-router-dom";
 import SignIn from "../pages/Authentication/SignIn/SignIn";
+import Logo from "./../assets/icon/Logo.svg";
 
 const Header = () => {
   const Navigate = useNavigate();
@@ -26,10 +28,11 @@ const Header = () => {
         sx={{
           justifyContent: "space-between",
           flexDirection: { xs: "column", sm: "row" },
+          p: 2,
         }}
       >
         {/* Left Section: Icon Button + Text */}
-        <Box sx={{ display: "flex", alignItems: "center", marginLeft: 8 }}>
+        <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
           <IconButton color="inherit">
             <AirplaneTicketIcon />
             <Typography
@@ -48,12 +51,30 @@ const Header = () => {
             </Typography>
           </IconButton>
         </Box>
+        <Box
+          sx={{
+            display: "flex",
+            p: 2,
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <img src={Logo}></img>
+          <Typography
+            variant="h1"
+            sx={{
+              color: "#000000",
+            }}
+          >
+            FLBK
+          </Typography>
+        </Box>
 
         {/* Right Section: Login and Register Buttons */}
-        <Box sx={{ marginRight: 8 }}>
+        <Box sx={{ m: "auto" }}>
           <Button
             variant="outlined"
-            onClick={()=>Navigate("signin")}
+            onClick={() => Navigate("signin")}
             sx={{
               marginRight: 2,
               color: "#000000",
@@ -66,9 +87,7 @@ const Header = () => {
           >
             Đăng nhập
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => Navigate("signup")}>
+          <Button variant="contained" onClick={() => Navigate("signup")}>
             Đăng ký
           </Button>
         </Box>
