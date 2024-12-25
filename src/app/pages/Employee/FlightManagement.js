@@ -16,7 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 const FlightManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [page, setPage] = useState(0); // Trang hiện tại
-    const [rowsPerPage, setRowsPerPage] = useState(10); // Số dòng trên mỗi trang
+    const [rowsPerPage, setRowsPerPage] = useState(5); // Số dòng trên mỗi trang
 
     const [data, setData] = useState([]); // State để lưu dữ liệu
     const [loading, setLoading] = useState(true); // Trạng thái loading

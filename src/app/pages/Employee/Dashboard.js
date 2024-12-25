@@ -15,8 +15,6 @@ import { useDemoRouter } from '@toolpad/core/internal';
 import { Box, createTheme } from '@mui/material';
 import CustomerList from './CustomerList';
 import FlightManagement from './FlightManagement';
-import VerifyTickets from './VerifyTickets';
-import CancelTickets from './CancelTickets';
 
 
 const NAVIGATION = [
@@ -158,8 +156,6 @@ function DemoPageContent({ pathname }) {
     >
       {pathname === "/Khachhang" ? (<CustomerList />) : <></>}
       {pathname === "/Lichchuyenbay" ? (<FlightManagement />) : <></>}
-      {pathname === "/Ghinhandatve" ? (<VerifyTickets />) : <></>}
-      {pathname === "/Ghinhanhuyve" ? (<CancelTickets />) : <></>}
       {/* <Typography>Dashboard content for {pathname}</Typography> */}
     </Box>
   );
