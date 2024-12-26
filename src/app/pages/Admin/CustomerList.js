@@ -27,10 +27,10 @@ const CustomerList = () => {
 
     });
 
-    const [isEditOpen, setIsEditOpen] = useState(false); // Trạng thái mở hộp thoại sửa chuyến bay
+    const [isEditOpen, setIsEditOpen] = useState(false); // Trạng thái mở hộp thoại sửa khách hàng
     const [selectedUser, setSelectedUser] = useState(null);
 
-    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);// Trạng thái mở hộp thoại xóa chuyến bay
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);// Trạng thái mở hộp thoại xóa khách hàng
 
     const [value, setValue] = useState();
 
@@ -90,28 +90,22 @@ const CustomerList = () => {
     };
 
 
-    // const handleEditUser = () => {
-    //     // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
-    //     console.log('Dữ liệu sửa thông tin khách hàng:', userData);
-    //     UserService.updateUserById(userData.id, userData);
-    //     handleEditDialogClose();
-    // };
+
 
     const handleEditUser = async () => {
         try {
-            // Gọi API để cập nhật thông tin người dùng
+            // Gọi API để cập nhật thông tin khách hàng
             const updatedUser = await UserService.updateUserById(userData.id, {
                 name: userData.name,
                 phoneNumber: userData.phoneNumber,
                 email: userData.email,
                 dateOfBirth: userData.dateOfBirth,
                 citizenId: userData.citizenId,
-                // address: userData.address, // Nếu có trường address
+                // address: userData.address,
             });
-            console.log('Thông tin người dùng đã cập nhật:', updatedUser.dateOfBirth);
             console.log('Thông tin người dùng đã cập nhật:', updatedUser);
 
-            // Cập nhật danh sách người dùng trong state
+            // Cập nhật danh sách khách hàng trong state
             setData((prevData) => ({
                 ...prevData,
                 results: prevData.results.map((user) =>
@@ -122,8 +116,8 @@ const CustomerList = () => {
             // Đóng hộp thoại chỉnh sửa
             handleEditDialogClose();
         } catch (error) {
-            console.error('Lỗi khi cập nhật thông tin người dùng:', error);
-            alert('Không thể cập nhật thông tin người dùng. Vui lòng thử lại!');
+            console.error('Lỗi khi cập nhật thông tin khách hàng:', error);
+            alert('Không thể cập nhật thông tin khách hàng. Vui lòng thử lại!');
         }
     };
 
@@ -131,7 +125,7 @@ const CustomerList = () => {
         const { name, value } = e.target;
         setuserData({ ...userData, [name]: value });
     };
-    //Xóa chuyến bay
+    //Xóa khách hàng
     const handleDeleteDialogOpen = (user) => {
         setSelectedUser(user);
         setOpenDeleteDialog(true);
@@ -142,10 +136,28 @@ const CustomerList = () => {
         setSelectedUser(null);
     };
 
-    const handleDeleteUser = () => {
-        console.log(`Xóa khách hàng có ID: ${selectedUser.id}`);
-        // Logic xóa khách hàng ở đây (có thể gọi API xóa từ server)
-        setOpenDeleteDialog(false);
+    const handleDeleteUser = async () => {
+        try {
+            if (!selectedUser?.id) return;
+
+            // Gọi API xóa khách hàng
+            await UserService.deleteUserById(selectedUser.id);
+
+            console.log(`Đã xóa khách hàng có ID: ${selectedUser.id}`);
+
+            // Xóa khách hàng khỏi danh sách hiển thị
+            setData((prevData) => ({
+                ...prevData,
+                results: prevData.results.filter((user) => user.id !== selectedUser.id),
+                totalResults: prevData.totalResults - 1, // Giảm tổng số khách hàng
+            }));
+
+            // Đóng hộp thoại
+            handleDeleteDialogClose();
+        } catch (error) {
+            console.error('Lỗi khi xóa khách hàng:', error);
+            alert('Không thể xóa khách hàng. Vui lòng thử lại!');
+        }
     };
 
     return (
@@ -253,7 +265,7 @@ const CustomerList = () => {
                     />
                     <DatePicker
                         label="Ngày sinh"
-                        value={userData.dateOfBirth}
+                        value={value}
                         onChange={(newValue) => setValue(newValue)}
                     />
                     <TextField

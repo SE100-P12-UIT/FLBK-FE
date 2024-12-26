@@ -24,9 +24,15 @@ const EmployeeList = () => {
     const [loading, setLoading] = useState(true); // Trạng thái loading
     const [error, setError] = useState(null); // Trạng thái lỗi
 
-    const [isOpen, setIsOpen] = useState(false); // Trạng thái mở hộp thoại thêm chuyến bay
+    const [isOpen, setIsOpen] = useState(false); // Trạng thái mở hộp thoại thêm nhân viên
     const [userData, setuserData] = useState({
         id: '',
+        email: '',
+        password: '',
+        name: '',
+        role: 'employee',
+        dateOfBirth: '',
+        phoneNumber: '',
 
     });
 
@@ -36,27 +42,44 @@ const EmployeeList = () => {
     const handleAddDialogClose = () => {
         setIsOpen(false);
         setuserData({
-            flightid: '',
-            airline: '',
-            departure: '',
-            destination: '',
-            departureTime: '',
-            duration: '',
-            price: '',
+            id: '',
+            email: '',
+            password: '',
+            name: '',
+            role: 'employee',
+            dateOfBirth: '',
+            phoneNumber: '',
         });
     };
 
-    const handleAddUser = () => {
-        // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
-        console.log('Dữ liệu thêm chuyến bay:', userData);
-        handleAddDialogClose();
+    const handleAddUser = async () => {
+        try {
+            // Gọi API thêm người dùng
+            const createdUser = await UserService.createUserAccount(userData);
+
+            if (createdUser && createdUser.id) {
+                console.log('Nhân viên mới:', createdUser);
+
+                // Thêm nhân viên vào danh sách hiển thị
+                setData((prevData) => ({
+                    ...prevData,
+                    results: [createdUser, ...prevData.results], // Thêm nhân viên vào đầu danh sách
+                    totalResults: prevData.totalResults + 1, // Tăng tổng số nhân viên
+                }));
+            }
+            // Đóng hộp thoại
+            handleAddDialogClose();
+        } catch (error) {
+            console.error('Lỗi khi thêm nhân viên:', error);
+            alert('Không thể thêm nhân viên. Vui lòng thử lại!');
+        }
     };
 
 
-    const [isEditOpen, setIsEditOpen] = useState(false); // Trạng thái mở hộp thoại sửa chuyến bay
+    const [isEditOpen, setIsEditOpen] = useState(false); // Trạng thái mở hộp thoại sửa nhân viên
     const [selectedUser, setSelectedUser] = useState(null);
 
-    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);// Trạng thái mở hộp thoại xóa chuyến bay
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);// Trạng thái mở hộp thoại xóa nhân viên
 
     const [value, setValue] = useState();
 
@@ -104,6 +127,7 @@ const EmployeeList = () => {
             id: user.id,
             email: user.email,
             name: user.name,
+            role: user.role,
             dateOfBirth: user.dateOfBirth,
             phoneNumber: user.phoneNumber,
             // address: user.address
@@ -114,11 +138,7 @@ const EmployeeList = () => {
     const handleEditDialogClose = () => {
         setIsEditOpen(false);
     };
-    // const handleEditUser = () => {
-    //     // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
-    //     console.log('Dữ liệu sửa thông tin nhân viên:', userData);
-    //     handleEditDialogClose();
-    // };
+
 
     const handleEditUser = async () => {
         try {
@@ -133,7 +153,7 @@ const EmployeeList = () => {
             });
             console.log('Thông tin người dùng đã cập nhật:', updatedUser);
 
-            // Cập nhật danh sách người dùng trong state
+            // Cập nhật danh sách nhân viên trong state
             setData((prevData) => ({
                 ...prevData,
                 results: prevData.results.map((user) =>
@@ -144,8 +164,8 @@ const EmployeeList = () => {
             // Đóng hộp thoại chỉnh sửa
             handleEditDialogClose();
         } catch (error) {
-            console.error('Lỗi khi cập nhật thông tin người dùng:', error);
-            alert('Không thể cập nhật thông tin người dùng. Vui lòng thử lại!');
+            console.error('Lỗi khi cập nhật thông tin nhân viên:', error);
+            alert('Không thể cập nhật thông tin nhân viên. Vui lòng thử lại!');
         }
     };
 
@@ -153,7 +173,7 @@ const EmployeeList = () => {
         const { name, value } = e.target;
         setuserData({ ...userData, [name]: value });
     };
-    //Xóa chuyến bay
+    //Xóa nhân viên
     const handleDeleteDialogOpen = (user) => {
         setSelectedUser(user);
         setOpenDeleteDialog(true);
@@ -164,10 +184,29 @@ const EmployeeList = () => {
         setSelectedUser(null);
     };
 
-    const handleDeleteUser = () => {
-        console.log(`Xóa Nhân viên có ID: ${selectedUser.id}`);
-        // Logic xóa nhân viên ở đây (có thể gọi API xóa từ server)
-        setOpenDeleteDialog(false);
+
+    const handleDeleteUser = async () => {
+        try {
+            if (!selectedUser?.id) return;
+
+            // Gọi API xóa nhân viên
+            await UserService.deleteUserById(selectedUser.id);
+
+            console.log(`Đã xóa khách hàng có ID: ${selectedUser.id}`);
+
+            // Xóa nhân viên khỏi danh sách hiển thị
+            setData((prevData) => ({
+                ...prevData,
+                results: prevData.results.filter((user) => user.id !== selectedUser.id),
+                totalResults: prevData.totalResults - 1, // Giảm tổng số nhân viên
+            }));
+
+            // Đóng hộp thoại
+            handleDeleteDialogClose();
+        } catch (error) {
+            console.error('Lỗi khi xóa nhân viên:', error);
+            alert('Không thể xóa nhân viên. Vui lòng thử lại!');
+        }
     };
 
     return (
@@ -283,9 +322,16 @@ const EmployeeList = () => {
                         value={userData.email}
                         onChange={handleInputChange}
                     />
+                    <TextField
+                        name="password"
+                        label="Password"
+                        fullWidth
+                        margin="normal"
+                        onChange={handleInputChange}
+                    />
                     <DatePicker
                         label="Ngày sinh"
-                        value={userData.dateOfBirth}
+                        value={value}
                         onChange={(newValue) => setValue(newValue)}
                     />
                     <TextField
@@ -307,7 +353,7 @@ const EmployeeList = () => {
                 </DialogActions>
             </Dialog>
 
-            {/* Dialog sửa khách hàng */}
+            {/* Dialog sửa nhân viên */}
             <Dialog open={isEditOpen} onClose={handleEditDialogClose}>
                 <DialogTitle>Sửa thông tin nhân viên</DialogTitle>
                 <DialogContent>
@@ -367,7 +413,7 @@ const EmployeeList = () => {
                 </DialogActions>
             </Dialog>
 
-            {/* Dialog xác nhận xóa khách hàng */}
+            {/* Dialog xác nhận xóa nhân viên */}
             <Dialog open={openDeleteDialog} onClose={handleDeleteDialogClose}>
                 <DialogTitle>Xác nhận xóa thông tin nhân viên?</DialogTitle>
                 <DialogContent>
