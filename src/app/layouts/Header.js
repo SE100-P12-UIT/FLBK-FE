@@ -1,46 +1,125 @@
-import React from 'react';
-import { AppBar, Toolbar, IconButton, Button, Typography, Box } from '@mui/material';
-import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  Toolbar,
+  Typography
+} from "@mui/material";
+import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Logo from "./../assets/icon/Logo.svg";
 
 const Header = () => {
+  const Navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   return (
-    <AppBar 
-      position="static" 
+    <AppBar
+      position="static"
       sx={{
-        backgroundColor: 'transparent', 
-        boxShadow: 'none', 
-        minWidth:'400px'
+        backgroundColor: "transparent",
+        boxShadow: "none",
+        minWidth: "400px",
       }}
     >
-      <Toolbar sx={{ justifyContent: 'space-between', flexDirection: { xs: 'column', sm: 'row' }}}>
+      <Toolbar
+        sx={{
+          justifyContent:"space-between",
+          flexDirection: { xs: "column", sm: "row" },
+          p: 2,
+        }}
+      >
         {/* Left Section: Icon Button + Text */}
-        <Box sx={{ display: 'flex', alignItems: 'center', marginLeft:8, }}>
-          <IconButton color="inherit" >
+        <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
+          <IconButton href="/search" color="inherit">
             <AirplaneTicketIcon />
-            <Typography variant="h6" sx={{ ml: 1, color:'#000000',textShadow: `
+            <Typography
+              variant="h6"
+              sx={{
+                ml: 1,
+                color: "#000000",
+                textShadow: `
           2px 2px 4px white, 
           -2px -2px 4px white, 
           2px -2px 4px white, 
-          -2px 2px 4px white`, }}>
-            Tìm chuyến bay
+          -2px 2px 4px white`,
+              }}
+            >
+              Tìm chuyến bay
+            </Typography>
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            p: 2,
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <IconButton href="/home" >
+
+            <img src={Logo} alt='Logo'></img>
+            <Typography
+            variant="h1"
+            sx={{
+              color: "#000000",
+            }}
+          >
+            FLBK
           </Typography>
           </IconButton>
           
         </Box>
 
         {/* Right Section: Login and Register Buttons */}
-        <Box sx={{marginRight:8, }}>
-          <Button variant='outlined' sx={{ marginRight: 2,color:'#000000',textShadow: `
+        {(!isAuthenticated) ? (<Box sx={{ m: "auto" }}>
+          <Button
+            variant="outlined"
+            onClick={() => Navigate("/signin")}
+            sx={{
+              marginRight: 2,
+              color: "#000000",
+              textShadow: `
           2px 2px 4px white, 
           -2px -2px 4px white, 
           2px -2px 4px white, 
-          -2px 2px 4px white`, }}>
+          -2px 2px 4px white`,
+            }}
+          >
             Đăng nhập
           </Button>
-          <Button variant='contained'>
+          <Button variant="contained" onClick={() => Navigate("/signup")}>
             Đăng ký
           </Button>
-        </Box>
+        </Box>) : (
+            <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
+            <IconButton href="/user/profile" color="inherit">
+              <AccountCircleIcon />
+              <Typography
+                variant="h6"
+                sx={{
+                  ml: 1,
+                  color: "#000000",
+                  textShadow: `
+            2px 2px 4px white, 
+            -2px -2px 4px white, 
+            2px -2px 4px white, 
+            -2px 2px 4px white`,
+                }}
+              >
+                Hồ sơ
+              </Typography>
+            </IconButton>
+          </Box>
+            
+            
+        )}
+        
       </Toolbar>
     </AppBar>
   );
