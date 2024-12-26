@@ -98,7 +98,7 @@ const theme = createTheme({
                     color: '#000000',
                     '&:hover': {
                         backgroundColor: '#DDFAF0',
-                        color: '#FFFFFF',
+                        color: '#000000',
                     },
                 },
                 outlined: {

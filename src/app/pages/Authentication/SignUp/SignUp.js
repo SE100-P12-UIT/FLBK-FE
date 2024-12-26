@@ -1,10 +1,8 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import SignUpCard from './SignUpCard';
+import Stack from '@mui/material/Stack';
+import * as React from 'react';
 import SignupStatic1 from "../../../assets/images/SignupStatic1.png";
+import SignUpCard from './SignUpCard';
 
 export default function SignUp() {
 

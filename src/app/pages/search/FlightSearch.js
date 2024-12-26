@@ -1,3 +1,5 @@
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import SendIcon from "@mui/icons-material/Send";
 import {
   Autocomplete,
   Box,
@@ -7,22 +9,20 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import Header from "../../layouts/Header";
+import { useNavigate } from "react-router-dom";
+import ScrollToTopButton from "../../components/ScrollToTopButton";
 import Footer from "../../layouts/Footer";
+import Header from "../../layouts/Header";
 import airport from "./../../assets/images/airport.png";
+import Columbia from "./../../assets/images/Columbia.png";
 import locations from "./../../assets/images/locations.png";
+import London from "./../../assets/images/London.png";
 import Melbourne from "./../../assets/images/Melbourne.png";
 import Paris from "./../../assets/images/Paris.png";
-import London from "./../../assets/images/London.png";
-import Columbia from "./../../assets/images/Columbia.png";
 import SriLanka from "./../../assets/images/SriLanka.png";
 import SriLanka2 from "./../../assets/images/SriLanka2.png";
 import SriLanka3 from "./../../assets/images/SriLanka3.png";
 import SriLanka4 from "./../../assets/images/SriLanka4.png";
-import SendIcon from "@mui/icons-material/Send";
-import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-import ScrollToTopButton from "../../components/ScrollToTopButton";
-import { useNavigate } from "react-router-dom";
 
 const vietnamCities = [
   "Hà Nội",

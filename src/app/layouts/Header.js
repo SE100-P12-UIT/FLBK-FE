@@ -1,19 +1,17 @@
-import React from "react";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import {
   AppBar,
-  Toolbar,
-  IconButton,
-  Button,
-  Typography,
   Box,
-  Icon,
+  Button,
+  IconButton,
+  Toolbar,
+  Typography
 } from "@mui/material";
-import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
-import { useNavigate } from "react-router-dom";
-import SignIn from "../pages/Authentication/SignIn/SignIn";
-import Logo from "./../assets/icon/Logo.svg";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Logo from "./../assets/icon/Logo.svg";
 
 const Header = () => {
   const Navigate = useNavigate();
@@ -65,7 +63,7 @@ const Header = () => {
         >
           <IconButton href="/home" >
 
-            <img src={Logo}></img>
+            <img src={Logo} alt='Logo'></img>
             <Typography
             variant="h1"
             sx={{

@@ -1,10 +1,10 @@
-import React from 'react';
-import { Box, Typography, Grid, Link, IconButton } from '@mui/material';
-import Logo from './../assets/icon/Logo.svg';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import InstagramIcon from '@mui/icons-material/Instagram';
+import { Box, Grid, IconButton, Link, Typography } from '@mui/material';
+import React from 'react';
+import Logo from './../assets/icon/Logo.svg';
 
 
 const Footer = () => {

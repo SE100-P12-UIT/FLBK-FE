@@ -1,10 +1,8 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import SignInCard from './SignInCard';
+import Stack from '@mui/material/Stack';
+import * as React from 'react';
 import LoginStatic1 from "../../../assets/images/LoginStatic1.png";
+import SignInCard from './SignInCard';
 
 export default function SignIn() {
 
