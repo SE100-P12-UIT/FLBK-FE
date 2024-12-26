@@ -98,7 +98,7 @@ const theme = createTheme({
                     color: '#000000',
                     '&:hover': {
                         backgroundColor: '#DDFAF0',
-                        color: '#FFFFFF',
+                        color: '#000000',
                     },
                 },
                 outlined: {
@@ -127,6 +127,19 @@ const theme = createTheme({
         MuiTextField: {
             styleOverrides: {
                 root: {
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '8px',
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#8DD3BB',
+                        },
+                    },
+                },
+            },
+        },
+        MuiSelect: {
+            styleOverrides: {
+                root: {
+                    borderRadius:'8px',
                     '& .MuiOutlinedInput-root': {
                         borderRadius: '8px',
                         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {

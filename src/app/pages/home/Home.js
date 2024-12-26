@@ -1,3 +1,5 @@
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import SendIcon from "@mui/icons-material/Send";
 import {
   Autocomplete,
   Box,
@@ -7,13 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import Header from "../../layouts/Header";
-import Footer from "../../layouts/Footer";
-import homepage from "./../../assets/images/homepage.png";
-import flight from "./../../assets/images/flight.png";
-import SendIcon from "@mui/icons-material/Send";
-import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import { useNavigate } from "react-router-dom";
 import ScrollToTopButton from "../../components/ScrollToTopButton";
+import Footer from "../../layouts/Footer";
+import Header from "../../layouts/Header";
+import flight from "./../../assets/images/flight.png";
+import homepage from "./../../assets/images/homepage.png";
 
 const vietnamCities = [
   "Hà Nội",
@@ -96,9 +97,10 @@ const Home = () => {
   const [destination, setDestination] = React.useState(null);
   const [ticketType, setTicketType] = React.useState(null);
   const [passengerCount, setPassengerCount] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleSearch = () => {
-    alert("Searching flights...");
+    navigate('/search');
   };
 
   return (

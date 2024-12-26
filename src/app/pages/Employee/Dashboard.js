@@ -1,22 +1,22 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Logo from '../../assets/icon/Logo.svg';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DescriptionIcon from '@mui/icons-material/Description';
-import PersonIcon from '@mui/icons-material/Person';
 import FlightIcon from '@mui/icons-material/Flight';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Box, createTheme } from '@mui/material';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
-import { Box, createTheme } from '@mui/material';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import Logo from '../../assets/icon/Logo.svg';
+import CancelTickets from './CancelTickets';
 import CustomerList from './CustomerList';
 import FlightManagement from './FlightManagement';
 import VerifyTickets from './VerifyTickets';
-import CancelTickets from './CancelTickets';
 
 
 const NAVIGATION = [
@@ -180,6 +180,7 @@ function Dashboard(props) {
   return (
     // preview-start
     <AppProvider
+      
       navigation={NAVIGATION}
       branding={{
         logo: <img src={Logo} alt="Logo" />,
