@@ -13,6 +13,7 @@ import UserProfile from './app/pages/Customer/Profile/UserProfile.js';
 const Home = lazy(() => import('./app/pages/home/Home.js'));
 const FlightSearch = lazy(() => import('./app/pages/search/FlightSearch.js'));
 const BookFlight = lazy(() => import('./app/pages/search/BookFlight.js'));
+const BookingDetails = lazy(() => import('./app/pages/search/BookingDetail.js'));
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -24,7 +25,7 @@ function App() {
       const redirectPath = redirectBasedOnRole(userRole);
       if (window.location.pathname === '/') {
         navigate(redirectPath); 
-      }
+      } 
     }
   }, [isAuthenticated, userRole, navigate]);
 
@@ -45,6 +46,7 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/search" element={<FlightSearch />} />
               <Route path="/booking" element={<BookFlight />} />
+              <Route path="/bkdt" element={<BookingDetails />} />
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
