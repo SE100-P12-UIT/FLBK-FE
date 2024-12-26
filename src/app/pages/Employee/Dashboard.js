@@ -6,7 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { Box, Button, createTheme, Typography } from '@mui/material';
+import { Box, createTheme } from '@mui/material';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
@@ -17,14 +17,63 @@ import CancelTickets from './CancelTickets';
 import CustomerList from './CustomerList';
 import FlightManagement from './FlightManagement';
 import VerifyTickets from './VerifyTickets';
-import YesNoModal from '../../components/YesNoModal';
-import { userLogout } from '../../stores/actions/authActions';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
 
 
+const NAVIGATION = [
+  {
+    segment: 'Khachhang',
+    title: 'Khách hàng',
+    icon: <PersonIcon />,
+  },
+  {
+    segment: 'Lichchuyenbay',
+    title: 'Lịch chuyến bay',
+    icon: <FlightIcon />,
+  },
+  {
+    segment: 'Ghinhandatve',
+    title: 'Ghi nhận đặt vé',
+    icon: <ShoppingCartIcon />,
+  },
+  {
+    segment: 'Ghinhanhuyve',
+    title: 'Ghi nhận hủy vé',
+    icon: <DeleteForeverIcon />,
+  },
+  {
+    segment: 'Lapbaocao',
+    title: 'Lập báo cáo',
+    icon: <BarChartIcon />,
+    children: [
+      {
+        segment: 'Doanhthutheothang',
+        title: 'Doanh thu theo tháng',
+        icon: <DescriptionIcon />,
+      },
+      {
+        segment: 'Doanhthutheonam',
+        title: 'Doanh thu theo năm',
+        icon: <DescriptionIcon />,
+      },
+    ],
+  },
+  {
+    kind: 'divider',
+  },
+  {
+    kind: 'divider',
+  },
+  {
+    segment: 'Caidat',
+    title: 'Cài đặt',
+    icon: <SettingsIcon />,
+  },
+  {
+    segment: 'Dangxuat',
+    title: 'Đăng xuất',
+    icon: <LogoutIcon />,
+  },
+];
 
 
 
@@ -95,7 +144,6 @@ const demoTheme = createTheme({
 });
 
 
-
 function DemoPageContent({ pathname }) {
   return (
     <Box
@@ -123,150 +171,15 @@ DemoPageContent.propTypes = {
 
 function Dashboard(props) {
   const { window } = props;
-  const [openLogoutModal, setOpenLogoutModal] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      const resultAction = await dispatch(userLogout()).unwrap();
-      if (resultAction) {
-        toast.success('Đăng xuất thành công');
-        navigate('/signin'); 
-      }
-    } catch (error) {
-      toast.error('Đã có lỗi xảy ra');
-      console.error('Failed to logout:', error);
-    }
-  };
-
-  const NAVIGATION = [
-    {
-      segment: 'Khachhang',
-      title: 'Khách hàng',
-      icon: <PersonIcon />,
-    },
-    {
-      segment: 'Lichchuyenbay',
-      title: 'Lịch chuyến bay',
-      icon: <FlightIcon />,
-    },
-    {
-      segment: 'Ghinhandatve',
-      title: 'Ghi nhận đặt vé',
-      icon: <ShoppingCartIcon />,
-    },
-    {
-      segment: 'Ghinhanhuyve',
-      title: 'Ghi nhận hủy vé',
-      icon: <DeleteForeverIcon />,
-    },
-    {
-      segment: 'Lapbaocao',
-      title: 'Lập báo cáo',
-      icon: <BarChartIcon />,
-      children: [
-        {
-          segment: 'Doanhthutheothang',
-          title: 'Doanh thu theo tháng',
-          icon: <DescriptionIcon />,
-        },
-        {
-          segment: 'Doanhthutheonam',
-          title: 'Doanh thu theo năm',
-          icon: <DescriptionIcon />,
-        },
-      ],
-    },
-    {
-      kind: 'divider',
-    },
-    {
-      kind: 'divider',
-    },
-    {
-      segment: 'Caidat',
-      title: 'Cài đặt',
-      icon: <SettingsIcon />,
-    },
-    /* {
-      segment: 'Dangxuat',
-      title: 'Đăng xuất',
-      icon: <LogoutIcon />,
-    }, */
-  ];
-
-  function SidebarFooter({ mini }) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: mini ? 'center' : 'flex-start',
-          alignItems: 'center',
-          my: 2,
-          mx: 1,
-          overflow: 'hidden',
-          borderRadius:'8px',
-        }}
-      >
-        <Button
-          startIcon={<LogoutIcon />}
-          onClick={() => setOpenLogoutModal(true)}
-          sx={{
-            justifyContent:  mini?'center':'flex-start',
-            width: '100%',
-            height: '48px',
-            padding: '8px 16px',
-            textAlign: 'left',
-            borderRadius: '8px',
-            color: 'text.primary',
-            position: 'relative', 
-            transition: 'all 0.2s',
-            backgroundColor: 'transparent',
-            '.MuiButton-startIcon': {
-              margin: mini ? 'auto' : '0 px 0 0', 
-            },
-            '&:hover': {
-              backgroundColor:  'action.hover', 
-            },
-          }}
-        >
-          {/* Chỉ hiện icon hover khi mini */}
-          
-            <Typography
-              sx={{
-                fontSize: '1rem',
-                fontWeight: 600,
-                textTransform: 'none',
-                position: 'absolute', 
-                left: '48px', 
-                whiteSpace: 'nowrap', 
-                overflow: 'hidden', 
-                visibility: mini? 'hidden': 'visible', 
-              }}
-            >
-              Đăng xuất
-            </Typography>
-          
-        </Button>
-      </Box>
-    );
-  }
-  
-  
-  
-  SidebarFooter.propTypes = {
-    mini: PropTypes.bool.isRequired,
-  };
-
 
   const router = useDemoRouter('/dashboard');
 
+  // Remove this const when copying and pasting into your project.
   const demoWindow = window !== undefined ? window() : undefined;
 
   return (
-    <Box>
-      <AppProvider
+    // preview-start
+    <AppProvider
       
       navigation={NAVIGATION}
       branding={{
@@ -277,22 +190,11 @@ function Dashboard(props) {
       theme={demoTheme}
       window={demoWindow}
     >
-      <DashboardLayout slots={{
-        sidebarFooter: SidebarFooter,
-      }}>
+      <DashboardLayout>
         <DemoPageContent pathname={router.pathname} />
       </DashboardLayout>
     </AppProvider>
-
-      <YesNoModal
-        title="Đăng xuất"
-        content="Bạn có chắc chắn muốn đăng xuất?"
-        open={openLogoutModal}
-        setOpen={setOpenLogoutModal}
-        onYes={handleLogout}
-        onNo={() => setOpenLogoutModal(false)}
-      />
-    </Box>
+    // preview-end
   );
 }
 
