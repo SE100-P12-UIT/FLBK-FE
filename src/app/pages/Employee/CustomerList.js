@@ -60,7 +60,8 @@ const CustomerList = () => {
     if (error) return <Typography color="error">{error}</Typography>;
 
     const filteredData = Array.isArray(data) ? data.filter(
-        (item) => item.email && item.email.includes(searchTerm)
+        (item) => item.email && item.email.includes(searchTerm) ||
+            item.phone && item.phone.includes(searchTerm)
     ) : [];
 
     const paginatedData = filteredData.slice(
@@ -86,7 +87,7 @@ const CustomerList = () => {
                 <Typography variant="body2">Toàn bộ danh sách khách hàng sẽ hiển thị ở đây</Typography>
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
-                <CardContent sx={{  }}>
+                <CardContent sx={{}}>
                     <Typography variant="h4">{data.length}</Typography>
                     <Typography variant="body2">Số lượng khách hàng</Typography>
                 </CardContent>
@@ -108,28 +109,28 @@ const CustomerList = () => {
                 }}
             />
             <TableContainer component={Paper} sx={{ overflowX: 'auto' }} >
-            <Table sx={{ borderBottom: '1px solid #ddd' }}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Số thứ tự</TableCell>
-                        <TableCell>Tên người dùng</TableCell>
-                        <TableCell>Số điện thoại</TableCell>
-                        <TableCell>Email</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {paginatedData.map((item, index) => (
-                        <TableRow key={index}>
-                            <TableCell>{item.id}</TableCell>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>{item.phone}</TableCell>
-                            <TableCell>{item.email}</TableCell>
+                <Table sx={{ borderBottom: '1px solid #ddd' }}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Số thứ tự</TableCell>
+                            <TableCell>Tên người dùng</TableCell>
+                            <TableCell>Số điện thoại</TableCell>
+                            <TableCell>Email</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {paginatedData.map((item, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{item.id}</TableCell>
+                                <TableCell>{item.firstName}</TableCell>
+                                <TableCell>{item.phone}</TableCell>
+                                <TableCell>{item.email}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </TableContainer>
-           
+
             <TablePagination
                 component="div"
                 count={filteredData.length}
