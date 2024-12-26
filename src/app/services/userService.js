@@ -1,6 +1,6 @@
 import axiosConfig from './axiosConfig';
 import { API_BASE_URL } from './config';
-const USER_ENDPOINT = `${API_BASE_URL}/users`;
+const USER_ENDPOINT = `${API_BASE_URL}/user`;
 
 const getUserById = async (id) => {
   try {

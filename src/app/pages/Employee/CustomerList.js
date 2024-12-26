@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useState, useEffect } from 'react';
-
+import UserService from '../../services/userService';
 
 // const data1 = [
 //     { id: '#0001', name: 'Minh Tuấn', phone: '0123456789', email: 'tuan@example.com' },
@@ -23,7 +23,6 @@ import React, { useState, useEffect } from 'react';
 //     { id: '#0012', name: 'Anh Thư', phone: '0875154251', email: 'anhthu12@example.com' },
 // ]; // đổi data nếu call API
 
-const apiurl = 'https://dummyjson.com/users'
 
 const CustomerList = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -38,13 +37,10 @@ const CustomerList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(apiurl); // Thay API đúng vào đây
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
-                console.log('Dữ liệu từ API:', result);
-                setData(result.users || []); // Lưu dữ liệu vào state
+                const response = await UserService.getAllUsers("user", "asc", rowsPerPage, page + 1); // Thay API đúng vào đây
+                console.log('Dữ liệu từ API:', response);
+
+                setData(response || []); // Lưu dữ liệu vào state
                 setLoading(false); // Tắt trạng thái loadingSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);
@@ -53,24 +49,28 @@ const CustomerList = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [rowsPerPage, page]);
+
 
     // Hiển thị trạng thái loading hoặc lỗi
     if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
     if (error) return <Typography color="error">{error}</Typography>;
 
-    const filteredData = Array.isArray(data) ? data.filter(
+    const filteredData = Array.isArray(data.results) ? data.results.filter(
         (item) => item.email && item.email.includes(searchTerm)
     ) : [];
 
-    const paginatedData = filteredData.slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
-    );
+    // const paginatedData = filteredData.slice(
+    //     page * rowsPerPage,
+    //     page * rowsPerPage + rowsPerPage
+    // );
 
     // Xử lý thay đổi trang
     const handleChangePage = (event, newPage) => {
+        console.log(data.results);
+        console.log(filteredData);
         setPage(newPage);
+        console.log(newPage);
     };
 
     // Xử lý thay đổi số dòng trên mỗi trang
@@ -86,8 +86,8 @@ const CustomerList = () => {
                 <Typography variant="body2">Toàn bộ danh sách khách hàng sẽ hiển thị ở đây</Typography>
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
-                <CardContent sx={{  }}>
-                    <Typography variant="h4">{data.length}</Typography>
+                <CardContent sx={{}}>
+                    <Typography variant="h4">{data.totalResults}</Typography>
                     <Typography variant="body2">Số lượng khách hàng</Typography>
                 </CardContent>
             </Card>
@@ -108,31 +108,31 @@ const CustomerList = () => {
                 }}
             />
             <TableContainer component={Paper} sx={{ overflowX: 'auto' }} >
-            <Table sx={{ borderBottom: '1px solid #ddd' }}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Số thứ tự</TableCell>
-                        <TableCell>Tên người dùng</TableCell>
-                        <TableCell>Số điện thoại</TableCell>
-                        <TableCell>Email</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {paginatedData.map((item, index) => (
-                        <TableRow key={index}>
-                            <TableCell>{item.id}</TableCell>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>{item.phone}</TableCell>
-                            <TableCell>{item.email}</TableCell>
+                <Table sx={{ borderBottom: '1px solid #ddd' }}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Số thứ tự</TableCell>
+                            <TableCell>Tên người dùng</TableCell>
+                            <TableCell>Số điện thoại</TableCell>
+                            <TableCell>Email</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {filteredData.map((item, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{item.id}</TableCell>
+                                <TableCell>{item.name}</TableCell>
+                                <TableCell>{item.phoneNumber}</TableCell>
+                                <TableCell>{item.email}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </TableContainer>
-           
+
             <TablePagination
                 component="div"
-                count={filteredData.length}
+                count={data.totalResults}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={rowsPerPage}
