@@ -20,7 +20,7 @@ const login = async (email, password) => {
 
 const logout = async (refreshToken) => {
   try {
-    await axiosConfig.post(`${AUTH_ENDPOINT}/logout`, { refreshToken });
+    /* await axiosConfig.post(`${AUTH_ENDPOINT}/logout`, { refreshToken }); */
 
     localStorage.removeItem('userInfo');
     Cookies.remove('accessToken');
