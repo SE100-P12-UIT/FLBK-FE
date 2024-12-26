@@ -18,7 +18,7 @@ const FlightSearch = lazy(() => import('./app/pages/search/FlightSearch.js'))
 const BookFlight = lazy(() => import('./app/pages/search/BookFlight.js'))
 
 function App() {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Lấy trạng thái đăng nhập
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); 
   const [userRole, setUserRole] = useState(" ");
   
     useEffect(() => {
@@ -66,6 +66,7 @@ function App() {
   const EmployeeRoutes = () => (
     <Routes>
       <Route path="/employee/dashboard" element={<Dashboard />} />
+      <Route path="/" element={<Navigate to="/employee/dashboard" replace />} />
       <Route path="*" element={<Navigate to="/employee/dashboard" replace />} />
     </Routes>
   );

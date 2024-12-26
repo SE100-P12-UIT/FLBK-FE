@@ -12,6 +12,7 @@ import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import { useNavigate } from "react-router-dom";
 import SignIn from "../pages/Authentication/SignIn/SignIn";
 import Logo from "./../assets/icon/Logo.svg";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useSelector } from "react-redux";
 
 const Header = () => {
@@ -29,14 +30,14 @@ const Header = () => {
     >
       <Toolbar
         sx={{
-          justifyContent: "space-between",
+          justifyContent:"space-between",
           flexDirection: { xs: "column", sm: "row" },
           p: 2,
         }}
       >
         {/* Left Section: Icon Button + Text */}
         <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
-          <IconButton href="/booking" color="inherit">
+          <IconButton href="/search" color="inherit">
             <AirplaneTicketIcon />
             <Typography
               variant="h6"
@@ -62,8 +63,10 @@ const Header = () => {
             gap: 1,
           }}
         >
-          <img src={Logo}></img>
-          <Typography
+          <IconButton href="/home" >
+
+            <img src={Logo}></img>
+            <Typography
             variant="h1"
             sx={{
               color: "#000000",
@@ -71,6 +74,8 @@ const Header = () => {
           >
             FLBK
           </Typography>
+          </IconButton>
+          
         </Box>
 
         {/* Right Section: Login and Register Buttons */}
@@ -94,20 +99,25 @@ const Header = () => {
             Đăng ký
           </Button>
         </Box>) : (
-            <Box sx={{ m: "auto" }}>
-              <Button disabled="true" variant="outlined" sx={{
-                marginRight: 2,
-                visibility: 'hidden',
-}}>
-                Đăng nhập
-              </Button>
-              
-              <Button disabled="true" variant="contained" sx={{
-                visibility: 'hidden',
-              }}>
-                Đăng ký
-                </Button>
-            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
+            <IconButton href="/user/profile" color="inherit">
+              <AccountCircleIcon />
+              <Typography
+                variant="h6"
+                sx={{
+                  ml: 1,
+                  color: "#000000",
+                  textShadow: `
+            2px 2px 4px white, 
+            -2px -2px 4px white, 
+            2px -2px 4px white, 
+            -2px 2px 4px white`,
+                }}
+              >
+                Hồ sơ
+              </Typography>
+            </IconButton>
+          </Box>
             
             
         )}

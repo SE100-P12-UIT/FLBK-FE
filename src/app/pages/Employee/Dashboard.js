@@ -147,8 +147,6 @@ const demoTheme = createTheme({
 
 
 function DemoPageContent({ pathname }) {
-  const Navigate = useNavigate();
-  Navigate(pathname);
   return (
     <Box
       sx={{
