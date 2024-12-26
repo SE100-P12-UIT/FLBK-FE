@@ -21,6 +21,7 @@ import Emirates from "./../../assets/images/Emirates.png";
 import Etihad from "./../../assets/images/Etihad.png";
 import FlyDubai from "./../../assets/images/FlyDubai.png";
 import Qatar from "./../../assets/images/Qatar.png";
+import { useNavigate } from 'react-router-dom';
   
   const vietnamCities = [
     "Hà Nội",
@@ -155,6 +156,7 @@ import Qatar from "./../../assets/images/Qatar.png";
   ];
   
   const FlightSearch = () => {
+    const navigate = useNavigate();
     const [departure, setDeparture] = React.useState(null);
     const [destination, setDestination] = React.useState(null);
     const [ticketType, setTicketType] = React.useState(null);
@@ -174,6 +176,28 @@ import Qatar from "./../../assets/images/Qatar.png";
       const formattedHours = hours % 12 === 0 ? 12 : hours % 12; // Handle 12-hour format
       return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${period}`;
     }
+  
+    const handleBooking = (flight) => {
+      navigate('/bkdt', {
+        state: {
+          flightData: {
+            airline: flight.airlineName,
+            aircraft: `${flight.airlineName} A380 Airbus`,
+            aircraftType: "Airbus A320",
+            price: flight.price.replace('$', ''),
+            duration: flight.duration,
+            departureTime: flight.departure,
+            arrivalTime: flight.arrival,
+            airlineLogo: flight.airlineLogo,
+            rating: flight.rating,
+            reviews: flight.reviews,
+            stops: flight.stops,
+            route1: flight.route1,
+            route2: flight.route2
+          }
+        }
+      });
+    };
   
     return (
       <Box
@@ -430,6 +454,7 @@ import Qatar from "./../../assets/images/Qatar.png";
               variant="contained"
               color="primary"
               sx={{ mt: 1, width: '100%', marginLeft: 3 }}
+              onClick={() => handleBooking(flight)}
             >
               Đặt vé
             </Button>
