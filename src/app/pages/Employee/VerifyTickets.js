@@ -134,10 +134,10 @@ const VerifyTickets = () => {
                                     <TableCell>{item.meta.updatedAt}</TableCell>
                                     <TableCell>{formattedDate}</TableCell>
                                     <TableCell>
-                                        <Button variant="contained" color="success" size='small' sx={{ width: '100px' }} onClick={handleConfirmClick}>
+                                        <Button variant="contained" color="success" size='small' sx={{ minWidth: '120px', width: 'auto', m:0.5,p:0.5 }} onClick={handleConfirmClick}>
                                             Xác nhận
                                         </Button>
-                                        <Button variant="outlined" color="error" size='small' sx={{ width: '100px' }} onClick={handleCancelClick}>
+                                        <Button variant="outlined" color="error" size='small' sx={{ minWidth: '120px',width:'auto',m:0.5,p:0.5 }} onClick={handleCancelClick}>
                                             Từ chối
                                         </Button>
                                     </TableCell>
