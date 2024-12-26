@@ -265,8 +265,8 @@ function Dashboard(props) {
   const demoWindow = window !== undefined ? window() : undefined;
 
   return (
-    // preview-start
-    <AppProvider
+    <Box>
+      <AppProvider
       
       navigation={NAVIGATION}
       branding={{
@@ -282,6 +282,7 @@ function Dashboard(props) {
       }}>
         <DemoPageContent pathname={router.pathname} />
       </DashboardLayout>
+    </AppProvider>
 
       <YesNoModal
         title="Đăng xuất"
@@ -291,9 +292,7 @@ function Dashboard(props) {
         onYes={handleLogout}
         onNo={() => setOpenLogoutModal(false)}
       />
-
-    </AppProvider>
-    
+    </Box>
   );
 }
 
