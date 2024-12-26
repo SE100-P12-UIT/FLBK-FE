@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { updateUser } from '../actions/userAction';
 
-const user = JSON.parse(localStorage.getItem('userInfo'));
+const user = JSON.parse(localStorage.getItem('userInfo')) || {};
 
 const initialState = {
   user,

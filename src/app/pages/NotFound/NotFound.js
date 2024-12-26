@@ -33,7 +33,7 @@ const NotFoundPage = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/home/")}
         >
           Trở về trang chủ
         </Button>

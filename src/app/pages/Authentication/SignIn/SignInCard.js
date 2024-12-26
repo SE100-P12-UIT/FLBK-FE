@@ -55,7 +55,7 @@ export default function SignInCard() {
       .then((response) => {
         if (response) {
           toast.success('Đăng nhập thành công');
-          navigate('/home');
+          navigate('/');
         }
       })
       .catch((status) => {
