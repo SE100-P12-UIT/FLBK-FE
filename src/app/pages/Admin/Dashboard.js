@@ -15,6 +15,7 @@ import * as React from 'react';
 import Logo from '../../assets/icon/Logo.svg';
 import CustomerList from './CustomerList';
 import EmployeeList from './EmployeeList';
+import FlightManagement from './FlightManagement';
 
 
 const NAVIGATION = [
@@ -26,12 +27,13 @@ const NAVIGATION = [
     {
         segment: 'QuanLyNhanVien',
         title: 'Quản lý nhân viên',
-        icon: <FlightIcon />,
+        icon: <PersonIcon />,
+
     },
     {
         segment: 'QuanLyChuyenBay',
         title: 'Quản lý chuyến bay',
-        icon: <ShoppingCartIcon />,
+        icon: <FlightIcon />,
     },
     {
         segment: 'QuanLyQuyDinh',
@@ -41,7 +43,7 @@ const NAVIGATION = [
     {
         segment: 'QuanLyMayBay',
         title: 'Quản lý máy bay',
-        icon: <DeleteForeverIcon />,
+        icon: <FlightIcon />,
     },
     {
         segment: 'Lapbaocao',
@@ -161,7 +163,7 @@ function DemoPageContent({ pathname }) {
         >
             {pathname === "/QuanLyKhachHang" ? (<CustomerList />) : <></>}
             {pathname === "/QuanLyNhanVien" ? (<EmployeeList />) : <></>}
-            {/* {pathname === "/Lichchuyenbay" ? (<FlightManagement />) : <></>} */}
+            {pathname === "/QuanLyChuyenBay" ? (<FlightManagement />) : <></>}
 
             {/* <Typography>Dashboard content for {pathname}</Typography> */}
         </Box>

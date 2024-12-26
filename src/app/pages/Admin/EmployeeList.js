@@ -180,7 +180,7 @@ const EmployeeList = () => {
                 }}
             />
             <TableContainer component={Paper} sx={{ overflowX: 'auto' }} >
-                <Table sx={{ borderBottom: '1px solid #ddd' }}>
+                <Table sx={{ borderBottom: '1px solid #ddd', whiteSpace: 'nowrap' }}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Số thứ tự</TableCell>
@@ -198,8 +198,8 @@ const EmployeeList = () => {
                             const ns = new Date(item.dateOfBirth);
                             // Chỉ hiển thị ngày (theo định dạng địa phương, ví dụ: dd/mm/yyyy hoặc mm/dd/yyyy tùy vào cài đặt)
                             const formattedDate = ns.toLocaleString("en");
-                            return (<TableRow key={index}>
-                                <TableCell>{item.id}</TableCell>
+                            return (<TableRow key={item.id}>
+                                <TableCell>{index + 1}</TableCell>
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.phoneNumber}</TableCell>
                                 <TableCell>{item.email}</TableCell>
@@ -342,7 +342,7 @@ const EmployeeList = () => {
             <Dialog open={openDeleteDialog} onClose={handleDeleteDialogClose}>
                 <DialogTitle>Xác nhận xóa thông tin nhân viên?</DialogTitle>
                 <DialogContent>
-                    <Typography>Bạn có chắc chắn muốn xóa nhân viên tên{selectedUser?.name}?</Typography>
+                    <Typography>Bạn có chắc chắn muốn xóa nhân viên tên {selectedUser?.name} ?</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleDeleteDialogClose} color="secondary">
@@ -353,7 +353,7 @@ const EmployeeList = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Box>
+        </Box >
     )
 };
 

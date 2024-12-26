@@ -79,7 +79,7 @@ const VerifyTickets = () => {
                 <Typography variant="body2">Toàn bộ danh sách vé sẽ hiển thị ở đây</Typography>
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
-                <CardContent sx={{  }}>
+                <CardContent sx={{}}>
                     <Typography variant="h4">{data.length}</Typography>
                     <Typography variant="body2">Số lượng Vé chờ xác nhận</Typography>
                 </CardContent>
@@ -124,8 +124,8 @@ const VerifyTickets = () => {
                             // Chỉ hiển thị ngày (theo định dạng địa phương, ví dụ: dd/mm/yyyy hoặc mm/dd/yyyy tùy vào cài đặt)
                             const formattedDate = createdAt.toLocaleString("en-GB");
                             return (
-                                <TableRow key={index}>
-                                    <TableCell>{item.id}</TableCell>
+                                <TableRow key={item.id}>
+                                    <TableCell>{index + 1}</TableCell>
                                     <TableCell>{item.title}</TableCell>
                                     <TableCell>{item.title}</TableCell>
                                     <TableCell>{item.title}</TableCell>
