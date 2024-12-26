@@ -31,11 +31,6 @@ function App() {
     if (role === 'employee') return '/employee/dashboard';
     return '/search';
   };
-  
-  useEffect(() => {
-    console.log("Auth: ", isAuthenticated," | Role: ", userRole);
-    
-  }, []);
 
   if (!isAuthenticated) {
     return (
