@@ -1,5 +1,4 @@
 import BarChartIcon from '@mui/icons-material/BarChart';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FlightIcon from '@mui/icons-material/Flight';
 import LogoutIcon from '@mui/icons-material/Logout';

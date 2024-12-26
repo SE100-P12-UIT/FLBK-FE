@@ -106,8 +106,8 @@ const EmployeeList = () => {
     if (error) return <Typography color="error">{error}</Typography>;
 
     const filteredData = Array.isArray(data.results) ? data.results.filter(
-        (item) => item.email && item.email.includes(searchTerm) ||
-            item.phoneNumber && item.phoneNumber.includes(searchTerm)
+        (item) => (item.email && item.email.includes(searchTerm)) ||
+            (item.phoneNumber && item.phoneNumber.includes(searchTerm))
     ) : [];
 
     // Xử lý thay đổi trang
