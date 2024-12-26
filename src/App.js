@@ -22,14 +22,16 @@ function App() {
   useEffect(() => {
     if (isAuthenticated && userRole) {
       const redirectPath = redirectBasedOnRole(userRole);
-      navigate(redirectPath); 
+      if (window.location.pathname === '/') {
+        navigate(redirectPath); 
+      }
     }
   }, [isAuthenticated, userRole, navigate]);
 
   const redirectBasedOnRole = (role) => {
     if (role === 'admin') return '/admin/dashboard';
     if (role === 'employee') return '/employee/dashboard';
-    return '/search';
+    return '/home';
   };
 
   if (!isAuthenticated) {
@@ -43,7 +45,7 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/search" element={<FlightSearch />} />
               <Route path="/booking" element={<BookFlight />} />
-              <Route path="/" element={<Navigate to="/search" replace />} />
+              <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Box>
@@ -74,7 +76,9 @@ function App() {
               <>
                 <Route path="/user/profile" element={<UserProfile />} />
                 <Route path="/search" element={<FlightSearch />} />
-                <Route path="*" element={<Navigate to="/search" replace />} />
+                <Route path="/booking" element={<BookFlight />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="*" element={<NotFoundPage />} />
               </>
             )}
           </Routes>
