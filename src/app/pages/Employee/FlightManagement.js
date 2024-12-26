@@ -158,7 +158,7 @@ const FlightManagement = () => {
                 <Typography variant="body2">Toàn bộ danh sách chuyến bay sẽ hiển thị ở đây</Typography>
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
-                <CardContent sx={{  }}>
+                <CardContent sx={{}}>
                     <Typography variant="h4">{data.length}</Typography>
                     <Typography variant="body2">Số lượng chuyến bay</Typography>
                 </CardContent>
@@ -237,14 +237,6 @@ const FlightManagement = () => {
             <Dialog open={isOpen} onClose={handleAddDialogClose}>
                 <DialogTitle>Thêm chuyến bay</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        name="flightid"
-                        label="Mã chuyến bay"
-                        fullWidth
-                        margin="normal"
-                        value={flightData.flightid}
-                        onChange={handleInputChange}
-                    />
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Hãng máy bay</InputLabel>
                         <Select
@@ -255,6 +247,19 @@ const FlightManagement = () => {
                         >
                             <MenuItem value="VietJet">VietJet</MenuItem>
                             <MenuItem value="VietNamAirline">VietNamAirline</MenuItem>
+                            <MenuItem value="other">Khác...</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel>Chọn máy bay</InputLabel>
+                        <Select
+                            name="plane"
+                            value={flightData.planeid}
+                            onChange={handleInputChange}
+                            label="Chọn máy bay"
+                        >
+                            <MenuItem value="A313">A313</MenuItem>
+                            <MenuItem value="A310">A310</MenuItem>
                             <MenuItem value="other">Khác...</MenuItem>
                         </Select>
                     </FormControl>
@@ -302,6 +307,7 @@ const FlightManagement = () => {
                         margin="normal"
                         value={flightData.duration}
                         onChange={handleInputChange}
+                        InputProps={{ inputProps: { min: 0.5 } }}
                     />
                     <TextField
                         name="price"
@@ -311,6 +317,7 @@ const FlightManagement = () => {
                         margin="normal"
                         value={flightData.price}
                         onChange={handleInputChange}
+                        InputProps={{ inputProps: { min: 1 } }}
                     />
                 </DialogContent>
                 <DialogActions>
