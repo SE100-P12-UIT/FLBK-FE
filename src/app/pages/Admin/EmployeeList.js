@@ -46,7 +46,7 @@ const EmployeeList = () => {
         });
     };
 
-    const handleAddEmployee = () => {
+    const handleAddUser = () => {
         // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
         console.log('Dữ liệu thêm chuyến bay:', userData);
         handleAddDialogClose();
@@ -114,10 +114,39 @@ const EmployeeList = () => {
     const handleEditDialogClose = () => {
         setIsEditOpen(false);
     };
-    const handleEditUser = () => {
-        // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
-        console.log('Dữ liệu sửa thông tin nhân viên:', userData);
-        handleEditDialogClose();
+    // const handleEditUser = () => {
+    //     // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
+    //     console.log('Dữ liệu sửa thông tin nhân viên:', userData);
+    //     handleEditDialogClose();
+    // };
+
+    const handleEditUser = async () => {
+        try {
+            // Gọi API để cập nhật thông tin người dùng
+            const updatedUser = await UserService.updateUserById(userData.id, {
+                name: userData.name,
+                phoneNumber: userData.phoneNumber,
+                email: userData.email,
+                dateOfBirth: userData.dateOfBirth,
+                citizenId: userData.citizenId,
+                // address: userData.address, // Nếu có trường address
+            });
+            console.log('Thông tin người dùng đã cập nhật:', updatedUser);
+
+            // Cập nhật danh sách người dùng trong state
+            setData((prevData) => ({
+                ...prevData,
+                results: prevData.results.map((user) =>
+                    user.id === userData.id ? { ...user, ...updatedUser } : user
+                ),
+            }));
+
+            // Đóng hộp thoại chỉnh sửa
+            handleEditDialogClose();
+        } catch (error) {
+            console.error('Lỗi khi cập nhật thông tin người dùng:', error);
+            alert('Không thể cập nhật thông tin người dùng. Vui lòng thử lại!');
+        }
     };
 
     const handleInputChange = (e) => {
@@ -272,7 +301,7 @@ const EmployeeList = () => {
                     <Button onClick={handleAddDialogClose} color="secondary">
                         Hủy
                     </Button>
-                    <Button onClick={handleAddEmployee} variant="contained" color="primary">
+                    <Button onClick={handleAddUser} variant="contained" color="primary">
                         Thêm
                     </Button>
                 </DialogActions>

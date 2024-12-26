@@ -88,10 +88,43 @@ const CustomerList = () => {
     const handleEditDialogClose = () => {
         setIsEditOpen(false);
     };
-    const handleEditUser = () => {
-        // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
-        console.log('Dữ liệu sửa thông tin khách hàng:', userData);
-        handleEditDialogClose();
+
+
+    // const handleEditUser = () => {
+    //     // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
+    //     console.log('Dữ liệu sửa thông tin khách hàng:', userData);
+    //     UserService.updateUserById(userData.id, userData);
+    //     handleEditDialogClose();
+    // };
+
+    const handleEditUser = async () => {
+        try {
+            // Gọi API để cập nhật thông tin người dùng
+            const updatedUser = await UserService.updateUserById(userData.id, {
+                name: userData.name,
+                phoneNumber: userData.phoneNumber,
+                email: userData.email,
+                dateOfBirth: userData.dateOfBirth,
+                citizenId: userData.citizenId,
+                // address: userData.address, // Nếu có trường address
+            });
+            console.log('Thông tin người dùng đã cập nhật:', updatedUser.dateOfBirth);
+            console.log('Thông tin người dùng đã cập nhật:', updatedUser);
+
+            // Cập nhật danh sách người dùng trong state
+            setData((prevData) => ({
+                ...prevData,
+                results: prevData.results.map((user) =>
+                    user.id === userData.id ? { ...user, ...updatedUser } : user
+                ),
+            }));
+
+            // Đóng hộp thoại chỉnh sửa
+            handleEditDialogClose();
+        } catch (error) {
+            console.error('Lỗi khi cập nhật thông tin người dùng:', error);
+            alert('Không thể cập nhật thông tin người dùng. Vui lòng thử lại!');
+        }
     };
 
     const handleInputChange = (e) => {
