@@ -5,6 +5,7 @@ import { Box, ThemeProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import theme from './app/styles/muiOverride.js';
 import Dashboard from './app/pages/Employee/Dashboard.js';
+import DashBoard from './app/pages/Admin/Dashboard.js'
 import NotFoundPage from './app/pages/NotFound/NotFound.js';
 import SignIn from './app/pages/Authentication/SignIn/SignIn.js';
 import SignUp from './app/pages/Authentication/SignUp/SignUp.js';
@@ -22,7 +23,7 @@ function App() {
   useEffect(() => {
     if (isAuthenticated && userRole) {
       const redirectPath = redirectBasedOnRole(userRole);
-      navigate(redirectPath); 
+      navigate(redirectPath);
     }
   }, [isAuthenticated, userRole, navigate]);
 
@@ -60,7 +61,7 @@ function App() {
           <Routes>
             {userRole === 'admin' && (
               <>
-                <Route path="/admin/dashboard" element={<Dashboard />} />
+                <Route path="/admin/dashboard" element={<DashBoard />} />
                 <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
               </>
             )}
