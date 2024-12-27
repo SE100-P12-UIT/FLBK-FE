@@ -119,8 +119,8 @@ const CustomerList = () => {
                     </TableHead>
                     <TableBody>
                         {filteredData.map((item, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{item.id}</TableCell>
+                            <TableRow key={item.id}>
+                                <TableCell>{index + 1}</TableCell>
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.phoneNumber}</TableCell>
                                 <TableCell>{item.email}</TableCell>

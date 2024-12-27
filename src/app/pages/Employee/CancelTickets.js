@@ -134,8 +134,8 @@ const CancelTickets = () => {
               // Chỉ hiển thị ngày (theo định dạng địa phương, ví dụ: dd/mm/yyyy hoặc mm/dd/yyyy tùy vào cài đặt)
               const formattedDate = createdAt.toLocaleString("en-GB");
               return (
-                <TableRow key={index}>
-                  <TableCell>{item.id}</TableCell>
+                <TableRow key={item.id}>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{item.title}</TableCell>
                   <TableCell>{item.title}</TableCell>
                   <TableCell>{item.title}</TableCell>
