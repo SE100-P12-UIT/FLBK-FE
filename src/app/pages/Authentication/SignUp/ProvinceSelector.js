@@ -5,7 +5,7 @@ import { getProvinces, getDistrictsByProvinceCode, getWardsByDistrictCode } from
 const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
+  const [towns, setTowns] = useState([]);
 
   useEffect(() => {
     const fetchCities = () => {
@@ -27,14 +27,14 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
           label: district.name,
         }));
         setDistricts(districtsList);
-        setWards([]);
+        setTowns([]);
       } else {
         setDistricts([]);
-        setWards([]);
+        setTowns([]);
       }
     } else {
       setDistricts([]);
-      setWards([]);
+      setTowns([]);
     }
   }, [address.province, cities]);
 
@@ -46,12 +46,12 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
           value: ward.code,
           label: ward.name,
         }));
-        setWards(wardsList);
+        setTowns(wardsList);
       } else {
-        setWards([]);
+        setTowns([]);
       }
     } else {
-      setWards([]);
+      setTowns([]);
     }
   }, [address.district, districts]);
 
@@ -59,9 +59,9 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
     const newAddress = { ...address, [field]: value };
     if (field === 'province') {
       newAddress.district = '';
-      newAddress.ward = '';
+      newAddress.town = '';
     } else if (field === 'district') {
-      newAddress.ward = '';
+      newAddress.town = '';
     }
     onAddressChange(newAddress);
   };
@@ -72,8 +72,8 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
       <Box
         sx={{
           display: 'flex',
-                  gap: '16px',
-          marginBottom:'16px',
+          gap: '16px',
+          marginBottom: '16px',
           flexDirection: { xs: 'column', lg: 'row' },
         }}
       >
@@ -114,8 +114,8 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
         </FormControl>
         <FormControl fullWidth>
           <Select
-            value={address.ward || ''}
-            onChange={(e) => handleChange('ward', e.target.value)}
+            value={address.town || ''}
+            onChange={(e) => handleChange('town', e.target.value)}
             displayEmpty
             required
             disabled={!address.district}
@@ -123,9 +123,9 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
             <MenuItem value="" disabled>
               Chọn phường/xã
             </MenuItem>
-            {wards.map((ward) => (
-              <MenuItem key={ward.value} value={ward.label}>
-                {ward.label}
+            {towns.map((town) => (
+              <MenuItem key={town.value} value={town.label}>
+                {town.label}
               </MenuItem>
             ))}
           </Select>
@@ -133,8 +133,8 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
       </Box>
       <FormControl fullWidth>
         <TextField
-          value={address.detail || ''}
-          onChange={(e) => handleChange('detail', e.target.value)}
+          value={address.street || ''}
+          onChange={(e) => handleChange('street', e.target.value)}
           placeholder="Số nhà, tên đường"
           fullWidth
           required
