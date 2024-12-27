@@ -15,6 +15,7 @@ import Logo from '../../assets/icon/Logo.svg';
 import CustomerList from './CustomerList';
 import EmployeeList from './EmployeeList';
 import FlightManagement from './FlightManagement';
+import PlaneList from './PlaneList';
 
 
 const NAVIGATION = [
@@ -163,7 +164,7 @@ function DemoPageContent({ pathname }) {
             {pathname === "/QuanLyKhachHang" ? (<CustomerList />) : <></>}
             {pathname === "/QuanLyNhanVien" ? (<EmployeeList />) : <></>}
             {pathname === "/QuanLyChuyenBay" ? (<FlightManagement />) : <></>}
-
+            {pathname === "/QuanLyMayBay" ? (<PlaneList />) : <></>}
             {/* <Typography>Dashboard content for {pathname}</Typography> */}
         </Box>
     );
