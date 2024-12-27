@@ -31,7 +31,7 @@ const EmployeeList = () => {
         password: '',
         name: '',
         role: 'employee',
-        dateOfBirth: '',
+        dateOfBirth: null,
         phoneNumber: '',
 
     });
@@ -40,16 +40,17 @@ const EmployeeList = () => {
         setIsOpen(true);
     };
     const handleAddDialogClose = () => {
-        setIsOpen(false);
+
         setuserData({
             id: '',
             email: '',
             password: '',
             name: '',
             role: 'employee',
-            dateOfBirth: '',
+            dateOfBirth: null,
             phoneNumber: '',
         });
+        setIsOpen(false);
     };
 
     const handleAddUser = async () => {
@@ -57,16 +58,16 @@ const EmployeeList = () => {
             // Gọi API thêm người dùng
             const createdUser = await UserService.createUserAccount(userData);
 
-            if (createdUser && createdUser.id) {
-                console.log('Nhân viên mới:', createdUser);
+            // if (createdUser && createdUser.id) {
+            console.log('Nhân viên mới:', createdUser);
 
-                // Thêm nhân viên vào danh sách hiển thị
-                setData((prevData) => ({
-                    ...prevData,
-                    results: [createdUser, ...prevData.results], // Thêm nhân viên vào đầu danh sách
-                    totalResults: prevData.totalResults + 1, // Tăng tổng số nhân viên
-                }));
-            }
+            // Thêm nhân viên vào danh sách hiển thị
+            setData((prevData) => ({
+                ...prevData,
+                results: [createdUser, ...prevData.results], // Thêm nhân viên vào đầu danh sách
+                totalResults: prevData.totalResults + 1, // Tăng tổng số nhân viên
+            }));
+
             // Đóng hộp thoại
             handleAddDialogClose();
         } catch (error) {
@@ -80,8 +81,6 @@ const EmployeeList = () => {
     const [selectedUser, setSelectedUser] = useState(null);
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);// Trạng thái mở hộp thoại xóa nhân viên
-
-    const [value, setValue] = useState();
 
     // Gọi API 
     useEffect(() => {
@@ -130,6 +129,7 @@ const EmployeeList = () => {
             role: user.role,
             dateOfBirth: user.dateOfBirth,
             phoneNumber: user.phoneNumber,
+            citizenId: user.citizenId,
             // address: user.address
         });
         setIsEditOpen(true);
@@ -192,7 +192,7 @@ const EmployeeList = () => {
             // Gọi API xóa nhân viên
             await UserService.deleteUserById(selectedUser.id);
 
-            console.log(`Đã xóa khách hàng có ID: ${selectedUser.id}`);
+            console.log(`Đã xóa nhân viên có ID: ${selectedUser.id}`);
 
             // Xóa nhân viên khỏi danh sách hiển thị
             setData((prevData) => ({
@@ -265,7 +265,7 @@ const EmployeeList = () => {
                         {filteredData.map((item, index) => {
                             const ns = new Date(item.dateOfBirth);
                             // Chỉ hiển thị ngày (theo định dạng địa phương, ví dụ: dd/mm/yyyy hoặc mm/dd/yyyy tùy vào cài đặt)
-                            const formattedDate = ns.toLocaleString("en");
+                            const formattedDate = ns.toLocaleDateString("en-GB");
                             return (<TableRow key={item.id}>
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell>{item.name}</TableCell>
@@ -303,7 +303,7 @@ const EmployeeList = () => {
                         label="Họ và tên"
                         fullWidth
                         margin="normal"
-                        value={userData.name}
+                        // value={userData.name}
                         onChange={handleInputChange}
                     />
                     <TextField
@@ -311,7 +311,7 @@ const EmployeeList = () => {
                         label="Số điện thoại"
                         fullWidth
                         margin="normal"
-                        value={userData.phoneNumber}
+                        // value={userData.phoneNumber}
                         onChange={handleInputChange}
                     />
                     <TextField
@@ -319,7 +319,6 @@ const EmployeeList = () => {
                         label="Email"
                         fullWidth
                         margin="normal"
-                        value={userData.email}
                         onChange={handleInputChange}
                     />
                     <TextField
@@ -330,16 +329,23 @@ const EmployeeList = () => {
                         onChange={handleInputChange}
                     />
                     <DatePicker
+                        name="dateOfBirth"
                         label="Ngày sinh"
-                        value={value}
-                        onChange={(newValue) => setValue(newValue)}
+                        // value={userData.dateOfBirth ? new Date(userData.dateOfBirth) : null}
+                        onChange={(newValue) => setuserData({ ...userData, dateOfBirth: newValue })}
+                        slotProps={{
+                            textField: {
+                                fullWidth: true,
+                                margin: 'normal',
+                            },
+                        }}
                     />
                     <TextField
                         name="citizenId"
                         label="Căn cước công dân"
                         fullWidth
                         margin="normal"
-                        value={userData.citizenId}
+                        // value={userData.citizenId}
                         onChange={handleInputChange}
                     />
                 </DialogContent>
@@ -382,9 +388,16 @@ const EmployeeList = () => {
                         onChange={handleInputChange}
                     />
                     <DatePicker
+                        name="dateOfBirth"
                         label="Ngày sinh"
-                        value={userData.dateOfBirth}
-                        onChange={(newValue) => setValue(newValue)}
+                        value={userData.dateOfBirth ? new Date(userData.dateOfBirth) : null}
+                        onChange={(newValue) => setuserData({ ...userData, dateOfBirth: newValue })}
+                        slotProps={{
+                            textField: {
+                                fullWidth: true,
+                                margin: 'normal',
+                            },
+                        }}
                     />
                     <TextField
                         name="citizenId"

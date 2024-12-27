@@ -32,8 +32,6 @@ const CustomerList = () => {
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);// Trạng thái mở hộp thoại xóa khách hàng
 
-    const [value, setValue] = useState();
-
     // Gọi API 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,8 +55,8 @@ const CustomerList = () => {
     if (error) return <Typography color="error">{error}</Typography>;
 
     const filteredData = Array.isArray(data.results) ? data.results.filter(
-        (item) => item.email && item.email.includes(searchTerm) ||
-            item.phoneNumber && item.phoneNumber.includes(searchTerm)
+        (item) => (item.email && item.email.includes(searchTerm)) ||
+            (item.phoneNumber && item.phoneNumber.includes(searchTerm))
     ) : [];
 
     // Xử lý thay đổi trang
@@ -80,6 +78,7 @@ const CustomerList = () => {
             name: user.name,
             dateOfBirth: user.dateOfBirth,
             phoneNumber: user.phoneNumber,
+            citizenId: user.citizenId,
             // address: user.address
         });
         setIsEditOpen(true);
@@ -206,7 +205,7 @@ const CustomerList = () => {
                         {filteredData.map((item, index) => {
                             const ns = new Date(item.dateOfBirth);
                             // Chỉ hiển thị ngày (theo định dạng địa phương, ví dụ: dd/mm/yyyy hoặc mm/dd/yyyy tùy vào cài đặt)
-                            const formattedDate = ns.toLocaleString("en");
+                            const formattedDate = ns.toLocaleDateString("en-GB");
                             return (<TableRow key={item.id}>
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell>{item.name}</TableCell>
@@ -264,9 +263,16 @@ const CustomerList = () => {
                         onChange={handleInputChange}
                     />
                     <DatePicker
+                        name="dateOfBirth"
                         label="Ngày sinh"
-                        value={value}
-                        onChange={(newValue) => setValue(newValue)}
+                        value={userData.dateOfBirth ? new Date(userData.dateOfBirth) : null}
+                        onChange={(newValue) => setuserData({ ...userData, dateOfBirth: newValue })}
+                        slotProps={{
+                            textField: {
+                                fullWidth: true,
+                                margin: 'normal',
+                            },
+                        }}
                     />
                     <TextField
                         name="citizenId"
