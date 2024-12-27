@@ -9,7 +9,7 @@ import Logo from './../assets/icon/Logo.svg';
 
 const Footer = () => {
   return (
-    <Box sx={{display:'flex',width:'100%',minWidth:'400px', backgroundColor: '#8DD3BB', p:4, color: '#000' }}>
+    <Box sx={{display:'flex',justifySelf:'stretch', width:'100vw',minWidth:'400px', backgroundColor: '#8DD3BB', p:4, color: '#000' }}>
       <Grid container spacing={1}>
         {/* Logo Section */}
         <Grid item xs={12} md={3}>

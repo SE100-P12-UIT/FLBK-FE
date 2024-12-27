@@ -32,7 +32,7 @@ const YesNoModal = ({ title, content, open, setOpen, onYes, onNo }) => {
         <Typography id="yes-no-modal-description" variant="body1" sx={{ mt: 1 }}>
           {content}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "right", mt: 5, gap: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3, gap: 2 }}>
           <Button
             variant="outlined"
             onClick={onYes}
