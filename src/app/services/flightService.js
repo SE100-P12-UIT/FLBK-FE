@@ -28,7 +28,7 @@ const updateFlightById = async (id, updateBody) => {
         }
     }
 };
-const getAllFlights = async (planeid = '', sortBy = null, limit, page) => {
+const getAllFlights = async (planeid, sortBy, limit, page) => {
     try {
         const response = await axiosConfig.get(`${USER_ENDPOINT}`, {
             params: {

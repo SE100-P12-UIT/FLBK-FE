@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import FlightService from '../../services/flightService';
+import FlightService from '../../services/FlightService';
 
 const FlightManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -143,7 +143,7 @@ const FlightManagement = () => {
     const handleEditFlight = async () => {
         try {
             // Gọi API để cập nhật thông tin người dùng
-            const updatedFlight = await flightService.updateFlightById(flightData.id, {
+            const updatedFlight = await FlightService.updateFlightById(flightData.id, {
                 name: flightData.name,
                 phoneNumber: flightData.phoneNumber,
                 email: flightData.email,
@@ -157,7 +157,7 @@ const FlightManagement = () => {
             setData((prevData) => ({
                 ...prevData,
                 results: prevData.results.map((flight) =>
-                    fight.id === flightData.id ? { ...flight, ...updatedFlight } : flight
+                    flight.id === flightData.id ? { ...flight, ...updatedFlight } : flight
                 ),
             }));
 
@@ -188,7 +188,7 @@ const FlightManagement = () => {
             // Gọi API xóa chuyến bay
             await FlightService.deleteFlightById(selectedFlight.id);
 
-            console.log(`Đã xóa chuyến có ID: ${selectedUser.id}`);
+            console.log(`Đã xóa chuyến có ID: ${selectedFlight.id}`);
 
             // Xóa chuyến bay khỏi danh sách hiển thị
             setData((prevData) => ({
