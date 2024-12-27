@@ -87,7 +87,7 @@ function App() {
             )}
           </Routes>
         </Box>
-        <ToastContainer position="bottom-right" autoClose={2500} />
+        <ToastContainer position="bottom-right" autoClose={2500} limit={3}/>
       </ThemeProvider>
     </Suspense>
   );
