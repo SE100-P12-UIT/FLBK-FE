@@ -1,6 +1,5 @@
 import HeartIcon from "@mui/icons-material/FavoriteBorder";
-import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-import SendIcon from "@mui/icons-material/Send";
+import SearchIcon from '@mui/icons-material/Search';
 import {
   Autocomplete,
   Box,
@@ -13,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import ScrollToTopButton from "../../components/ScrollToTopButton";
 import Footer from "../../layouts/Footer";
 import Header from "../../layouts/Header";
@@ -21,7 +20,7 @@ import Emirates from "./../../assets/images/Emirates.png";
 import Etihad from "./../../assets/images/Etihad.png";
 import FlyDubai from "./../../assets/images/FlyDubai.png";
 import Qatar from "./../../assets/images/Qatar.png";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
   
   const vietnamCities = [
     "Hà Nội",
@@ -132,7 +131,7 @@ import { useNavigate } from 'react-router-dom';
       airlineName: 'Qatar Airways',
       rating: '4.2',
       reviews: 'Very Good (54 reviews)',
-      price: '$104/night',
+      price: '$104',
       departure: '12:00 pm',
       arrival: '1:28 pm',
       stops: 'Non stop',
@@ -145,7 +144,7 @@ import { useNavigate } from 'react-router-dom';
       airlineName: 'Qatar Airways',
       rating: '4.2',
       reviews: 'Very Good (54 reviews)',
-      price: '$104/night',
+      price: '$104',
       departure: '12:00 pm',
       arrival: '1:28 pm',
       stops: 'Non stop',
@@ -157,13 +156,19 @@ import { useNavigate } from 'react-router-dom';
   
   const FlightSearch = () => {
     const navigate = useNavigate();
-    const [departure, setDeparture] = React.useState(null);
-    const [destination, setDestination] = React.useState(null);
-    const [ticketType, setTicketType] = React.useState(null);
-    const [passengerCount, setPassengerCount] = React.useState(null);
-    const [priceRange, setPriceRange] = React.useState([50, 1200]);
-    const [timeRange, setTimeRange] = React.useState([1, 1436]);
-  
+    const location = useLocation();
+    const { departure, destination, flightDate, passengerCount, ticketType } = location.state || {};
+
+    // State variables to hold the values
+    const [departureValue, setDeparture] = useState(departure || '');
+    const [destinationValue, setDestination] = useState(destination || '');
+    const [flightDateValue, setFlightDate] = useState(flightDate || '');
+    const [passengerCountValue, setPassengerCount] = useState(passengerCount || '');
+    const [ticketTypeValue, setTicketType] = useState(ticketType || '');
+
+    const [priceRange, setPriceRange] = useState([50, 1200]);
+    const [timeRange, setTimeRange] = useState([1, 1436]);
+
     const handleSearch = () => {
       alert("Searching flights...");
     };
@@ -214,15 +219,10 @@ import { useNavigate } from 'react-router-dom';
             boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.2)",
         }}
         >
-          <Box sx={{ display: "flex", flexDirection: "row", p: 2 }}>
-            <FlightTakeoffIcon />
-            <Typography variant="h6">Đặt vé</Typography>
-          </Box>
-  
-          <Grid container spacing={2} alignItems="center" sx={{ p: 2 }}>
-            <Grid item xs={12} sm={6} md={3}>
+          <Grid container spacing={1} alignItems="center" sx={{ p: 2 }}>
+            <Grid item xs={12} sm={3} md={2.2}>
               <Autocomplete
-                value={departure}
+                value={departureValue}
                 onChange={(event, newValue) => setDeparture(newValue)}
                 options={vietnamCities}
                 renderInput={(params) => (
@@ -231,9 +231,9 @@ import { useNavigate } from 'react-router-dom';
               />
             </Grid>
   
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={3} md={2.2}>
               <Autocomplete
-                value={destination}
+                value={destinationValue}
                 onChange={(event, newValue) => setDestination(newValue)}
                 options={vietnamCities}
                 renderInput={(params) => (
@@ -242,9 +242,22 @@ import { useNavigate } from 'react-router-dom';
               />
             </Grid>
   
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={3} md={2.2}>
+              <TextField
+                label="Ngày bay"
+                type="date"
+                fullWidth
+                value={flightDateValue}
+                onChange={(e) => setFlightDate(e.target.value)}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+  
+            <Grid item xs={12} sm={3} md={2.2}>
               <Autocomplete
-                value={passengerCount}
+                value={passengerCountValue}
                 onChange={(event, newValue) => setPassengerCount(newValue)}
                 options={passengerOptions}
                 renderInput={(params) => (
@@ -253,9 +266,9 @@ import { useNavigate } from 'react-router-dom';
               />
             </Grid>
   
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={3} md={2.2}>
               <Autocomplete
-                value={ticketType}
+                value={ticketTypeValue}
                 onChange={(event, newValue) => setTicketType(newValue)}
                 options={ticketTypes}
                 renderInput={(params) => (
@@ -263,14 +276,15 @@ import { useNavigate } from 'react-router-dom';
                 )}
               />
             </Grid>
-          </Grid>
   
-          <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
-          <Button variant="contained" onClick={handleSearch} color="primary">
-            <SendIcon />
-            <Typography variant="h6">Tìm vé</Typography>
-          </Button>
-        </Box>
+            <Grid item xs={12} sm={3} md={1}>
+              <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
+                <Button variant="contained" onClick={handleSearch} color="primary">
+                  <SearchIcon />
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
         </Box>
 
       {/* Left Sidebar - Filters */}
