@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import FlightService from '../../services/FlightService';
+import FlightService from '../../services/flightService';
 
 const FlightManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
