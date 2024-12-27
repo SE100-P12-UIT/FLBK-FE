@@ -44,13 +44,10 @@ const FlightManagement = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1) // Thay API đúng vào đây
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
-                setData(result || []); // Lưu dữ liệu vào state
+                const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1) // Thay API đúng vào đây               
+                setData(response || []); // Lưu dữ liệu vào state
                 setLoading(false); // Tắt trạng thái loading
+                console.log("Dữ liệu api chuyến bay:", response);
             } catch (error) {
                 setError('Không thể tải dữ liệu');
                 setLoading(false);
@@ -63,13 +60,8 @@ const FlightManagement = () => {
     if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
     if (error) return <Typography color="error">{error}</Typography>;
 
-    const filteredData = data.filter(
-        (item) => item.phone && item.phone.includes(searchTerm)
-    );
-
-    const paginatedData = filteredData.slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
+    const filteredData = data.results.filter(
+        (item) => item.flightName && item.flightName.includes(searchTerm)
     );
 
     // Xử lý thay đổi trang
@@ -213,7 +205,7 @@ const FlightManagement = () => {
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
                 <CardContent sx={{}}>
-                    <Typography variant="h4">{data.length}</Typography>
+                    <Typography variant="h4">{data.totalResults}</Typography>
                     <Typography variant="body2">Số lượng chuyến bay</Typography>
                 </CardContent>
             </Card>
@@ -248,8 +240,8 @@ const FlightManagement = () => {
                 <Table sx={{ borderBottom: '1px solid #ddd', whiteSpace: 'nowrap' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Mã chuyến bay</TableCell>
-                            <TableCell>Hãng</TableCell>
+                            <TableCell>Số thứ tự</TableCell>
+                            <TableCell>Tên chuyến bay</TableCell>
                             <TableCell>Điểm đi</TableCell>
                             <TableCell>Điểm đến</TableCell>
                             <TableCell>Thời gian khởi hành</TableCell>
@@ -259,21 +251,26 @@ const FlightManagement = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {paginatedData.map((item, index) => (
-                            <TableRow key={item.id}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>{item.phone}</TableCell>
-                                <TableCell>{item.phone}</TableCell>
-                                <TableCell>{item.email}</TableCell>
-                                <TableCell>{item.email}</TableCell>
-                                <TableCell>{item.phone}</TableCell>
-                                <TableCell>{item.email}</TableCell>
-                                <TableCell>
-                                    <IconButton onClick={() => handleEditDialogOpen(item)}><EditIcon /></IconButton>
-                                    <IconButton onClick={() => handleDeleteDialogOpen(item)}><DeleteIcon /></IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {filteredData.map((item, index) => {
+                            const dt = new Date(item.departureTime);
+                            const formatdeparture = dt.toLocaleString("en-GB")
+                            return (
+                                <TableRow key={item.id}>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{item.flightName}</TableCell>
+                                    <TableCell>{item.route[0].airport} - {item.route[0].location}</TableCell>
+                                    <TableCell>{item.route[1].airport} - {item.route[1].location}</TableCell>
+                                    <TableCell>{formatdeparture}</TableCell>
+                                    <TableCell>{item.duration}</TableCell>
+                                    <TableCell>{item?.price.$numberDecimal}</TableCell>
+                                    <TableCell>
+                                        <IconButton onClick={() => handleEditDialogOpen(item)}><EditIcon /></IconButton>
+                                        <IconButton onClick={() => handleDeleteDialogOpen(item)}><DeleteIcon /></IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        }
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>
