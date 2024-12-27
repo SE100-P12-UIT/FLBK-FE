@@ -25,8 +25,8 @@ function App() {
     if (isAuthenticated && userRole) {
       const redirectPath = redirectBasedOnRole(userRole);
       if (window.location.pathname === '/') {
-        navigate(redirectPath); 
-      } 
+        navigate(redirectPath);
+      }
     }
   }, [isAuthenticated, userRole, navigate]);
 

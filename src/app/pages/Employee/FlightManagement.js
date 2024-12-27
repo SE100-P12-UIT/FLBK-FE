@@ -12,6 +12,7 @@ import React, { useState, useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import FlightService from '../../services/flightService';
 
 const FlightManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -43,12 +44,12 @@ const FlightManagement = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://dummyjson.com/users'); // Thay API đúng vào đây
+                const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1) // Thay API đúng vào đây
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
-                setData(result.users || []); // Lưu dữ liệu vào state
+                setData(result || []); // Lưu dữ liệu vào state
                 setLoading(false); // Tắt trạng thái loading
             } catch (error) {
                 setError('Không thể tải dữ liệu');
@@ -56,7 +57,7 @@ const FlightManagement = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [rowsPerPage, page]);
 
     // Hiển thị trạng thái loading hoặc lỗi
     if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
@@ -85,7 +86,24 @@ const FlightManagement = () => {
     // Xử lý thêm chuyến bay
     const handleAddDialogOpen = () => {
         setIsOpen(true);
+
     };
+
+    const handleAddFlight = async () => {
+        try {
+            // Gọi API thêm chuyến bay
+            await FlightService.createFlight(flightData);
+            //gọi lại api
+            const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1);
+            setData(response);
+            // Đóng hộp thoại
+            handleAddDialogClose();
+        } catch (error) {
+            console.error('Lỗi khi thêm chuyến bay:', error);
+            alert('Không thể thêm chuyến bay. Vui lòng thử lại!');
+        }
+    };
+
     const handleAddDialogClose = () => {
         setIsOpen(false);
         setFlightData({
@@ -102,12 +120,6 @@ const FlightManagement = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFlightData({ ...flightData, [name]: value });
-    };
-
-    const handleAddFlight = () => {
-        // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
-        console.log('Dữ liệu thêm chuyến bay:', flightData);
-        handleAddDialogClose();
     };
 
 
@@ -128,11 +140,35 @@ const FlightManagement = () => {
     const handleEditDialogClose = () => {
         setIsEditOpen(false);
     };
-    const handleEditFlight = () => {
-        // Thêm logic xử lý dữ liệu ở đây (ví dụ: gửi lên server)
-        console.log('Dữ liệu sửa chuyến bay:', flightData);
-        handleEditDialogClose();
+    const handleEditFlight = async () => {
+        try {
+            // Gọi API để cập nhật thông tin người dùng
+            const updatedFlight = await FlightService.updateFlightById(flightData.id, {
+                name: flightData.name,
+                phoneNumber: flightData.phoneNumber,
+                email: flightData.email,
+                dateOfBirth: flightData.dateOfBirth,
+                citizenId: flightData.citizenId,
+                // address: userData.address, // Nếu có trường address
+            });
+            console.log('Thông tin chuyến bay đã cập nhật:', updatedFlight);
+
+            // Cập nhật danh sách chuyên bay trong state
+            setData((prevData) => ({
+                ...prevData,
+                results: prevData.results.map((flight) =>
+                    flight.id === flightData.id ? { ...flight, ...updatedFlight } : flight
+                ),
+            }));
+
+            // Đóng hộp thoại chỉnh sửa
+            handleEditDialogClose();
+        } catch (error) {
+            console.error('Lỗi khi cập nhật thông tin chuyến bay:', error);
+            alert('Không thể cập nhật thông tin chuyến bay. Vui lòng thử lại!');
+        }
     };
+
 
     //Xóa chuyến bay
     const handleDeleteDialogOpen = (flight) => {
@@ -145,10 +181,28 @@ const FlightManagement = () => {
         setSelectedFlight(null);
     };
 
-    const handleDeleteFlight = () => {
-        console.log(`Xóa chuyến bay có ID: ${selectedFlight.id}`);
-        // Logic xóa chuyến bay ở đây (có thể gọi API xóa từ server)
-        setOpenDeleteDialog(false);
+    const handleDeleteFlight = async () => {
+        try {
+            if (!selectedFlight?.id) return;
+
+            // Gọi API xóa chuyến bay
+            await FlightService.deleteFlightById(selectedFlight.id);
+
+            console.log(`Đã xóa chuyến có ID: ${selectedFlight.id}`);
+
+            // Xóa chuyến bay khỏi danh sách hiển thị
+            setData((prevData) => ({
+                ...prevData,
+                results: prevData.results.filter((flight) => flight.id !== selectedFlight.id),
+                totalResults: prevData.totalResults - 1, // Giảm tổng số chuyến bay
+            }));
+
+            // Đóng hộp thoại
+            handleDeleteDialogClose();
+        } catch (error) {
+            console.error('Lỗi khi xóa chuyến bay:', error);
+            alert('Không thể xóa chuyến bay. Vui lòng thử lại!');
+        }
     };
 
     return (

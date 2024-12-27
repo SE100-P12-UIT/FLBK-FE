@@ -42,8 +42,8 @@ export default function SignUpCard() {
   const [address, setAddress] = React.useState({
     province: "",
     district: "",
-    ward: "",
-    detail: "",
+    town: "",
+    street: "",
   });
   const navigate = useNavigate();
 
@@ -53,7 +53,7 @@ export default function SignUpCard() {
 
   const validateForm = (data, birthDate, address) => {
     const errors = {};
-  
+
     // Validate individual fields
     if (!data.name) errors.name = "Họ và tên là bắt buộc.";
     if (!data.email) errors.email = "Email là bắt buộc.";
@@ -63,15 +63,15 @@ export default function SignUpCard() {
     else if (!/^\d{10}$/.test(data.phone)) errors.phone = "Số điện thoại không hợp lệ.";
     if (!data.cccd) errors.cccd = "CCCD là bắt buộc.";
     if (!birthDate) errors.birthDate = "Ngày sinh là bắt buộc.";
-    
+
     // Validate address
-    if (!address.province || !address.district || !address.ward) {
+    if (!address.province || !address.district || !address.town) {
       errors.address = "Địa chỉ là bắt buộc.";
     }
-  
+
     return errors;
   };
-  
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -84,19 +84,24 @@ export default function SignUpCard() {
       phone: data.get("phone"),
       cccd: data.get("cccd"),
     };
-  
+
     const errors = validateForm(formData, birthDate, address);
     setFormErrors(errors);
     if (Object.keys(errors).length > 0) {
       return;
     }
-    
+
     const payload = {
       ...formData,
       phoneNumber: formData.phone,
       dateOfBirth: birthDate ? dayjs(birthDate).format("YYYY-MM-DD") : "",
       citizenId: formData.cccd,
-      address: `${address.detail}, ${address.ward}, ${address.district}, ${address.province}`,
+      address: {
+        district: address.district,
+        province: address.province,
+        street: address.street,
+        town: address.town,
+      }
     };
 
     console.log(payload);
