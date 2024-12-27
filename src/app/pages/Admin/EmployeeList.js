@@ -40,7 +40,6 @@ const EmployeeList = () => {
         setIsOpen(true);
     };
     const handleAddDialogClose = () => {
-
         setuserData({
             id: '',
             email: '',
@@ -56,17 +55,10 @@ const EmployeeList = () => {
     const handleAddUser = async () => {
         try {
             // Gọi API thêm người dùng
-            const createdUser = await UserService.createUserAccount(userData);
-
-            // if (createdUser && createdUser.id) {
-            console.log('Nhân viên mới:', createdUser);
-
-            // Thêm nhân viên vào danh sách hiển thị
-            setData((prevData) => ({
-                ...prevData,
-                results: [createdUser, ...prevData.results], // Thêm nhân viên vào đầu danh sách
-                totalResults: prevData.totalResults + 1, // Tăng tổng số nhân viên
-            }));
+            await UserService.createUserAccount(userData);
+            //gọi lại api
+            const response = await UserService.getAllUsers("employee", "asc", rowsPerPage, page + 1);
+            setData(response);
 
             // Đóng hộp thoại
             handleAddDialogClose();
