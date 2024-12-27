@@ -15,7 +15,7 @@ const TabSection = () => {
     useEffect(() => {
         setuser(data);
         console.log(data);
-    })
+    }, [data])
 
 
     const [user, setuser] = useState({
@@ -26,9 +26,6 @@ const TabSection = () => {
         address: {},
         dateOfBirth: '12/02/2004'
     });
-
-
-
 
     return (
         <Box sx={{ mt: 4, bgcolor: "white", p: 3, boxShadow: 3, borderRadius: 2, minWidth: '500px' }}>

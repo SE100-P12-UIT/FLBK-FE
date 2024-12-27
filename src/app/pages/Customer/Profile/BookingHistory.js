@@ -1,24 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     Box,
-    Tabs,
-    Tab,
     Typography,
     Card,
     CardContent,
     Avatar,
     Button,
     Grid,
-    Divider,
 } from "@mui/material";
 
 const BookingHistory = () => {
-    const [activeTab, setActiveTab] = useState(0);
-
-    const handleTabChange = (event, newValue) => {
-        setActiveTab(newValue);
-    };
-
     const bookings = [
         {
             id: 1,
