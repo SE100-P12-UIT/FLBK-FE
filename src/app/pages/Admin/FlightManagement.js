@@ -44,12 +44,12 @@ const FlightManagement = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1) // Thay API đúng vào đây
-                if (!response.ok) {
+                const response = await FlightService.getAllFlights('', 'asc', rowsPerPage, page + 1) // Thay API đúng vào đây
+                if (!response) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
-                setData(result || []); // Lưu dữ liệu vào state
+                console.log(response);
+                setData(response || []); // Lưu dữ liệu vào state
                 setLoading(false); // Tắt trạng thái loading
             } catch (error) {
                 setError('Không thể tải dữ liệu');
@@ -63,14 +63,11 @@ const FlightManagement = () => {
     if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
     if (error) return <Typography color="error">{error}</Typography>;
 
-    const filteredData = data.filter(
-        (item) => item.phone && item.phone.includes(searchTerm)
+    const filteredData = data.results.filter(
+        (item) => item.airline && item.airline.includes(searchTerm)
     );
 
-    const paginatedData = filteredData.slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
-    );
+
 
     // Xử lý thay đổi trang
     const handleChangePage = (event, newPage) => {
@@ -213,7 +210,7 @@ const FlightManagement = () => {
             </Box>
             <Card sx={{ marginBottom: '16px' }}>
                 <CardContent sx={{}}>
-                    <Typography variant="h4">{data.length}</Typography>
+                    <Typography variant="h4">{data.totalResults}</Typography>
                     <Typography variant="body2">Số lượng chuyến bay</Typography>
                 </CardContent>
             </Card>
@@ -259,7 +256,7 @@ const FlightManagement = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {paginatedData.map((item, index) => (
+                        {filteredData.map((item, index) => (
                             <TableRow key={item.id}>
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell>{item.phone}</TableCell>

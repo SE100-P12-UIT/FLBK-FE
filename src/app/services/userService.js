@@ -70,12 +70,27 @@ const createUserAccount = async (user) => {
   }
 }
 
+const deleteUserById = async (id) => {
+  try {
+    const response = await axiosConfig.delete(`${USER_ENDPOINT}/${id}`);
+    return response.data; // Trả về kết quả từ API nếu cần
+  } catch (error) {
+    if (error.response) {
+      throw error.response.data; // Trả về lỗi từ API
+    } else {
+      throw new Error('lỗi xóa người dùng');
+    }
+  }
+};
+
+
 const UserService = {
   getUserById,
   searchUserByEmail,
   updateUserById,
   getAllUsers,
   createUserAccount,
+  deleteUserById
 };
 
 export default UserService;
