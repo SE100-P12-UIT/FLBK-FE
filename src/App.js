@@ -79,6 +79,7 @@ function App() {
                 <Route path="/user/profile" element={<UserProfile />} />
                 <Route path="/search" element={<FlightSearch />} />
                 <Route path="/booking" element={<BookFlight />} />
+                <Route path="/bkdt" element={<BookingDetails />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="*" element={<NotFoundPage />} />
               </>

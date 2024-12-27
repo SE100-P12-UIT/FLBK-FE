@@ -1,14 +1,14 @@
-import { Box, createTheme, Typography, Radio, Button, Breadcrumbs, Link } from '@mui/material';
-import * as React from 'react';
-import WifiIcon from '@mui/icons-material/Wifi';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
-import TimerIcon from '@mui/icons-material/Timer';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import RealPlane from "./../../assets/images/RealPlane.png";
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 import FlightIcon from '@mui/icons-material/Flight';
-import { useLocation } from 'react-router-dom';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import TimerIcon from '@mui/icons-material/Timer';
+import WifiIcon from '@mui/icons-material/Wifi';
+import { Box, Breadcrumbs, Button, Link, Radio, Typography } from '@mui/material';
+import * as React from 'react';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import RealPlane from "./../../assets/images/RealPlane.png";
 
 function BookingDetail() {
   const location = useLocation();
@@ -266,7 +266,7 @@ function BookingDetail() {
         }}>
           <Typography fontWeight="bold">Tổng</Typography>
           <Typography fontWeight="bold">
-            ${parseFloat(flightData?.price?.replace('$', '') || 0) * 2}
+              ${parseFloat(total || 0)}
           </Typography>
         </Box>
 
