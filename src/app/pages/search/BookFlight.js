@@ -115,7 +115,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
     },
     {
       airlineLogo: FlyDubai,
-      airlineName: 'FlyDubai',
+      airlineName: 'Fly Dubai',
       rating: '4.2',
       reviews: 'Very Good (54 reviews)',
       price: '$104',
@@ -128,7 +128,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
     },
     {
       airlineLogo: Qatar,
-      airlineName: 'Qatar Airways',
+      airlineName: 'Qatar',
       rating: '4.2',
       reviews: 'Very Good (54 reviews)',
       price: '$104',
@@ -141,7 +141,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
     },
     {
       airlineLogo: Etihad,
-      airlineName: 'Qatar Airways',
+      airlineName: 'Etihad',
       rating: '4.2',
       reviews: 'Very Good (54 reviews)',
       price: '$104',
@@ -161,17 +161,44 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
     // State variables to hold the values
     const [departureValue, setDeparture] = useState(departure || '');
-    const [destinationValue, setDestination] = useState(destination || '');
-    const [flightDateValue, setFlightDate] = useState(flightDate || '');
-    const [passengerCountValue, setPassengerCount] = useState(passengerCount || '');
-    const [ticketTypeValue, setTicketType] = useState(ticketType || '');
-
-    const [priceRange, setPriceRange] = useState([50, 1200]);
-    const [timeRange, setTimeRange] = useState([1, 1436]);
+  const [destinationValue, setDestination] = useState(destination || '');
+  const [flightDateValue, setFlightDate] = useState(flightDate || '');
+  const [passengerCountValue, setPassengerCount] = useState(passengerCount || '');
+  const [ticketTypeValue, setTicketType] = useState(ticketType || '');
+  const [priceRange, setPriceRange] = useState([50, 1200]);
+  const [timeRange, setTimeRange] = useState([1, 1436]);
+  const [selectedAirlines, setSelectedAirlines] = useState([]);
+  const [filteredFlights, setFilteredFlights] = useState(flights);
 
     const handleSearch = () => {
       alert("Searching flights...");
     };
+
+    const handleAirlineChange = (airline) => {
+      setSelectedAirlines((prev) =>
+        prev.includes(airline) ? prev.filter((a) => a !== airline) : [...prev, airline]
+      );
+    };
+
+    const filterFlights = () => {
+      let updatedFlights = flights.filter((flight) => {
+        const price = parseInt(flight.price.replace('$', ''));
+        const departureTime = parseInt(flight.departure.split(':')[0]) * 60 + parseInt(flight.departure.split(':')[1].split(' ')[0]);
+        
+        return (
+          (!selectedAirlines.length || selectedAirlines.includes(flight.airlineName)) &&
+          price >= priceRange[0] && price <= priceRange[1] &&
+          departureTime >= timeRange[0] && departureTime <= timeRange[1]
+        );
+      });
+  
+      setFilteredFlights(updatedFlights);
+    };
+
+      // Re-filter flights when filters change
+  React.useEffect(() => {
+    filterFlights();
+  }, [priceRange, timeRange, selectedAirlines]);
 
     // Helper function to convert minutes to time format
     function formatTime(value) {
@@ -316,14 +343,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
           <Slider
             value={priceRange}
             onChange={(e, newValue) => setPriceRange(newValue)}
+            onChangeCommitted={filterFlights} // Apply filtering after adjustment
             valueLabelDisplay="auto"
             min={50}
             max={1200}
-            sx={{ 
+            sx={{
               color: '#8DD3BB',
               '& .MuiSlider-thumb': {
                 backgroundColor: '#8DD3BB',
-              }
+              },
             }}
           />
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -338,6 +366,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
           <Slider
             value={timeRange}
             onChange={(e, newValue) => setTimeRange(newValue)}
+            onChangeCommitted={filterFlights} // Apply filtering after adjustment
             valueLabelDisplay="auto"
             min={1} // Representing 12:00 AM as 0 minutes since midnight
             max={1436} // Representing 11:59 PM as 1439 minutes since midnight
@@ -357,24 +386,20 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
         {/* Flight Filter */}
         <Box sx={{ width: "70%", p: 2, borderBottom: '1px solid #112211' }}>
-          <Typography variant="h6">Hãng</Typography>
+        <Typography variant="h6">Hãng</Typography>
           <FormGroup>
-            <FormControlLabel 
-              control={<Checkbox />} 
-              label="Emirates" 
-            />
-            <FormControlLabel 
-              control={<Checkbox />} 
-              label="Fly Dubai" 
-            />
-            <FormControlLabel 
-              control={<Checkbox />} 
-              label="Qatar" 
-            />
-            <FormControlLabel 
-              control={<Checkbox />} 
-              label="Etihad" 
-            />
+            {["Emirates", "Fly Dubai", "Qatar", "Etihad"].map((airline) => (
+              <FormControlLabel
+                key={airline}
+                control={
+                  <Checkbox
+                    checked={selectedAirlines.includes(airline)}
+                    onChange={() => handleAirlineChange(airline)} // Update selected airlines
+                  />
+                }
+                label={airline}
+              />
+            ))}
           </FormGroup>
         </Box>
         </Box>
@@ -390,7 +415,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
           padding: 2,
         }}
         >
-          {flights.map((flight, index) => (
+          {filteredFlights.length > 0 ? (
+    filteredFlights.map((flight, index) => (
         <Grid
           container
           spacing={2}
@@ -476,7 +502,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
             
           </Grid>
         </Grid>
-      ))}
+      ))) : (
+        <Typography>No flights match your criteria.</Typography>
+      )}
         </Box>
         </Box>
           <ScrollToTopButton/>
