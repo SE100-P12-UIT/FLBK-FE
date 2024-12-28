@@ -57,9 +57,9 @@ axiosConfig.interceptors.response.use(
             return axiosConfig(originalRequest);
           })
           .catch((error) => {
-            // AuthService.logout(refreshToken).then(() => {
-            //   window.location.href = '/signin';
-            // });
+            AuthService.logout(refreshToken).then(() => {
+              window.location.href = '/signin';
+            });
           })
           .finally(() => {
             refreshTokenPromise = null;

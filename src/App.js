@@ -1,8 +1,9 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, ThemeProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
+import Cookies from 'js-cookie';
 import theme from './app/styles/muiOverride.js';
 import Dashboard from './app/pages/Employee/Dashboard.js';
 import DashBoard from './app/pages/Admin/Dashboard.js'
@@ -10,6 +11,9 @@ import NotFoundPage from './app/pages/NotFound/NotFound.js';
 import SignIn from './app/pages/Authentication/SignIn/SignIn.js';
 import SignUp from './app/pages/Authentication/SignUp/SignUp.js';
 import UserProfile from './app/pages/Customer/Profile/UserProfile.js';
+import TokenService from './app/services/tokenService.js';
+import { setUser } from './app/stores/slices/userSlice.js';
+import UserService from './app/services/userService.js';
 
 const Home = lazy(() => import('./app/pages/home/Home.js'));
 const FlightSearch = lazy(() => import('./app/pages/search/FlightSearch.js'));
@@ -19,7 +23,28 @@ const BookingDetails = lazy(() => import('./app/pages/search/BookingDetail.js'))
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const userRole = useSelector((state) => state.user.user.role || "");
+  const { token, refreshToken } = TokenService.getAccessTokenFromURL(window.location.search);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (token && refreshToken) {
+        Cookies.set('accessToken', token);
+        Cookies.set('refreshToken', refreshToken);
+        try {
+          const user = await UserService.getUserById(TokenService.decodeToken(token).sub);
+          dispatch(setUser(user));
+          window.history.replaceState({}, document.title, window.location.pathname);
+          window.location.reload();
+        } catch (error) {
+          console.error('Failed to fetch user:', error);
+        }
+      }
+    };
+
+    fetchUser();
+  }, [token, refreshToken, dispatch]);
 
   useEffect(() => {
     if (isAuthenticated && userRole) {
