@@ -4,84 +4,20 @@ import {
   Autocomplete,
   Box,
   Button,
-  Grid,
+  Grid2,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ScrollToTopButton from "../../components/ScrollToTopButton";
 import Footer from "../../layouts/Footer";
 import Header from "../../layouts/Header";
+import vietnamCities from "../../util/publicData";
 import flight from "./../../assets/images/flight.png";
 import homepage from "./../../assets/images/homepage.png";
 
-const vietnamCities = [
-  "Hà Nội",
-  "Hồ Chí Minh",
-  "Đà Nẵng",
-  "Hải Phòng",
-  "Cần Thơ",
-  "An Giang",
-  "Bà Rịa - Vũng Tàu",
-  "Bắc Giang",
-  "Bắc Kạn",
-  "Bạc Liêu",
-  "Bắc Ninh",
-  "Bến Tre",
-  "Bình Dương",
-  "Bình Định",
-  "Bình Phước",
-  "Bình Thuận",
-  "Cà Mau",
-  "Cao Bằng",
-  "Đắk Lắk",
-  "Đắk Nông",
-  "Điện Biên",
-  "Đồng Nai",
-  "Đồng Tháp",
-  "Gia Lai",
-  "Hà Giang",
-  "Hà Nam",
-  "Hà Tĩnh",
-  "Hậu Giang",
-  "Hòa Bình",
-  "Hưng Yên",
-  "Khánh Hòa",
-  "Kiên Giang",
-  "Kon Tum",
-  "Lai Châu",
-  "Lâm Đồng",
-  "Lạng Sơn",
-  "Lào Cai",
-  "Long An",
-  "Nam Định",
-  "Nghệ An",
-  "Ninh Bình",
-  "Ninh Thuận",
-  "Phú Thọ",
-  "Phú Yên",
-  "Quảng Bình",
-  "Quảng Nam",
-  "Quảng Ngãi",
-  "Quảng Ninh",
-  "Quảng Trị",
-  "Sóc Trăng",
-  "Sơn La",
-  "Tây Ninh",
-  "Thái Bình",
-  "Thái Nguyên",
-  "Thanh Hóa",
-  "Thừa Thiên Huế",
-  "Tiền Giang",
-  "Trà Vinh",
-  "Tuyên Quang",
-  "Vĩnh Long",
-  "Vĩnh Phúc",
-];
-
-// List of ticket types
-const ticketTypes = ["Economy", "Business", "First Class"];
+const ticketTypes = ["Common", "Business"];
 
 // List of passenger options
 const passengerOptions = [
@@ -93,14 +29,23 @@ const passengerOptions = [
 ];
 
 const Home = () => {
-  const [departure, setDeparture] = React.useState(null);
-  const [destination, setDestination] = React.useState(null);
-  const [ticketType, setTicketType] = React.useState(null);
-  const [passengerCount, setPassengerCount] = React.useState(null);
+  const [departure, setDeparture] = useState(null);
+  const [destination, setDestination] = useState(null);
+  const [ticketType, setTicketType] = useState(null);
+  const [passengerCount, setPassengerCount] = useState(null);
+  const [flightDate, setFlightDate] = useState(null);
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    navigate('/search');
+    navigate('/booking', {
+      state: {
+        departure,
+        destination,
+        flightDate,
+        passengerCount,
+        ticketType,
+      },
+    });
   };
 
   return (
@@ -174,51 +119,64 @@ const Home = () => {
           <Typography variant="h6">Đặt vé</Typography>
         </Box>
 
-        <Grid container spacing={2} alignItems="center" sx={{ p: 2 }}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Autocomplete
-              value={departure}
-              onChange={(event, newValue) => setDeparture(newValue)}
-              options={vietnamCities}
-              renderInput={(params) => (
-                <TextField {...params} label="Điểm đi" />
-              )}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <Autocomplete
-              value={destination}
-              onChange={(event, newValue) => setDestination(newValue)}
-              options={vietnamCities}
-              renderInput={(params) => (
-                <TextField {...params} label="Điểm đến" />
-              )}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <Autocomplete
-              value={passengerCount}
-              onChange={(event, newValue) => setPassengerCount(newValue)}
-              options={passengerOptions}
-              renderInput={(params) => (
-                <TextField {...params} label="Số hành khách" />
-              )}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <Autocomplete
-              value={ticketType}
-              onChange={(event, newValue) => setTicketType(newValue)}
-              options={ticketTypes}
-              renderInput={(params) => (
-                <TextField {...params} label="Loại vé" />
-              )}
-            />
-          </Grid>
-        </Grid>
+        <Grid2 container spacing={2} alignItems="center" sx={{ p: 2 }}>
+                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                    <Autocomplete
+                      value={departure}
+                      onChange={(event, newValue) => setDeparture(newValue)}
+                      options={vietnamCities}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Điểm đi" />
+                      )}
+                    />
+                  </Grid2>
+        
+                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                    <Autocomplete
+                      value={destination}
+                      onChange={(event, newValue) => setDestination(newValue)}
+                      options={vietnamCities}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Điểm đến" />
+                      )}
+                    />
+                  </Grid2>
+        
+                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                    <TextField
+                      label="Ngày bay"
+                      type="date"
+                      fullWidth
+                      value={flightDate}
+                      onChange={(e) => setFlightDate(e.target.value)}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid2>
+        
+                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                    <Autocomplete
+                      value={passengerCount}
+                      onChange={(event, newValue) => setPassengerCount(newValue)}
+                      options={passengerOptions}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Số hành khách" />
+                      )}
+                    />
+                  </Grid2>
+        
+                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                    <Autocomplete
+                      value={ticketType}
+                      onChange={(event, newValue) => setTicketType(newValue)}
+                      options={ticketTypes}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Loại vé" />
+                      )}
+                    />
+                  </Grid2>
+                </Grid2>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
           <Button variant="contained" onClick={handleSearch} color="primary">

@@ -3,30 +3,30 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControl,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-    TextField,
-    Typography
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TextField,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -53,7 +53,7 @@ const PlaneList = () => {
   });
 
   const [isSeatDialogOpen, setIsSeatDialogOpen] = useState(false);
-//   const [seatConfiguration, setSeatConfiguration] = useState([]);
+  //   const [seatConfiguration, setSeatConfiguration] = useState([]);
 
   const handleSeatDialogOpen = () => {
     setIsSeatDialogOpen(true);
@@ -334,7 +334,7 @@ const PlaneList = () => {
             <Select name="airline" onChange={handleInputChange} label="Hãng">
               <MenuItem value="VietJet">VietJet</MenuItem>
               <MenuItem value="VietNamAirline">VietNamAirline</MenuItem>
-              <MenuItem value="other">Khác...</MenuItem>
+              <MenuItem value="BambooAirway">BambooAirway</MenuItem>
             </Select>
           </FormControl>
 
