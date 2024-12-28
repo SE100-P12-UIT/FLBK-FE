@@ -28,24 +28,28 @@ const updatePlaneById = async (id, updateBody) => {
   }
 };
 
-const getAllPlane = async (/* role = 'user', sortBy = null, limit, page */) => {
+const getAllPlane = async (airline, sortBy, limit, page) => {
   try {
-    const response = await axiosConfig.get(`${PLANE_ENDPOINT}/getPlanes`/* , {
-      params: {
-        role,
-        sortBy,
-        limit,
-        page,
-      },
-    } */);
+    // Chỉ giữ lại các trường có giá trị
+    const params = {};
+    if (airline) params.airline = airline;
+    if (sortBy) params.sortBy = sortBy;
+    if (limit) params.limit = limit;
+    if (page) params.page = page;
+
+    const response = await axiosConfig.get(`${PLANE_ENDPOINT}/getPlanes`, {
+      params,
+    });
+
     return response.data;
   } catch (error) {
-      if (error.response) {
+    if (error.response) {
       throw error.response.data;
-      }
+    }
     return error.message;
   }
-}
+};
+
 
 const createPlane = async (requestBody) => {
   try {
@@ -62,10 +66,10 @@ const createPlane = async (requestBody) => {
 const deletePlaneById = async (id) => {
   try {
     const response = await axiosConfig.delete(`${PLANE_ENDPOINT}/deletePlane/${id}`);
-    return response.data; 
+    return response.data;
   } catch (error) {
     if (error.response) {
-      throw error.response.data; 
+      throw error.response.data;
     } else {
       throw new Error('lỗi xóa người dùng');
     }
@@ -74,9 +78,9 @@ const deletePlaneById = async (id) => {
 
 
 const PlaneService = {
-  getPlaneById, 
+  getPlaneById,
   updatePlaneById,
-  getAllPlane, 
+  getAllPlane,
   createPlane,
   deletePlaneById,
 };
