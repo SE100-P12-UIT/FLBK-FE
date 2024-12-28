@@ -249,7 +249,7 @@ const EmployeeList = () => {
                             <TableCell>Email</TableCell>
                             <TableCell>Ngày sinh</TableCell>
                             <TableCell>Căn cước công dân</TableCell>
-                            {/* <TableCell>Địa chỉ</TableCell> */}
+                            <TableCell>Địa chỉ</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
@@ -265,7 +265,12 @@ const EmployeeList = () => {
                                 <TableCell>{item.email}</TableCell>
                                 <TableCell>{formattedDate}</TableCell>
                                 <TableCell>{item.citizenId}</TableCell>
-                                {/* <TableCell>{item.address.ToString}</TableCell> */}
+                                <TableCell>{item?.address?.street ? `${item.address.street}, ` : ""}
+                    {item?.address?.town ? `${item.address.town}, ` : ""}
+                    {item?.address?.district
+                      ? `${item.address.district}, `
+                      : ""}
+                    {item?.address?.province || ""}</TableCell>
                                 <TableCell>
                                     <IconButton onClick={() => handleEditDialogOpen(item)}><EditIcon /></IconButton>
                                     <IconButton onClick={() => handleDeleteDialogOpen(item)}><DeleteIcon /></IconButton>

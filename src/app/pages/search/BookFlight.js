@@ -20,71 +20,10 @@ import Emirates from "./../../assets/images/Emirates.png";
 import Etihad from "./../../assets/images/Etihad.png";
 import FlyDubai from "./../../assets/images/FlyDubai.png";
 import Qatar from "./../../assets/images/Qatar.png";
+import vietnamCities from "../../util/publicData";
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useCallback } from "react";
   
-  const vietnamCities = [
-    "Hà Nội",
-    "Hồ Chí Minh",
-    "Đà Nẵng",
-    "Hải Phòng",
-    "Cần Thơ",
-    "An Giang",
-    "Bà Rịa - Vũng Tàu",
-    "Bắc Giang",
-    "Bắc Kạn",
-    "Bạc Liêu",
-    "Bắc Ninh",
-    "Bến Tre",
-    "Bình Dương",
-    "Bình Định",
-    "Bình Phước",
-    "Bình Thuận",
-    "Cà Mau",
-    "Cao Bằng",
-    "Đắk Lắk",
-    "Đắk Nông",
-    "Điện Biên",
-    "Đồng Nai",
-    "Đồng Tháp",
-    "Gia Lai",
-    "Hà Giang",
-    "Hà Nam",
-    "Hà Tĩnh",
-    "Hậu Giang",
-    "Hòa Bình",
-    "Hưng Yên",
-    "Khánh Hòa",
-    "Kiên Giang",
-    "Kon Tum",
-    "Lai Châu",
-    "Lâm Đồng",
-    "Lạng Sơn",
-    "Lào Cai",
-    "Long An",
-    "Nam Định",
-    "Nghệ An",
-    "Ninh Bình",
-    "Ninh Thuận",
-    "Phú Thọ",
-    "Phú Yên",
-    "Quảng Bình",
-    "Quảng Nam",
-    "Quảng Ngãi",
-    "Quảng Ninh",
-    "Quảng Trị",
-    "Sóc Trăng",
-    "Sơn La",
-    "Tây Ninh",
-    "Thái Bình",
-    "Thái Nguyên",
-    "Thanh Hóa",
-    "Thừa Thiên Huế",
-    "Tiền Giang",
-    "Trà Vinh",
-    "Tuyên Quang",
-    "Vĩnh Long",
-    "Vĩnh Phúc",
-  ];
   
   // List of ticket types
   const ticketTypes = ["Economy", "Business", "First Class"];
@@ -180,25 +119,29 @@ import { useNavigate, useLocation } from 'react-router-dom';
       );
     };
 
-    const filterFlights = () => {
+    const filterFlights = useCallback(() => {
       let updatedFlights = flights.filter((flight) => {
         const price = parseInt(flight.price.replace('$', ''));
-        const departureTime = parseInt(flight.departure.split(':')[0]) * 60 + parseInt(flight.departure.split(':')[1].split(' ')[0]);
-        
+        const departureTime =
+          parseInt(flight.departure.split(':')[0]) * 60 +
+          parseInt(flight.departure.split(':')[1].split(' ')[0]);
+    
         return (
           (!selectedAirlines.length || selectedAirlines.includes(flight.airlineName)) &&
-          price >= priceRange[0] && price <= priceRange[1] &&
-          departureTime >= timeRange[0] && departureTime <= timeRange[1]
+          price >= priceRange[0] &&
+          price <= priceRange[1] &&
+          departureTime >= timeRange[0] &&
+          departureTime <= timeRange[1]
         );
       });
-  
+    
       setFilteredFlights(updatedFlights);
-    };
+    }, [selectedAirlines, priceRange, timeRange]);
 
       // Re-filter flights when filters change
   React.useEffect(() => {
     filterFlights();
-  }, [priceRange, timeRange, selectedAirlines]);
+  }, [priceRange, timeRange, selectedAirlines, filterFlights]);
 
     // Helper function to convert minutes to time format
     function formatTime(value) {
