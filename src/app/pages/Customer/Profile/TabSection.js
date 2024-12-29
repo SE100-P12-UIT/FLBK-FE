@@ -28,7 +28,7 @@ const TabSection = () => {
     });
 
     return (
-        <Box sx={{ mt: 4, bgcolor: "white", p: 3, boxShadow: 3, borderRadius: 2, minWidth: '500px' }}>
+        <Box sx={{ mt: 12, bgcolor: "white", p: 3, boxShadow: 3, borderRadius: 2, minWidth: '500px' }}>
             <Tabs
                 value={activeTab}
                 onChange={handleChange}
