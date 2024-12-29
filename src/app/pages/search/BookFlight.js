@@ -12,17 +12,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import ScrollToTopButton from "../../components/ScrollToTopButton";
 import Footer from "../../layouts/Footer";
 import Header from "../../layouts/Header";
-import Emirates from "./../../assets/images/Emirates.png";
-import Etihad from "./../../assets/images/Etihad.png";
-import FlyDubai from "./../../assets/images/FlyDubai.png";
-import Qatar from "./../../assets/images/Qatar.png";
+import VietnamAirlines from "./../../assets/images/VNAir.png";
+import VietJet from "./../../assets/images/VJet.png";
+import BambooAirways from "./../../assets/images/Bamboo.png";
 import vietnamCities from "../../util/publicData";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCallback } from "react";
+import FlightService from '../../services/flightService'; // Import the FlightService
+import PlaneService from '../../services/planeService'; // Import the PlaneService
   
   
   // List of ticket types
@@ -38,7 +39,7 @@ import { useCallback } from "react";
   ];
 
   //List of flights
-  const flights = [
+ /* const flights = [
     {
       airlineLogo: Emirates,
       airlineName: 'Emirates',
@@ -91,13 +92,67 @@ import { useCallback } from "react";
       route1: 'Etihad',
       route2: 'EWR-BNA',
     }
+  ];*/
+
+  /*const flights = [
+    {
+      flightName: "VN123",
+      departureAirport: "Hà Nội",
+      arrivalAirport: "Hồ Chí Minh",
+      departureTime: "2024-01-01T12:00:00.000Z",
+      duration: 180,
+      price: 150,
+      planeId: "64c8d45b634c3c0012345680",
+    },
+    {
+      flightName: "VN124",
+      departureAirport: "Đà Nẵng",
+      arrivalAirport: "Hồ Chí Minh",
+      departureTime: "2024-01-01T15:00:00.000Z",
+      duration: 100,
+      price: 120,
+      planeId: "64c8d45b634c3c0012345681",
+    },
+    {
+      flightName: "VN125",
+      departureAirport: "Đà Nẵng",
+      arrivalAirport: "Hồ Chí Minh",
+      departureTime: "2024-01-01T23:00:00.000Z",
+      duration: 100,
+      price: 120,
+      planeId: "64c8d45b634c3c0012345681",
+    }
   ];
+  
+  const planes = [
+    {
+      planeId: "64c8d45b634c3c0012345680",
+      planeName: "Airbus A320",
+      maxSeats: 186,
+      airline: "Vietnam Airlines",
+      seats: [],
+    },
+    {
+      planeId: "64c8d45b634c3c0012345681",
+      planeName: "Boeing 737",
+      maxSeats: 200,
+      airline: "VietJet",
+      seats: [],
+    },
+  ];*/
+  
   
   const FlightSearch = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { departure, destination, flightDate, passengerCount, ticketType } = location.state || {};
 
+    const [flights, setFlights] = useState([]); // State to hold flight data
+    const [planes, setPlanes] = useState([]); // State to hold plane data
+    const [loadingFlights, setLoadingFlights] = useState(true); // State to manage loading for flights
+    const [loadingPlanes, setLoadingPlanes] = useState(true); // State to manage loading for planes
+    const [errorFlights, setErrorFlights] = useState(null); // State to manage errors for flights
+    const [errorPlanes, setErrorPlanes] = useState(null); // State to manage errors for planes
     // State variables to hold the values
     const [departureValue, setDeparture] = useState(departure || '');
   const [destinationValue, setDestination] = useState(destination || '');
@@ -108,49 +163,89 @@ import { useCallback } from "react";
   const [timeRange, setTimeRange] = useState([1, 1436]);
   const [selectedAirlines, setSelectedAirlines] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState(flights);
+  const [groupedFlights, setGroupedFlights] = useState({});
 
     const handleSearch = () => {
       alert("Searching flights...");
     };
 
+    const filterFlights = (flights, filters) => {
+      return flights.filter((flight) => {
+        const matchesPrice = flight.price >= filters.price[0] && flight.price <= filters.price[1];
+        const departureTime = new Date(flight.departureTime).getHours();
+        const matchesTime = departureTime >= filters.time[0] && departureTime <= filters.time[1];
+        const airline = getAirlineByPlaneId(flight.planeId);
+        const matchesAirline = !filters.selectedAirlines.length || filters.selectedAirlines.includes(airline);
+
+        // Additional filters
+        const matchesDeparture = filters.departure ? flight.departureAirport.includes(filters.departure) : true;
+        const matchesDestination = filters.destination ? flight.arrivalAirport.includes(filters.destination) : true;
+        const matchesFlightDate = filters.flightDate ? new Date(flight.departureTime).toDateString() === new Date(filters.flightDate).toDateString() : true;
+        const matchesPassengerCount = filters.passengerCount ? flight.passengerCount === filters.passengerCount : true; // Adjust based on your flight data structure
+
+        return matchesPrice && matchesTime && matchesAirline && matchesDeparture && matchesDestination && matchesFlightDate && matchesPassengerCount;
+      });
+    };
+      
     const handleAirlineChange = (airline) => {
       setSelectedAirlines((prev) =>
         prev.includes(airline) ? prev.filter((a) => a !== airline) : [...prev, airline]
       );
     };
 
-    const filterFlights = useCallback(() => {
-      let updatedFlights = flights.filter((flight) => {
-        const price = parseInt(flight.price.replace('$', ''));
-        const departureTime =
-          parseInt(flight.departure.split(':')[0]) * 60 +
-          parseInt(flight.departure.split(':')[1].split(' ')[0]);
-    
-        return (
-          (!selectedAirlines.length || selectedAirlines.includes(flight.airlineName)) &&
-          price >= priceRange[0] &&
-          price <= priceRange[1] &&
-          departureTime >= timeRange[0] &&
-          departureTime <= timeRange[1]
-        );
-      });
-    
-      setFilteredFlights(updatedFlights);
-    }, [selectedAirlines, priceRange, timeRange]);
+      const filters = {
+        price: priceRange,
+        time: timeRange,
+        selectedAirlines,
+        departure: departureValue,
+        destination: destinationValue,
+        flightDate: flightDateValue,
+        passengerCount: passengerCountValue,
+      };
 
       // Re-filter flights when filters change
-  React.useEffect(() => {
-    filterFlights();
-  }, [priceRange, timeRange, selectedAirlines, filterFlights]);
+      useEffect(() => {
+        const filtered = filterFlights(flights, filters);
+        setFilteredFlights(filtered);
+      }, [filters]);
 
-    // Helper function to convert minutes to time format
-    function formatTime(value) {
+      const getAirlineByPlaneId = (planeId) => {
+        const plane = planes.find((p) => p.planeId === planeId);
+        return plane ? plane.airline : "Unknown Airline";
+      };
+      
+      const getAirlineLogo = (airline) => {
+        switch (airline) {
+          case "Vietnam Airlines":
+            return VietnamAirlines;
+          case "VietJet":
+            return VietJet;
+          case "Bamboo Airways":
+            return BambooAirways;
+          default:
+            return null;
+        }
+      };
+      
+    // Function to format time
+    const formatTime = (dateString) => {
+      const date = new Date(dateString);
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+      const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits
+      return `${formattedHours}:${formattedMinutes} ${period}`;
+    };
+
+    function formatTimeSlider(value) {
       const hours = Math.floor(value / 60);
       const minutes = value % 60;
       const period = hours >= 12 ? 'PM' : 'AM';
       const formattedHours = hours % 12 === 0 ? 12 : hours % 12; // Handle 12-hour format
-      return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${period}`;
-    }
+      const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits
+      return `${formattedHours}:${formattedMinutes} ${period}`;
+    };
   
     const handleBooking = (flight) => {
       navigate('/bkdt', {
@@ -159,7 +254,7 @@ import { useCallback } from "react";
             airline: flight.airlineName,
             aircraft: `${flight.airlineName} A380 Airbus`,
             aircraftType: "Airbus A320",
-            price: flight.price.replace('$', ''),
+            price: flight.price,
             duration: flight.duration,
             departureTime: flight.departure,
             arrivalTime: flight.arrival,
@@ -174,6 +269,52 @@ import { useCallback } from "react";
       });
     };
   
+    const formatDuration = (duration) => {
+      const hours = Math.floor(duration / 60);
+      const minutes = duration % 60;
+      return `${hours}h ${minutes}m`; // Example output: "2h 30m"
+    };
+  
+    const calculateArrivalTime = (departureTime, duration) => {
+      const departureDate = new Date(departureTime);
+      const arrivalDate = new Date(departureDate.getTime() + duration * 60000); // Convert duration from minutes to milliseconds
+      return arrivalDate;
+    };
+  
+    useEffect(() => {
+      const fetchFlights = async () => {
+        setLoadingFlights(true);
+        try {
+          const response = await FlightService.getAllFlights("", "asc", 10, 1); // Adjust parameters as needed
+          setFlights(response.results || []); // Assuming the response has a results property
+          setLoadingFlights(false);
+        } catch (error) {
+          setErrorFlights('Không thể tải dữ liệu chuyến bay');
+          setLoadingFlights(false);
+        }
+      };
+
+      const fetchPlanes = async () => {
+        setLoadingPlanes(true);
+        try {
+          const response = await PlaneService.getAllPlane("", "asc", 10, 1); // Adjust parameters as needed
+          setPlanes(response.results || []); // Assuming the response has a results property
+          setLoadingPlanes(false);
+        } catch (error) {
+          setErrorPlanes('Không thể tải dữ liệu máy bay');
+          setLoadingPlanes(false);
+        }
+      };
+
+      fetchFlights();
+      fetchPlanes();
+    }, []);
+
+    if (loadingFlights) return <Typography>Đang tải dữ liệu chuyến bay...</Typography>;
+    if (errorFlights) return <Typography color="error">{errorFlights}</Typography>;
+    if (loadingPlanes) return <Typography>Đang tải dữ liệu máy bay...</Typography>;
+    if (errorPlanes) return <Typography color="error">{errorPlanes}</Typography>;
+
     return (
       <Box
         sx={{ display: "flex", minWidth:'300px',flexDirection: "column", alignItems: "center" }}
@@ -286,7 +427,6 @@ import { useCallback } from "react";
           <Slider
             value={priceRange}
             onChange={(e, newValue) => setPriceRange(newValue)}
-            onChangeCommitted={filterFlights} // Apply filtering after adjustment
             valueLabelDisplay="auto"
             min={50}
             max={1200}
@@ -309,21 +449,20 @@ import { useCallback } from "react";
           <Slider
             value={timeRange}
             onChange={(e, newValue) => setTimeRange(newValue)}
-            onChangeCommitted={filterFlights} // Apply filtering after adjustment
             valueLabelDisplay="auto"
-            min={1} // Representing 12:00 AM as 0 minutes since midnight
-            max={1436} // Representing 11:59 PM as 1439 minutes since midnight
+            min={timeRange[0]} // Representing 12:00 AM as 0 minutes since midnight
+            max={timeRange[1]} // Representing 11:59 PM as 1439 minutes since midnight
             sx={{
               color: '#8DD3BB',
               '& .MuiSlider-thumb': {
                 backgroundColor: '#8DD3BB',
               },
             }}
-            valueLabelFormat={(value) => formatTime(value)} // Formatting for label
+            valueLabelFormat={(value) => formatTime(value * 60000)} // Formatting for label
           />
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography>{formatTime(timeRange[0])}</Typography>
-            <Typography>{formatTime(timeRange[1])}</Typography>
+            <Typography>{formatTimeSlider(timeRange[0])}</Typography>
+            <Typography>{formatTimeSlider(timeRange[1])}</Typography>
           </Box>
         </Box>
 
@@ -331,13 +470,13 @@ import { useCallback } from "react";
         <Box sx={{ width: "70%", p: 2, borderBottom: '1px solid #112211' }}>
         <Typography variant="h6">Hãng</Typography>
           <FormGroup>
-            {["Emirates", "Fly Dubai", "Qatar", "Etihad"].map((airline) => (
+            {["Vietnam Airlines", "VietJet", "Bamboo Airways"].map((airline) => (
               <FormControlLabel
                 key={airline}
                 control={
                   <Checkbox
                     checked={selectedAirlines.includes(airline)}
-                    onChange={() => handleAirlineChange(airline)} // Update selected airlines
+                    onChange={() => handleAirlineChange(airline)}
                   />
                 }
                 label={airline}
@@ -365,7 +504,7 @@ import { useCallback } from "react";
           spacing={2}
           key={index}
           sx={{
-            borderBottom: index < flights.length - 1 ? '1px solid #ddd' : 'none',
+            borderBottom: index < filteredFlights.length - 1 ? '1px solid #ddd' : 'none',
             boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.2)",
             borderRadius: 4,
             pb: 2,
@@ -377,8 +516,8 @@ import { useCallback } from "react";
           {/* Airline Logo */}
           <Grid item xs={2} sm={2}>
             <img
-              src={flight.airlineLogo}
-              alt={flight.airlineName}
+              src={getAirlineLogo(getAirlineByPlaneId(flight.planeId))}
+              alt={getAirlineByPlaneId(flight.planeId)}
               style={{ width: '100%', objectFit: 'contain' }}
             />
           </Grid>
@@ -399,32 +538,32 @@ import { useCallback } from "react";
               padding: 1,  // Optional: add padding
             }}
           >
-                <Typography variant="h6">{flight.rating}</Typography>
+                <Typography variant="h6">4.2</Typography>
             </Box>
             <Typography variant="body2" color="textSecondary" marginTop={2}>
-              {flight.reviews}
+              Very Good (54 reviews)
             </Typography>
             <Typography variant="h2" color="#FF8682" sx={{ marginLeft: 'auto' }}>
-              {flight.price}
+              ${flight.price}
             </Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
               <Checkbox />
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
                 <Typography variant="h6">
-                  {flight.departure} - {flight.arrival}
+                  {formatTime(flight.departureTime)} - {formatTime(calculateArrivalTime(flight.departureTime, flight.duration))}
                 </Typography>
-                <Typography variant="body2">{flight.route1}</Typography>
+                <Typography variant="body2">{flight.departureAirport}</Typography>
               </Box>
               <Typography variant="body1" color="textSecondary">
-              {flight.stops}
+              Non stop
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
                 <Typography variant="h6" color="textSecondary">
-                {flight.duration}
+                {formatDuration(flight.duration)}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                {flight.route2}
+                {flight.arrivalAirport}
                 </Typography>
               </Box>
               
