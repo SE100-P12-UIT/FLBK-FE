@@ -13,25 +13,30 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import FlightService from '../../services/flightService';
+import PlaneService from '../../services/planeService';
+import { toast } from 'react-toastify';
+import vietnamCities from '../../util/publicData';
 
 const FlightManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [page, setPage] = useState(0); // Trang hiện tại
     const [rowsPerPage, setRowsPerPage] = useState(10); // Số dòng trên mỗi trang
 
-    const [data, setData] = useState([]); // State để lưu dữ liệu
+    const [data, setData] = useState({}); // State để lưu dữ liệu
     const [loading, setLoading] = useState(true); // Trạng thái loading
     const [error, setError] = useState(null); // Trạng thái lỗi
 
     const [isOpen, setIsOpen] = useState(false); // Trạng thái mở hộp thoại thêm chuyến bay
     const [flightData, setFlightData] = useState({
-        flightid: '',
-        airline: '',
-        departure: '',
-        destination: '',
+        id: '',
+        planeId: '',
+        flightName: '',
+        departureAirport: '',
+        arrivalAirport: '',
         departureTime: '',
         duration: '',
         price: '',
+        seats: [],
     });
 
     const [isEditOpen, setIsEditOpen] = useState(false); // Trạng thái mở hộp thoại sửa chuyến bay
@@ -39,13 +44,15 @@ const FlightManagement = () => {
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);// Trạng thái mở hộp thoại xóa chuyến bay
 
+    const [plane, setPlane] = useState([]);
+
 
     // Gọi API 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1) // Thay API đúng vào đây               
-                setData(response || []); // Lưu dữ liệu vào state
+                setData(response || {}); // Lưu dữ liệu vào state
                 setLoading(false); // Tắt trạng thái loading
                 console.log("Dữ liệu api chuyến bay:", response);
             } catch (error) {
@@ -56,11 +63,26 @@ const FlightManagement = () => {
         fetchData();
     }, [rowsPerPage, page]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await PlaneService.getAllPlane("", "asc", 10, 1)// Thay API đúng vào đây               
+                setPlane(response.results || []); // Lưu dữ liệu vào state
+                setLoading(false); // Tắt trạng thái loading
+                console.log("Dữ liệu api máy bay:", response.results);
+            } catch (error) {
+                setError('Không thể tải dữ liệu');
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [isOpen]);
+
     // Hiển thị trạng thái loading hoặc lỗi
     if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
     if (error) return <Typography color="error">{error}</Typography>;
 
-    const filteredData = data.results.filter(
+    const filteredData = data?.results.filter(
         (item) => item.flightName && item.flightName.includes(searchTerm)
     );
 
@@ -75,56 +97,110 @@ const FlightManagement = () => {
         setPage(0);
     };
 
+    const handlePreAddFlight = async () => {
+        try {
+            const plane = await PlaneService.getPlaneById(flightData.planeId);
+            const finalPlane = plane.seats
+                .filter(seat => !seat.disable) // Lọc các object có disable === false
+                .map(({ disable, ...seat }) => ({
+                    ...seat,
+                    isAvailable: true, // Thêm trường isAvailable với giá trị true
+
+                }));
+            return finalPlane;
+        } catch (error) {
+            console.error('Lỗi khi thêm ghế:', error);
+            toast.error('Không thể thêm chuyến bay. Vui lòng thử lại!');
+        }
+    };
+
+
     // Xử lý thêm chuyến bay
     const handleAddDialogOpen = () => {
         setIsOpen(true);
-
     };
 
+
+
     const handleAddFlight = async () => {
+        const seatsFinal = await handlePreAddFlight();
         try {
             // Gọi API thêm chuyến bay
-            await FlightService.createFlight(flightData);
+            const payLoad = {
+                planeId: flightData.planeId,
+                flightName: flightData.flightName,
+                departureAirport: flightData.departureAirport,
+                arrivalAirport: flightData.arrivalAirport,
+                departureTime: flightData.departureTime,
+                duration: flightData.duration,
+                price: flightData.price,
+                seats: seatsFinal,
+            }
+            console.log(payLoad);
+            await FlightService.createFlight(payLoad);
+
             //gọi lại api
             const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1);
             setData(response);
+            toast.success("Thêm chuyến bay thành công");
             // Đóng hộp thoại
             handleAddDialogClose();
         } catch (error) {
             console.error('Lỗi khi thêm chuyến bay:', error);
-            alert('Không thể thêm chuyến bay. Vui lòng thử lại!');
+            toast.error('Không thể thêm chuyến bay. Vui lòng thử lại!');
         }
     };
 
     const handleAddDialogClose = () => {
         setIsOpen(false);
         setFlightData({
-            flightid: '',
-            airline: '',
-            departure: '',
-            destination: '',
+            id: '',
+            planeId: '',
+            flightName: '',
+            departureAirport: '',
+            arrivalAirport: '',
             departureTime: '',
             duration: '',
             price: '',
+            seats: [],
         });
     };
 
-    const handleInputChange = (e) => {
+    const fetchSeatsByPlaneId = async (planeId) => {
+        try {
+            const plane = await PlaneService.getPlaneById(planeId);
+            return plane.seats || [];
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách ghế:', error);
+            toast.error('Không thể lấy danh sách ghế. Vui lòng thử lại!');
+            return [];
+        }
+    };
+
+    const handleInputChange = async (e) => {
         const { name, value } = e.target;
-        setFlightData({ ...flightData, [name]: value });
+
+        if (name === "planeId") {
+            const seats = await fetchSeatsByPlaneId(value);
+            setFlightData({ ...flightData, [name]: value, seats });
+        } else {
+            setFlightData({ ...flightData, [name]: value });
+        }
     };
 
 
     const handleEditDialogOpen = (flight) => {
         setSelectedFlight(flight);
         setFlightData({
-            flightid: flight.id,
-            airline: flight.email,
-            departure: flight.departure,
-            destination: flight.destination,
+            id: flight.id,
+            flightName: flight.flightName,
+            planeId: flight.planeId,
+            departureAirport: flight.departureAirport,
+            arrivalAirport: flight.arrivalAirport,
             departureTime: flight.departureTime,
             duration: flight.duration,
             price: flight.price,
+            seats: flight.seats,
         });
         setIsEditOpen(true);
     };
@@ -133,32 +209,40 @@ const FlightManagement = () => {
         setIsEditOpen(false);
     };
     const handleEditFlight = async () => {
+        const seatsFinal = await handlePreAddFlight();
         try {
             // Gọi API để cập nhật thông tin người dùng
             const updatedFlight = await FlightService.updateFlightById(flightData.id, {
-                name: flightData.name,
-                phoneNumber: flightData.phoneNumber,
-                email: flightData.email,
-                dateOfBirth: flightData.dateOfBirth,
-                citizenId: flightData.citizenId,
-                // address: userData.address, // Nếu có trường address
+                flightName: flightData.flightName,
+                departureAirport: flightData.departureAirport,
+                planeId: flightData.planeId,
+                arrivalAirport: flightData.arrivalAirport,
+                departureTime: flightData.departureTime,
+                duration: flightData.duration,
+                price: flightData.price,
+                seats: seatsFinal,
             });
             console.log('Thông tin chuyến bay đã cập nhật:', updatedFlight);
 
             // Cập nhật danh sách chuyên bay trong state
             setData((prevData) => ({
                 ...prevData,
-                results: prevData.results.map((flight) =>
+                results: prevData.results?.map((flight) =>
                     flight.id === flightData.id ? { ...flight, ...updatedFlight } : flight
                 ),
             }));
-
+            toast.success("Sửa chuyến bay thành công");
             // Đóng hộp thoại chỉnh sửa
             handleEditDialogClose();
         } catch (error) {
             console.error('Lỗi khi cập nhật thông tin chuyến bay:', error);
-            alert('Không thể cập nhật thông tin chuyến bay. Vui lòng thử lại!');
+            toast.error('Không thể cập nhật thông tin chuyến bay. Vui lòng thử lại!');
         }
+    };
+
+    const convertToDateTimeLocal = (isoString) => {
+        // Bỏ phần múi giờ và cắt đến "yyyy-MM-ddThh:mm"
+        return isoString.replace(/Z$/, '').slice(0, 16);
     };
 
 
@@ -185,7 +269,7 @@ const FlightManagement = () => {
             // Xóa chuyến bay khỏi danh sách hiển thị
             setData((prevData) => ({
                 ...prevData,
-                results: prevData.results.filter((flight) => flight.id !== selectedFlight.id),
+                results: prevData?.results.filter((flight) => flight.id !== selectedFlight.id),
                 totalResults: prevData.totalResults - 1, // Giảm tổng số chuyến bay
             }));
 
@@ -195,6 +279,18 @@ const FlightManagement = () => {
             console.error('Lỗi khi xóa chuyến bay:', error);
             alert('Không thể xóa chuyến bay. Vui lòng thử lại!');
         }
+    };
+
+    const formatDateTime = (isoString) => {
+        const date = new Date(isoString);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng trong JS bắt đầu từ 0
+        const year = date.getFullYear();
+
+        return `${hours}:${minutes}:${seconds}, ${day}/${month}/${year}`;
     };
 
     return (
@@ -222,7 +318,7 @@ const FlightManagement = () => {
             <Box>
                 <TextField
                     placeholder="Tìm kiếm theo..."
-                    type="number"
+                    // type="number"
                     fullWidth
                     margin="normal"
                     value={searchTerm}
@@ -251,18 +347,16 @@ const FlightManagement = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredData.map((item, index) => {
-                            const dt = new Date(item.departureTime);
-                            const formatdeparture = dt.toLocaleString("en-GB")
+                        {filteredData?.map((item, index) => {
                             return (
                                 <TableRow key={item.id}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{item.flightName}</TableCell>
-                                    <TableCell>{item.route[0].airport} - {item.route[0].location}</TableCell>
-                                    <TableCell>{item.route[1].airport} - {item.route[1].location}</TableCell>
-                                    <TableCell>{formatdeparture}</TableCell>
+                                    <TableCell>{item.departureAirport}</TableCell>
+                                    <TableCell>{item.arrivalAirport}</TableCell>
+                                    <TableCell>{formatDateTime(convertToDateTimeLocal(item.departureTime))}</TableCell>
                                     <TableCell>{item.duration}</TableCell>
-                                    <TableCell>{item?.price.$numberDecimal}</TableCell>
+                                    <TableCell>{item?.price}</TableCell>
                                     <TableCell>
                                         <IconButton onClick={() => handleEditDialogOpen(item)}><EditIcon /></IconButton>
                                         <IconButton onClick={() => handleDeleteDialogOpen(item)}><DeleteIcon /></IconButton>
@@ -277,7 +371,7 @@ const FlightManagement = () => {
 
             <TablePagination
                 component="div"
-                count={filteredData.length}
+                count={data.totalResults}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={rowsPerPage}
@@ -288,56 +382,51 @@ const FlightManagement = () => {
             <Dialog open={isOpen} onClose={handleAddDialogClose}>
                 <DialogTitle>Thêm chuyến bay</DialogTitle>
                 <DialogContent>
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Hãng máy bay</InputLabel>
-                        <Select
-                            name="airline"
-                            value={flightData.airline}
-                            onChange={handleInputChange}
-                            label="Hãng máy bay"
-                        >
-                            <MenuItem value="VietJet">VietJet</MenuItem>
-                            <MenuItem value="VietNamAirline">VietNamAirline</MenuItem>
-                            <MenuItem value="other">Khác...</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <TextField
+                        name="flightName"
+                        label="Tên chuyến bay"
+                        fullWidth
+                        margin="normal"
+                        // value={flightData.flightName}
+                        onChange={handleInputChange}
+                    />
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Chọn máy bay</InputLabel>
                         <Select
-                            name="plane"
-                            value={flightData.planeid}
+                            name="planeId"
+                            // value={flightData.planeId}
                             onChange={handleInputChange}
                             label="Chọn máy bay"
                         >
-                            <MenuItem value="A313">A313</MenuItem>
-                            <MenuItem value="A310">A310</MenuItem>
-                            <MenuItem value="other">Khác...</MenuItem>
+                            {plane?.map((item, index) => (
+                                <MenuItem key={index} value={item.id}>{item.planeName}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Điểm đi</InputLabel>
                         <Select
-                            name="departure"
-                            value={flightData.departure}
+                            name="departureAirport"
+                            // value={flightData.departureAirport}
                             onChange={handleInputChange}
                             label="Điểm đi"
                         >
-                            <MenuItem value="Hồ Chí Minh">Hồ Chí Minh</MenuItem>
-                            <MenuItem value="Hà Nội">Hà Nội</MenuItem>
-                            <MenuItem value="other">Khác...</MenuItem>
+                            {vietnamCities?.map((item, index) => (
+                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Điểm đến</InputLabel>
                         <Select
-                            name="destination"
-                            value={flightData.destination}
+                            name="arrivalAirport"
+                            // value={flightData.arrivalAirport}
                             onChange={handleInputChange}
                             label="Điểm đến"
                         >
-                            <MenuItem value="Hồ Chí Minh">Hồ Chí Minh</MenuItem>
-                            <MenuItem value="Hà Nội">Hà Nội</MenuItem>
-                            <MenuItem value="other">Khác...</MenuItem>
+                            {vietnamCities?.map((item, index) => (
+                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                     <TextField
@@ -347,18 +436,18 @@ const FlightManagement = () => {
                         fullWidth
                         margin="normal"
                         InputLabelProps={{ shrink: true }}
-                        value={flightData.departureTime}
+                        // value={flightData.departureTime}
                         onChange={handleInputChange}
                     />
                     <TextField
                         name="duration"
-                        label="Thời gian bay dự kiến (giờ)"
+                        label="Thời gian bay dự kiến (phút)"
                         type="number"
                         fullWidth
                         margin="normal"
-                        value={flightData.duration}
+                        // value={flightData.duration}
                         onChange={handleInputChange}
-                        InputProps={{ inputProps: { min: 0.5 } }}
+                        InputProps={{ inputProps: { min: 30 } }}
                     />
                     <TextField
                         name="price"
@@ -366,7 +455,7 @@ const FlightManagement = () => {
                         type="number"
                         fullWidth
                         margin="normal"
-                        value={flightData.price}
+                        // value={flightData.price}
                         onChange={handleInputChange}
                         InputProps={{ inputProps: { min: 1 } }}
                     />
@@ -385,43 +474,51 @@ const FlightManagement = () => {
             <Dialog open={isEditOpen} onClose={handleEditDialogClose}>
                 <DialogTitle>Sửa chuyến bay</DialogTitle>
                 <DialogContent>
+                    <TextField
+                        name="flightName"
+                        label="Tên chuyến bay"
+                        fullWidth
+                        margin="normal"
+                        value={flightData.flightName}
+                        onChange={handleInputChange}
+                    />
                     <FormControl fullWidth margin="normal">
-                        <InputLabel>Hãng máy bay</InputLabel>
+                        <InputLabel>Chọn máy bay</InputLabel>
                         <Select
-                            name="airline"
-                            value={flightData.airline}
+                            name="planeId"
+                            value={flightData.planeId}
                             onChange={handleInputChange}
-                            label="Hãng máy bay"
+                            label="Chọn máy bay"
                         >
-                            <MenuItem value="VietJet">VietJet</MenuItem>
-                            <MenuItem value="VietNamAirline">VietNamAirline</MenuItem>
-                            <MenuItem value="other">Khác...</MenuItem>
+                            {plane?.map((item, index) => (
+                                <MenuItem key={index} value={item.id}>{item.planeName}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Điểm đi</InputLabel>
                         <Select
-                            name="departure"
-                            value={flightData.departure}
+                            name="departureAirport"
+                            value={flightData.departureAirport}
                             onChange={handleInputChange}
                             label="Điểm đi"
                         >
-                            <MenuItem value="Hồ Chí Minh">Hồ Chí Minh</MenuItem>
-                            <MenuItem value="Hà Nội">Hà Nội</MenuItem>
-                            <MenuItem value="other">Khác...</MenuItem>
+                            {vietnamCities?.map((item, index) => (
+                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Điểm đến</InputLabel>
                         <Select
-                            name="destination"
-                            value={flightData.destination}
+                            name="arrivalAirport"
+                            value={flightData.arrivalAirport}
                             onChange={handleInputChange}
                             label="Điểm đến"
                         >
-                            <MenuItem value="Hồ Chí Minh">Hồ Chí Minh</MenuItem>
-                            <MenuItem value="Hà Nội">Hà Nội</MenuItem>
-                            <MenuItem value="other">Khác...</MenuItem>
+                            {vietnamCities?.map((item, index) => (
+                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                     <TextField
@@ -431,17 +528,18 @@ const FlightManagement = () => {
                         fullWidth
                         margin="normal"
                         InputLabelProps={{ shrink: true }}
-                        value={flightData.departureTime}
+                        value={convertToDateTimeLocal(flightData.departureTime)}
                         onChange={handleInputChange}
                     />
                     <TextField
                         name="duration"
-                        label="Thời gian bay dự kiến (giờ)"
+                        label="Thời gian bay dự kiến (phút)"
                         type="number"
                         fullWidth
                         margin="normal"
                         value={flightData.duration}
                         onChange={handleInputChange}
+                        InputProps={{ inputProps: { min: 30 } }}
                     />
                     <TextField
                         name="price"
@@ -451,6 +549,7 @@ const FlightManagement = () => {
                         margin="normal"
                         value={flightData.price}
                         onChange={handleInputChange}
+                        InputProps={{ inputProps: { min: 1 } }}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -467,7 +566,7 @@ const FlightManagement = () => {
             <Dialog open={openDeleteDialog} onClose={handleDeleteDialogClose}>
                 <DialogTitle>Xác nhận xóa chuyến bay</DialogTitle>
                 <DialogContent>
-                    <Typography>Bạn có chắc chắn muốn xóa chuyến bay {selectedFlight?.id} - {selectedFlight?.airline}?</Typography>
+                    <Typography>Bạn có chắc chắn muốn xóa chuyến bay - {selectedFlight?.flightName}?</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleDeleteDialogClose} color="secondary">
