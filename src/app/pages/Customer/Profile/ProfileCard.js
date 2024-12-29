@@ -1,21 +1,24 @@
 import React from "react";
 import { Box, Avatar, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const ProfileCard = () => {
+    const data = useSelector((state) => state.user.user)
     return (
         <Box
             sx={{
                 position: "relative",
                 background: "linear-gradient(to right, #f97316, #ec4899)",
-                height: 192,
+                height: '30vh',
                 borderRadius: 2,
-                minWidth: '500px'
+                minWidth: '500px',
             }}
         >
             <Box
                 sx={{
                     position: "absolute",
-                    bottom: -40,
+                    justifyItems: "center",
+                    bottom: -80,
                     left: "50%",
                     transform: "translateX(-50%)",
                     textAlign: "center",
@@ -33,12 +36,12 @@ const ProfileCard = () => {
                 <Typography
                     variant="h6"
                     sx={{
-                        color: "white",
+                        color: "Black",
                         fontWeight: "bold",
                         mt: 1,
                     }}
                 >
-                    zoraneko
+                    {data.name}
                 </Typography>
             </Box>
         </Box>
