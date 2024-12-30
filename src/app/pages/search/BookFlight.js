@@ -163,7 +163,6 @@ import PlaneService from '../../services/planeService'; // Import the PlaneServi
   const [timeRange, setTimeRange] = useState([1, 1436]);
   const [selectedAirlines, setSelectedAirlines] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState(flights);
-  const [groupedFlights, setGroupedFlights] = useState({});
 
     const handleSearch = () => {
       alert("Searching flights...");
@@ -248,22 +247,13 @@ import PlaneService from '../../services/planeService'; // Import the PlaneServi
     };
   
     const handleBooking = (flight) => {
+      const associatedPlane = planes.find(plane => plane.planeId === flight.planeId);
+
       navigate('/bkdt', {
         state: {
           flightData: {
-            airline: flight.airlineName,
-            aircraft: `${flight.airlineName} A380 Airbus`,
-            aircraftType: "Airbus A320",
-            price: flight.price,
-            duration: flight.duration,
-            departureTime: flight.departure,
-            arrivalTime: flight.arrival,
-            airlineLogo: flight.airlineLogo,
-            rating: flight.rating,
-            reviews: flight.reviews,
-            stops: flight.stops,
-            route1: flight.route1,
-            route2: flight.route2
+            flightData: flight,
+            planeData: associatedPlane
           }
         }
       });
