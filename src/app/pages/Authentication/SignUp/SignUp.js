@@ -12,8 +12,11 @@ export default function SignUp() {
       sx={{
         width: "100vw",
         height: "100vh",
-        justifyContent: "center",
-        gap: { xs: 8, sm: 12 },
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        // justifyContent: "center",
+        // gap: { xs: 8, sm: 12 },
       }}
     >
       <AppBar
@@ -28,6 +31,7 @@ export default function SignUp() {
           sx={{
             justifyContent: "space-between",
             flexDirection: { xs: "column", sm: "row" },
+            alignItems: "center",
             p: 2,
           }}
         >
@@ -46,60 +50,51 @@ export default function SignUp() {
           </Box>
         </Toolbar>
       </AppBar>
+
       <Stack
-        direction="column"
-        component="main"
-        width="100vw"
-        height="100vh"
-        sx={[
-          {
-            justifyContent: "space-between",
-          },
-          (theme) => ({
-            backgroundImage:
-              "radial-gradient(ellipse at 70% 51%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
-            backgroundSize: "cover",
-            ...theme.applyStyles("dark", {
-              backgroundImage:
-                "radial-gradient(at 70% 51%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))",
-            }),
-          }),
-        ]}
+        direction={{ xs: "column", lg: "row" }}
+        spacing={{ xs: 4, sm: 6 }}
+        alignItems="center"
+        justifyContent="center"
+        sx={{
+          flexGrow: 1,
+          padding: { xs: 2, md: 4 },
+          width: "100%",
+        }}
       >
-        <Stack
-          direction={{ xs: "column-reverse", md: "row" }}
+        
+        <Box
           sx={{
+            maxWidth: { xs: "100%", sm: "400px" },
+            width: "100%",
+            display: "flex",
             justifyContent: "center",
-            gap: { xs: 12, sm: 20 },
-            p: 1,
-            margin: "auto",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: { xs: "auto", md: "100%" },
-              maxWidth: "300px",
-              width: { xs: "auto", md: "100%" },
-              margin: "0 auto",
+          <img
+            src={SignupStatic1}
+            alt="Static Illustration"
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "cover",
+              borderRadius: 8,
             }}
-          >
-            <img
-              src={SignupStatic1}
-              alt="map"
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-                objectFit: "contain",
-                borderRadius: 2,
-              }}
-            />
-          </Box>
+          />
+        </Box>
 
+        <Box
+          sx={{
+            flexGrow: 2,
+            maxWidth: { xs: "100%", md: "100%" },
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <SignUpCard />
-        </Stack>
+        </Box>
+          
+        
       </Stack>
     </Box>
   );
