@@ -34,7 +34,7 @@ const ProfileCard = () => {
                     }}
                 />
                 <Typography
-                    variant="h6"
+                    variant="h4"
                     sx={{
                         color: "Black",
                         fontWeight: "bold",

@@ -254,6 +254,52 @@ const theme = createTheme({
                 },
             },
         },
+        MuiTabs: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#FFFFFF', // Màu nền của Tabs
+                    borderBottom: '2px solid #DDFAF0', // Đường viền dưới Tabs
+                },
+                indicator: {
+                    backgroundColor: '#8DD3BB', // Màu của đường gạch chân khi active
+                    height: '4px', // Độ dày của đường gạch chân
+                },
+            },
+        },
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    fontFamily: "'Montserrat', sans-serif", // Font chữ cho Tab
+                    fontSize: '1rem', // Kích thước chữ
+                    fontWeight: 500, // Độ đậm
+                    textTransform: 'none', // Không in hoa chữ
+                    color: '#555', // Màu chữ mặc định
+                    padding: '12px 16px', // Khoảng cách trong Tab
+                    position: 'relative', // Để dùng pseudo-element
+            borderRadius: '16px 16px 0 0',
+                    '&.Mui-selected': {
+                        color: '#112211', // Màu chữ khi được chọn
+                        fontWeight: 600, // Độ đậm khi được chọn
+                    },
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                        color: '#8DD3BB', // Màu chữ khi hover
+                        backgroundColor: '#F8F8F8',
+                    },
+                    '&:not(:last-of-type)': { // Không áp dụng divider cho Tab cuối
+                '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    top: '12%',
+                    right: 0,
+                    width: '1px',
+                    height: '70%',
+                    backgroundColor: '#DDFAF0', // Màu divider
+                },
+            },
+                },
+            },
+        },
     },
 });
 

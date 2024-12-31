@@ -11,6 +11,12 @@ const TabSection = () => {
         setActiveTab(newValue);
     };
 
+    const convertToDateTimeLocal = (isoString) => {
+        // Bỏ phần múi giờ và cắt đến "yyyy-MM-ddThh:mm"
+        return isoString.replace(/Z$/, '').slice(0, 10);
+    };
+
+
     const data = useSelector((state) => state.user.user)
     useEffect(() => {
         setuser(data);
@@ -94,7 +100,7 @@ const TabSection = () => {
                                     Ngày sinh
                                 </Typography>
                                 <Typography variant="body2" sx={{ pl: 2 }}>
-                                    {user.dateOfBirth}
+                                    {convertToDateTimeLocal(user.dateOfBirth)}
                                 </Typography>
                             </Box>
                             <Button variant="contained" color="primary">
