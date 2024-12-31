@@ -333,7 +333,7 @@ const PlaneList = () => {
             <InputLabel>Hãng</InputLabel>
             <Select name="airline" onChange={handleInputChange} label="Hãng">
               <MenuItem value="VietJet">VietJet</MenuItem>
-              <MenuItem value="VietNamAirline">VietNamAirline</MenuItem>
+              <MenuItem value="VietNamAirline">VietnamAirline</MenuItem>
               <MenuItem value="BambooAirway">BambooAirway</MenuItem>
             </Select>
           </FormControl>

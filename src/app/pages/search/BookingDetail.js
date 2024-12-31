@@ -65,11 +65,11 @@ function BookingDetail() {
 
   const getAirlineImg = (airline) => {
     switch (airline) {
-      case "Vietnam Airlines":
+      case "VietnamAirline":
         return RealPlaneVNAir;
       case "VietJet":
         return RealPlaneVJet;
-      case "Bamboo Airways":
+      case "BambooAirway":
         return RealPlaneBamboo;
       default:
         return null;
@@ -101,7 +101,7 @@ function BookingDetail() {
             Booking flight
           </Link>
           <Typography color="text.primary">
-            booking {flightData?.planeData.airline} {flightData?.planeData.planeName}
+            booking {flightData?.flightData.plane.airline} {flightData?.flightData.plane.planeName}
           </Typography>
         </Breadcrumbs>
       </Box>
@@ -118,7 +118,7 @@ function BookingDetail() {
           {/* Route and Price */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
             <Box>
-              <Typography variant="subtitle1" fontWeight="bold">{flightData?.planeData.airline + " " + flightData?.planeData.planeName || "Unknown"}</Typography>
+              <Typography variant="subtitle1" fontWeight="bold">{flightData?.flightData.plane.airline + " " + flightData?.flightData.plane.planeName || ""}</Typography>
               <Typography variant="caption">Departure: {flightData?.flightData.departureTime || "N/A"}</Typography>
             </Box>
             <Box>
@@ -137,10 +137,10 @@ function BookingDetail() {
               borderRadius: 1,
               padding: '8px 16px'
             }}>
-              <img src={getAirlineLogo(flightData?.planeData.airline) || RealPlane}
-              alt={flightData?.planeData.airline} width={40} height={40} />
+              <img src={getAirlineLogo(flightData?.flightData.plane.airline) || RealPlane}
+              alt={flightData?.flightData.airline} width={40} height={40} />
               <Box>
-                <Typography variant="subtitle1" fontWeight="bold">{flightData?.planeData.airline || "Emirates A380 Airbus"}</Typography>
+                <Typography variant="subtitle1" fontWeight="bold">{flightData?.flightData.plane.airline || "Emirates A380 Airbus"}</Typography>
                 <Typography variant="caption">{flightData?.flightData.flightName || "Airbus A320"}</Typography>
               </Box>
             </Box>
@@ -276,14 +276,14 @@ function BookingDetail() {
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
           <Box sx={{ width: 80, height: 80, borderRadius: 2, overflow: 'hidden' }}>
             <img 
-              src={getAirlineImg(flightData?.planeData.airline) ||RealPlane} 
+              src={getAirlineImg(flightData?.flightData.plane.airline) ||RealPlane} 
               alt="Aircraft"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </Box>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h6">Economy</Typography>
-            <Typography variant="subtitle1">{flightData?.planeData.airline + " " + flightData?.planeData.planeName}</Typography>
+            {/* <Typography variant="h6">Economy</Typography> */}
+            <Typography variant="subtitle1">{flightData?.flightData.plane.airline + " " + flightData?.flightData.plane.planeName}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
               <Box sx={{
                 display: "inline-flex",
