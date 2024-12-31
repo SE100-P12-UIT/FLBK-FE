@@ -19,7 +19,7 @@ import BambooAirways from "./../../assets/images/Bamboo.png";
 
 function BookingDetail() {
   const location = useLocation();
-  const { flightData, planeData } = location.state || {};
+  const { flightData/* , planeData */ } = location.state || {}; // Comment because of unnecessary data without usage will cause error in deployment
   console.log("Flight Data:", flightData); 
   const [paymentOption, setPaymentOption] = useState('full');
 

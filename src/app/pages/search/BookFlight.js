@@ -12,22 +12,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ScrollToTopButton from "../../components/ScrollToTopButton";
 import Footer from "../../layouts/Footer";
 import Header from "../../layouts/Header";
-import VietnamAirlines from "./../../assets/images/VNAir.png";
-import VietJet from "./../../assets/images/VJet.png";
-import BambooAirways from "./../../assets/images/Bamboo.png";
-import vietnamCities from "../../util/publicData";
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useCallback } from "react";
 import FlightService from '../../services/flightService'; // Import the FlightService
 import PlaneService from '../../services/planeService'; // Import the PlaneService
+import vietnamCities from "../../util/publicData";
+import BambooAirways from "./../../assets/images/Bamboo.png";
+import VietJet from "./../../assets/images/VJet.png";
+import VietnamAirlines from "./../../assets/images/VNAir.png";
   
   
   // List of ticket types
-  const ticketTypes = ["Economy", "Business", "First Class"];
+  const ticketTypes = ["Common", "Business"];
   
   // List of passenger options
   const passengerOptions = [
