@@ -118,7 +118,7 @@ export default function SignUpCard() {
   };
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" sx={{minWidth:'60vw'}}>
       <Typography
         component="h1"
         variant="h4"
@@ -192,7 +192,7 @@ export default function SignUpCard() {
 
         {/* Grid for Số điện thoại, CCCD, Ngày sinh */}
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={3.5}>
             <FormControl fullWidth>
               <FormLabel htmlFor="phone">Số điện thoại</FormLabel>
               <TextField
@@ -206,7 +206,7 @@ export default function SignUpCard() {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={3.5}>
             <FormControl fullWidth>
               <FormLabel htmlFor="cccd">CCCD</FormLabel>
               <TextField
@@ -220,7 +220,7 @@ export default function SignUpCard() {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} md={5}>
             <FormControl fullWidth>
               <FormLabel htmlFor="birthDate">Ngày sinh</FormLabel>
               <DatePicker

@@ -41,7 +41,7 @@ axiosConfig.interceptors.response.use(
     // }
 
     const originalRequest = error.config;
-    if (error.response && error.response.status === 401 && originalRequest) {
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       if (!refreshTokenPromise) {
         const refreshToken = Cookies.get('refreshToken');
 
@@ -60,13 +60,23 @@ axiosConfig.interceptors.response.use(
             AuthService.logout(refreshToken).then(() => {
               window.location.href = '/signin';
             });
+            throw error;
           })
           .finally(() => {
             refreshTokenPromise = null;
           });
       }
+      try {
+        const newAccessToken = await refreshTokenPromise;
 
-      return refreshTokenPromise.then(() => axiosConfig(originalRequest));
+        // Retry the original request with the new token
+        originalRequest._retry = true; // Prevent infinite retry loop
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return axiosConfig(originalRequest);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
+      }
+      // return refreshTokenPromise.then(() => axiosConfig(originalRequest));
     }
 
     return Promise.reject(error);

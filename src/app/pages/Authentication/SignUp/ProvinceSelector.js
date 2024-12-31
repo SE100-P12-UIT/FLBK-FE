@@ -74,10 +74,10 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
           display: 'flex',
           gap: '16px',
           marginBottom: '16px',
-          flexDirection: { xs: 'column', lg: 'row' },
+          flexDirection: { xs: 'column', md: 'row' },
         }}
       >
-        <FormControl fullWidth>
+        <FormControl sx={{  flexGrow: 1 }}>
           <Select
             value={address.province || ''}
             onChange={(e) => handleChange('province', e.target.value)}
@@ -94,7 +94,7 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl sx={{  flexGrow: 1 }}>
           <Select
             value={address.district || ''}
             onChange={(e) => handleChange('district', e.target.value)}
@@ -112,7 +112,7 @@ const ProvinceSelector = ({ address, onAddressChange, formErrors }) => {
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl sx={{  flexGrow: 1 }}>
           <Select
             value={address.town || ''}
             onChange={(e) => handleChange('town', e.target.value)}

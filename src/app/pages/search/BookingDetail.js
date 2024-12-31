@@ -9,16 +9,72 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import RealPlane from "./../../assets/images/RealPlane.png";
+import RealPlaneVNAir from "./../../assets/images/RealPlaneVNAir.png";
+import RealPlaneVJet from "./../../assets/images/RealPlaneVietJet.png";
+import RealPlaneBamboo from "./../../assets/images/RealPlaneBamboo.png";
+
+import VietnamAirlines from "./../../assets/images/VNAir.png";
+import VietJet from "./../../assets/images/VJet.png";
+import BambooAirways from "./../../assets/images/Bamboo.png";
 
 function BookingDetail() {
   const location = useLocation();
-  const flightData = location.state?.flightData;
+  const { flightData/* , planeData */ } = location.state || {}; // Comment because of unnecessary data without usage will cause error in deployment
+  console.log("Flight Data:", flightData); 
   const [paymentOption, setPaymentOption] = useState('full');
 
   // Calculate total price
-  const basePrice = parseFloat(flightData?.price || "240");
-  const tax = basePrice;
+  const basePrice = parseFloat(flightData?.flightData.price || "240");
+  const tax = basePrice * 0.15;
   const total = basePrice + tax;
+
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits
+    return `${formattedHours}:${formattedMinutes} ${period}`;
+  };
+
+  const formatDuration = (duration) => {
+    const hours = Math.floor(duration / 60);
+    const minutes = duration % 60;
+    return `${hours}h ${minutes}m`; // Example output: "2h 30m"
+  };
+
+  const calculateArrivalTime = (departureTime, duration) => {
+    const departureDate = new Date(departureTime);
+    const arrivalDate = new Date(departureDate.getTime() + duration * 60000); // Convert duration from minutes to milliseconds
+    return arrivalDate;
+  };
+
+  const getAirlineLogo = (airline) => {
+    switch (airline) {
+      case "Vietnam Airlines":
+        return VietnamAirlines;
+      case "VietJet":
+        return VietJet;
+      case "Bamboo Airways":
+        return BambooAirways;
+      default:
+        return null;
+    }
+  };
+
+  const getAirlineImg = (airline) => {
+    switch (airline) {
+      case "VietnamAirline":
+        return RealPlaneVNAir;
+      case "VietJet":
+        return RealPlaneVJet;
+      case "BambooAirway":
+        return RealPlaneBamboo;
+      default:
+        return null;
+    }
+  };
 
   return (
     <Box sx={{ p: 3, maxWidth: '1000px', margin: '0 auto' }}>
@@ -31,21 +87,21 @@ function BookingDetail() {
           <Link
             underline="hover"
             color="inherit"
-            href="/turkey"
+            href="/search"
             sx={{ color: '#112211' }}
           >
-            Turkey
+            Search flight
           </Link>
           <Link
             underline="hover"
             color="inherit"
-            href="/turkey/istanbul"
+            href="/booking"
             sx={{ color: '#112211' }}
           >
-            Istanbul
+            Booking flight
           </Link>
           <Typography color="text.primary">
-            CVK Park Bosphorus Hotel Istanbul
+            booking {flightData?.flightData.plane.airline} {flightData?.flightData.plane.planeName}
           </Typography>
         </Breadcrumbs>
       </Box>
@@ -62,12 +118,12 @@ function BookingDetail() {
           {/* Route and Price */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
             <Box>
-              <Typography variant="subtitle1" fontWeight="bold">{flightData?.aircraft || "EWR-BNA"}</Typography>
-              <Typography variant="caption">Return Wed, Dec 8</Typography>
+              <Typography variant="subtitle1" fontWeight="bold">{flightData?.flightData.plane.airline + " " + flightData?.flightData.plane.planeName || ""}</Typography>
+              <Typography variant="caption">Departure: {flightData?.flightData.departureTime || "N/A"}</Typography>
             </Box>
             <Box>
-              <Typography variant="h5" color="#FF8682" fontWeight="bold">${flightData?.price || "240"}</Typography>
-              <Typography variant="caption">{flightData?.duration || "2h 28m"}</Typography>
+              <Typography variant="h5" color="#FF8682" fontWeight="bold">${flightData?.flightData.price || "240"}</Typography>
+              <Typography variant="body">{formatDuration(flightData?.flightData.duration) || "2h 28m"}</Typography>
             </Box>
           </Box>
 
@@ -81,14 +137,15 @@ function BookingDetail() {
               borderRadius: 1,
               padding: '8px 16px'
             }}>
-              <img src={flightData?.airlineLogo || "/emirates.png"} alt={flightData?.airline || "Emirates"} width={40} height={40} />
+              <img src={getAirlineLogo(flightData?.flightData.plane.airline) || RealPlane}
+              alt={flightData?.flightData.airline} width={40} height={40} />
               <Box>
-                <Typography variant="subtitle1" fontWeight="bold">{flightData?.route1 || "Emirates A380 Airbus"}</Typography>
-                <Typography variant="caption">{flightData?.aircraftType || "Airbus A320"}</Typography>
+                <Typography variant="subtitle1" fontWeight="bold">{flightData?.flightData.plane.airline || "Emirates A380 Airbus"}</Typography>
+                <Typography variant="caption">{flightData?.flightData.flightName || "Airbus A320"}</Typography>
               </Box>
             </Box>
             <Box sx={{ display: 'flex', gap: 2 }}>
-                <FlightIcon sx={{transform: 'rotate(180deg)'}}/>
+                <FlightIcon sx={{transform: 'rotate(90deg)'}}/>
               <WifiIcon />
               <TimerIcon/>
               <FastfoodIcon />
@@ -99,8 +156,8 @@ function BookingDetail() {
           {/* Flight Times */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Box>
-              <Typography variant="h6">{flightData?.departureTime || "12:00 pm"}</Typography>
-              <Typography variant="caption" color="text.secondary">{flightData?.departureLocation || "Newark(EWR)"}</Typography>
+              <Typography variant="h6">{formatTime(flightData?.flightData.departureTime) || "12:00 pm"}</Typography>
+              <Typography variant="caption" color="text.secondary">{flightData?.flightData.departureAirport || "Newark(EWR)"}</Typography>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Box sx={{ 
@@ -135,8 +192,8 @@ function BookingDetail() {
               </Box>
             </Box>
             <Box>
-              <Typography variant="h6">{flightData?.arrivalTime || "12:00 pm"}</Typography>
-              <Typography variant="caption" color="text.secondary">{flightData?.arrivalLocation || "Newark(EWR)"}</Typography>
+              <Typography variant="h6">{formatTime(calculateArrivalTime(flightData?.flightData.departureTime, flightData?.flightData.duration)) || "12:00 pm"}</Typography>
+              <Typography variant="caption" color="text.secondary">{flightData?.flightData.arrivalAirport || "Newark(EWR)"}</Typography>
             </Box>
           </Box>
 
@@ -201,7 +258,7 @@ function BookingDetail() {
                 </Typography>
               </Box>
               <Typography variant="caption" sx={{ color: paymentOption === 'partial' ? '#112211' : 'inherit' }}>
-                Pay $207.43 now and the rest ($207.43) will be automatically charged to the same payment method on Nov 14, 2022. No extra fees.
+                Pay ${total} now and the rest (${total * 1 / 3}) will be automatically charged to the same payment method on Nov 14, 2022. No extra fees.
               </Typography>
             </Box>
           </Box>
@@ -219,14 +276,14 @@ function BookingDetail() {
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
           <Box sx={{ width: 80, height: 80, borderRadius: 2, overflow: 'hidden' }}>
             <img 
-              src={RealPlane} 
+              src={getAirlineImg(flightData?.flightData.plane.airline) ||RealPlane} 
               alt="Aircraft"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </Box>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h6">Economy</Typography>
-            <Typography variant="subtitle1">{flightData?.airlineName} A380 Airbus</Typography>
+            {/* <Typography variant="h6">Economy</Typography> */}
+            <Typography variant="subtitle1">{flightData?.flightData.plane.airline + " " + flightData?.flightData.plane.planeName}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
               <Box sx={{
                 display: "inline-flex",
@@ -234,10 +291,10 @@ function BookingDetail() {
                 border: "2px solid #8DD3BB",
                 padding: "2px 8px"
               }}>
-                <Typography variant="subtitle2">{flightData?.rating}</Typography>
+                <Typography variant="subtitle2">4.2</Typography>
               </Box>
               <Typography variant="caption" color="text.secondary">
-                {flightData?.reviews}
+                Very good (54 reviews)
               </Typography>
             </Box>
           </Box>
@@ -247,7 +304,7 @@ function BookingDetail() {
         <Typography variant="h6" mb={2}>Chi tiết hóa đơn</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
           <Typography>Giá vé</Typography>
-          <Typography>{flightData?.price}</Typography>
+          <Typography>{flightData?.flightData.price}</Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
           <Typography>Số lượng</Typography>
@@ -255,7 +312,7 @@ function BookingDetail() {
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
           <Typography>Thuế và phí</Typography>
-          <Typography>{flightData?.price}</Typography>
+          <Typography>{flightData?.flightData.price * 0.15}</Typography>
         </Box>
         <Box sx={{ 
           display: 'flex', 

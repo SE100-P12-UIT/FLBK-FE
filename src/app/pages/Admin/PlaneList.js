@@ -115,7 +115,7 @@ const PlaneList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await PlaneService.getAllPlane();
+        const response = await PlaneService.getAllPlane("", "asc", rowsPerPage, page + 1);
         console.log("Dữ liệu từ API:", response);
         setData(response || []);
         setLoading(false);
@@ -126,14 +126,14 @@ const PlaneList = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [page, rowsPerPage]);
 
   // Hiển thị trạng thái loading hoặc lỗi
   if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
-  const filteredData = Array.isArray(data)
-    ? data.filter(
+  const filteredData = Array.isArray(data.results)
+    ? data?.results.filter(
         (item) =>
           (item.planeName && item.planeName.includes(searchTerm)) ||
           (item.airline && item.airline.includes(searchTerm))
@@ -333,7 +333,7 @@ const PlaneList = () => {
             <InputLabel>Hãng</InputLabel>
             <Select name="airline" onChange={handleInputChange} label="Hãng">
               <MenuItem value="VietJet">VietJet</MenuItem>
-              <MenuItem value="VietNamAirline">VietNamAirline</MenuItem>
+              <MenuItem value="VietNamAirline">VietnamAirline</MenuItem>
               <MenuItem value="BambooAirway">BambooAirway</MenuItem>
             </Select>
           </FormControl>
@@ -396,7 +396,7 @@ const PlaneList = () => {
             >
               <MenuItem value="VietJet">VietJet</MenuItem>
               <MenuItem value="VietNamAirline">VietNamAirline</MenuItem>
-              <MenuItem value="other">Khác...</MenuItem>
+              <MenuItem value="BambooAirway">BambooAirway</MenuItem>
             </Select>
           </FormControl>
           <TextField
