@@ -28,115 +28,22 @@ const ticketTypes = ["Common", "Business"];
 
 // List of passenger options
 const passengerOptions = [
-  "1 Passenger",
-  "2 Passengers",
-  "3 Passengers",
-  "4 Passengers",
-  "5+ Passengers",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
 ];
 
-//List of flights
-/* const flights = [
-    {
-      airlineLogo: Emirates,
-      airlineName: 'Emirates',
-      rating: '4.2',
-      reviews: 'Very Good (54 reviews)',
-      price: '$104',
-      departure: '12:00 pm',
-      arrival: '1:28 pm',
-      stops: 'Non stop',
-      duration: '2h 28m',
-      route1: 'Emirates',
-      route2: 'EWR-BNA',
-    },
-    {
-      airlineLogo: FlyDubai,
-      airlineName: 'Fly Dubai',
-      rating: '4.2',
-      reviews: 'Very Good (54 reviews)',
-      price: '$104',
-      departure: '12:00 pm',
-      arrival: '1:28 pm',
-      stops: 'Non stop',
-      duration: '2h 28m',
-      route1: 'FlyDubai',
-      route2: 'EWR-BNA',
-    },
-    {
-      airlineLogo: Qatar,
-      airlineName: 'Qatar',
-      rating: '4.2',
-      reviews: 'Very Good (54 reviews)',
-      price: '$104',
-      departure: '12:00 pm',
-      arrival: '1:28 pm',
-      stops: 'Non stop',
-      duration: '2h 28m',
-      route1: 'Qatar',
-      route2: 'EWR-BNA',
-    },
-    {
-      airlineLogo: Etihad,
-      airlineName: 'Etihad',
-      rating: '4.2',
-      reviews: 'Very Good (54 reviews)',
-      price: '$104',
-      departure: '12:00 pm',
-      arrival: '1:28 pm',
-      stops: 'Non stop',
-      duration: '2h 28m',
-      route1: 'Etihad',
-      route2: 'EWR-BNA',
-    }
-  ];*/
-
-/*const flights = [
-    {
-      flightName: "VN123",
-      departureAirport: "Hà Nội",
-      arrivalAirport: "Hồ Chí Minh",
-      departureTime: "2024-01-01T12:00:00.000Z",
-      duration: 180,
-      price: 150,
-      planeId: "64c8d45b634c3c0012345680",
-    },
-    {
-      flightName: "VN124",
-      departureAirport: "Đà Nẵng",
-      arrivalAirport: "Hồ Chí Minh",
-      departureTime: "2024-01-01T15:00:00.000Z",
-      duration: 100,
-      price: 120,
-      planeId: "64c8d45b634c3c0012345681",
-    },
-    {
-      flightName: "VN125",
-      departureAirport: "Đà Nẵng",
-      arrivalAirport: "Hồ Chí Minh",
-      departureTime: "2024-01-01T23:00:00.000Z",
-      duration: 100,
-      price: 120,
-      planeId: "64c8d45b634c3c0012345681",
-    }
-  ];
-  
-  const planes = [
-    {
-      planeId: "64c8d45b634c3c0012345680",
-      planeName: "Airbus A320",
-      maxSeats: 186,
-      airline: "Vietnam Airlines",
-      seats: [],
-    },
-    {
-      planeId: "64c8d45b634c3c0012345681",
-      planeName: "Boeing 737",
-      maxSeats: 200,
-      airline: "VietJet",
-      seats: [],
-    },
-  ];*/
+const formatCurrency = (amount) => {
+  if (typeof amount !== "number") {
+    return "Số tiền không hợp lệ";
+  }
+  return amount.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+};
 
 const FlightSearch = () => {
   const navigate = useNavigate();
@@ -253,6 +160,12 @@ const FlightSearch = () => {
     switch (airline) {
       case "VietnamAirline":
         return VietnamAirlines;
+        case "VietNamAirline":
+        return VietnamAirlines;
+        case "Vietnam Airlines":
+        return VietnamAirlines;
+        case "VietnamAirlines":
+          return VietnamAirlines;
       case "VietJet":
         return VietJet;
       case "BambooAirway":
@@ -289,6 +202,7 @@ const FlightSearch = () => {
       state: {
         flightData: {
           flightData: flight,
+          seatType:ticketType,
           // planeData: associatedPlane
         },
       },
@@ -456,6 +370,7 @@ const FlightSearch = () => {
             position: "relative",
             height: "70vh",
             width: "25vw",
+            minWidth:'200px',
             marginBottom: 6,
             justifySelf: "left",
             flexDirection: "column",
@@ -480,8 +395,8 @@ const FlightSearch = () => {
               }}
             />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography>${priceRange[0]}</Typography>
-              <Typography>${priceRange[1]}</Typography>
+              <Typography>{priceRange[0]}</Typography>
+              <Typography>{priceRange[1]}</Typography>
             </Box>
           </Box>
 
@@ -557,6 +472,7 @@ const FlightSearch = () => {
                   mb: 2,
                   alignItems: "center",
                   width: "100%",
+                  minWidth:'500px',
                 }}
               >
                 {/* Airline Logo */}
@@ -591,14 +507,14 @@ const FlightSearch = () => {
                       color="textSecondary"
                       marginTop={2}
                     >
-                      Very Good (54 reviews)
+                      Rất tích cực (54 đánh giá)
                     </Typography>
                     <Typography
                       variant="h2"
                       color="#FF8682"
                       sx={{ marginLeft: "auto" }}
                     >
-                      ${flight.price}
+                    {formatCurrency(flight.price)}
                     </Typography>
                   </Box>
                   <Box
@@ -630,7 +546,7 @@ const FlightSearch = () => {
                       </Typography>
                     </Box>
                     <Typography variant="body1" color="textSecondary">
-                      Non stop
+                      
                     </Typography>
                     <Box
                       sx={{
@@ -679,7 +595,7 @@ const FlightSearch = () => {
               </Grid>
             ))
           ) : (
-            <Typography>No flights match your criteria.</Typography>
+            <Typography>Không có chuyến bay nào khớp với yêu cầu của bạn.</Typography>
           )}
         </Box>
       </Box>

@@ -42,7 +42,7 @@ const YesNoModal = ({ title, content, open, setOpen, onYes, onNo }) => {
                           
              }}
           >
-            <Typography variant="h6" textTransform={"initial"}>
+            <Typography variant="h6" color="#000"  textTransform={"initial"}>
               Có
             </Typography>
           </Button>
@@ -55,7 +55,7 @@ const YesNoModal = ({ title, content, open, setOpen, onYes, onNo }) => {
               
             }}
           >
-            <Typography variant="h6" textTransform={"initial"} >
+            <Typography variant="h6" color="#000" textTransform={"initial"} >
               Không
             </Typography>
           </Button>

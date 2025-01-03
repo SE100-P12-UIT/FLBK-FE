@@ -35,9 +35,19 @@ const logout = async (refreshToken) => {
 };
 
 const refreshAccessToken = async (refreshToken) => {
-  return await axiosConfig.post(`${AUTH_ENDPOINT}/refresh-tokens`, {
-    refreshToken,
-  });
+  try {
+    const response = await axiosConfig.post(`${AUTH_ENDPOINT}/refresh-tokens`, {
+      refreshToken,
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.data.message || 'Refresh Session failed';
+    } else {
+      throw new Error('Network Error');
+    }
+  }
+  
 };
 
 const register = async (payload) => {

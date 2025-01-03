@@ -2,18 +2,6 @@ import axiosConfig from './axiosConfig';
 import { API_BASE_URL } from './config';
 const USER_ENDPOINT = `${API_BASE_URL}/flight`;
 
-const getFlightById = async (id) => {
-    try {
-        const response = await axiosConfig.get(`${USER_ENDPOINT}/${id}`);
-        return response.data;
-    } catch (error) {
-        if (error.response) {
-            throw error.response.status;
-        } else {
-            throw new Error('Network Error');
-        }
-    }
-};
 
 
 const updateFlightById = async (id, updateBody) => {
@@ -72,9 +60,31 @@ const deleteFlightById = async (id) => {
     }
 };
 
+const getFilteredFlight = async (departureAirport, arrivalAirport, departureTime, airline) => {
+    try {
+      // Chỉ giữ lại các trường có giá trị
+      const params = {};
+      if (departureAirport) params.departureAirport = departureAirport;
+      if (arrivalAirport) params.arrivalAirport = arrivalAirport;
+      if (departureTime) params.departureTime = departureTime;
+      if (airline) params.airline = airline;
+  
+      const response = await axiosConfig.post(`${USER_ENDPOINT}/getPlanes`, {
+        params,
+      });
+  
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        throw error.response.data;
+      }
+      return error.message;
+    }
+  };
+
 
 const FlightService = {
-    getFlightById,
+    getFilteredFlight,
     updateFlightById,
     getAllFlights,
     createFlight,

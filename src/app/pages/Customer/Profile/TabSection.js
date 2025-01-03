@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import BookingHistory from "./BookingHistory";
 
 const TabSection = () => {
-    const tabs = ["Tài khoản", "Lịch sử đặt vé", "Phương thức thanh toán"];
+    const tabs = ["Tài khoản", "Lịch sử đặt vé"];
     const [activeTab, setActiveTab] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -110,7 +110,7 @@ const TabSection = () => {
                     </Box>
                 )}
                 {activeTab === 1 && <BookingHistory />}
-                {activeTab === 2 && <Typography variant="h4">Phương thức thanh toán</Typography>}
+                {/* {activeTab === 2 && <Typography variant="h4">Phương thức thanh toán</Typography>} */}
             </Box>
         </Box>
     );

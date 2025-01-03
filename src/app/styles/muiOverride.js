@@ -292,7 +292,7 @@ const theme = createTheme({
                     position: 'absolute',
                     top: '12%',
                     right: 0,
-                    width: '1px',
+                    width: '2px',
                     height: '70%',
                     backgroundColor: '#DDFAF0', // Màu divider
                 },
