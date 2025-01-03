@@ -5,8 +5,10 @@ import LoginStatic1 from "../../../assets/images/LoginStatic1.png";
 import SignInCard from "./SignInCard";
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import Logo from "../../../assets/icon/Logo.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function SignIn() {
+  const Navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -30,7 +32,7 @@ export default function SignIn() {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
-            <IconButton href="/home">
+            <IconButton onClick={()=>Navigate("/home")}>
               <img src={Logo} alt="Logo"></img>
               <Typography
                 variant="h1"

@@ -55,7 +55,7 @@ const Header = () => {
       >
         {/* Left Section: Icon Button + Text */}
         <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
-          <IconButton href="/search" color="inherit">
+          <IconButton onClick={()=>Navigate("/search")} color="inherit">
             <AirplaneTicketIcon />
             <Typography
               variant="h6"
@@ -81,7 +81,7 @@ const Header = () => {
             gap: 1,
           }}
         >
-          <IconButton href="/home">
+          <IconButton onClick={()=>Navigate("/home")}>
             <img src={Logo} alt="Logo"></img>
             <Typography
               variant="h1"
@@ -119,7 +119,7 @@ const Header = () => {
         ) : (
           <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
             <IconButton
-              href="/user/profile"
+                onClick={()=>Navigate("/user/profile")}
               color="inherit"
               sx={{ marginRight: 2 }}
             >
