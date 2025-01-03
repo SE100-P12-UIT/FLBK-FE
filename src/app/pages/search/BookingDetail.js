@@ -271,7 +271,7 @@ function BookingDetail() {
           <Link
             underline="hover"
             color="inherit"
-            href="/search"
+            onClick={()=>navigate("/search")}
             sx={{ color: "#112211" }}
           >
             Tìm chuyến bay
@@ -279,7 +279,7 @@ function BookingDetail() {
           <Link
             underline="hover"
             color="inherit"
-            href="/booking"
+            onClick={()=>navigate("/booking")}
             sx={{ color: "#112211" }}
           >
             Đặt vé

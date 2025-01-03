@@ -254,7 +254,7 @@ export default function SignUpCard() {
         <Typography sx={{ textAlign: "center" }}>
           Đã có tài khoản?{" "}
           <span>
-            <Link href="/signin/" variant="body2" sx={{ alignSelf: "center" }}>
+            <Link onClick={()=>navigate("/signin")} variant="body2" sx={{ alignSelf: "center" }}>
               Đăng nhập
             </Link>
           </span>

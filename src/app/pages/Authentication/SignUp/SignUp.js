@@ -5,8 +5,10 @@ import SignupStatic1 from "../../../assets/images/SignupStatic1.png";
 import SignUpCard from "./SignUpCard";
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import Logo from "../../../assets/icon/Logo.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const Navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -36,7 +38,7 @@ export default function SignUp() {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", m: "auto" }}>
-            <IconButton href="/home">
+            <IconButton onClick={()=>Navigate("/home")}>
               <img src={Logo} alt="Logo"></img>
               <Typography
                 variant="h1"
