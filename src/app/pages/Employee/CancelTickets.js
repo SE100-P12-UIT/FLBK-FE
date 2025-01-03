@@ -17,8 +17,9 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import React, { useState, useEffect } from "react";
-
-const apiurl = "https://dummyjson.com/products"; // api
+import TicketService from "../../services/ticketService";
+import { toast } from "react-toastify";
+import YesNoModal from "../../components/YesNoModal";
 
 const CancelTickets = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,39 +30,60 @@ const CancelTickets = () => {
   const [loading, setLoading] = useState(true); // Trạng thái loading
   const [error, setError] = useState(null); // Trạng thái lỗi
 
-  // Gọi API
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [declineModalOpen, setDeclineModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
+
+  const fetchData = async () => {
+    try {
+      const response = await TicketService.getTicketByStatus("PendingCancel");
+      console.log("Dữ liệu từ API:", response);
+      setData(response || []); // Lưu dữ liệu vào state
+      setLoading(false); // Tắt trạng thái loadingSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+      setError("Không thể tải dữ liệu");
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(apiurl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json(); // Chuyển đổi dữ liệu thành JSON
-        console.log("Dữ liệu từ API:", result);
-        setData(result.products || []); // Lưu dữ liệu vào state
-        setLoading(false); // Tắt trạng thái loadingSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-      } catch (error) {
-        console.error("Lỗi khi gọi API:", error);
-        setError("Không thể tải dữ liệu");
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
+
+  const formatDateTime = (dateString) => {
+    if (!dateString) return null;
+
+    // Chuyển chuỗi thành đối tượng Date
+    const dateObj = new Date(dateString);
+
+    // Lấy ngày, tháng, năm, giờ, phút, giây
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const year = dateObj.getFullYear();
+
+    const hours = String(dateObj.getHours()).padStart(2, "0");
+    const minutes = String(dateObj.getMinutes()).padStart(2, "0");
+    const seconds = String(dateObj.getSeconds()).padStart(2, "0");
+
+    // Định dạng lại thành "DD-MM-YYYY HH:mm:ss"
+    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+  };
 
   // Hiển thị trạng thái loading hoặc lỗi
   if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
   const filteredData = Array.isArray(data)
-    ? data.filter((item) => item.title && item.title.includes(searchTerm))
+    ? data.filter(
+        (item) =>
+          item.passenger.name && item.passenger.name.includes(searchTerm)
+      )
     : [];
 
-  const paginatedData = filteredData.slice(
+  /*  const paginatedData = filteredData.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
-  );
+  ); */
 
   // Xử lý thay đổi trang
   const handleChangePage = (event, newPage) => {
@@ -74,12 +96,32 @@ const CancelTickets = () => {
     setPage(0);
   };
 
-  const handleConfirmClick = () => {
-    alert("Button Xác nhận đã được nhấn!");
+  const handleConfirmClick = async (ticketId) => {
+    try {
+      const response =
+        await TicketService.acceptRequestCancelTicketById(ticketId);
+      if (response) {
+        toast.success("Xác nhận yêu cầu hủy vé thành công! Vé đã được hủy");
+        fetchData();
+      }
+
+      setConfirmModalOpen(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Lỗi không xác định");
+    }
   };
-  const handleCancelClick = () => {
-    alert("Button từ chối đã được nhấn!");
+  const handleCancelClick = async (ticketId) => {
+    // try {
+    //     const response = await TicketService.(ticketId);
+    //     if (response) toast.success("Từ chối yêu cầu hủy vé thành công! Vé đã không được hủy");
+    //     setDeclineModalOpen(false);
+    // } catch (error) {
+    //     console.log(error);
+    //     toast.error("Lỗi không xác định");
+    // }
   };
+
   return (
     <Box sx={{}}>
       <Box sx={{ borderBottom: "1px solid #ddd" }}>
@@ -119,9 +161,10 @@ const CancelTickets = () => {
             <TableRow>
               <TableCell>Số thứ tự</TableCell>
               <TableCell>Tên khách hàng</TableCell>
-              <TableCell>Số điện thoại</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Hãng</TableCell>
+              {/* <TableCell>Số điện thoại</TableCell>
+                                          <TableCell>Email</TableCell> */}
+              <TableCell>Ghế</TableCell>
+              <TableCell>Mã chuyến bay</TableCell>
               <TableCell>Điểm đi</TableCell>
               <TableCell>Điểm đến</TableCell>
               <TableCell>Thời gian khởi hành</TableCell>
@@ -129,27 +172,33 @@ const CancelTickets = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedData.map((item, index) => {
-              const createdAt = new Date(item.meta.createdAt);
+            {filteredData.map((item, index) => {
+              /* const createdAt = new Date(item.meta.createdAt); */
               // Chỉ hiển thị ngày (theo định dạng địa phương, ví dụ: dd/mm/yyyy hoặc mm/dd/yyyy tùy vào cài đặt)
-              const formattedDate = createdAt.toLocaleString("en-GB");
+              /* const formattedDate = createdAt.toLocaleString("en-GB"); */
               return (
                 <TableRow key={item.id}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{formattedDate}</TableCell>
-                  <TableCell>{item.meta.updatedAt}</TableCell>
-                  <TableCell>{formattedDate}</TableCell>
+                  <TableCell>{item.passenger.name}</TableCell>
+                  {/* <TableCell>{item.title}</TableCell>
+                                                      <TableCell>{item.title}</TableCell> */}
+                  <TableCell>{item.seatName}</TableCell>
+                  <TableCell>{item.flight.flightName}</TableCell>
+                  <TableCell>{item.flight.departureAirport}</TableCell>
+                  <TableCell>{item.flight.arrivalAirport}</TableCell>
+                  <TableCell>
+                    {formatDateTime(item.flight.departureTime)}
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="contained"
                       color="success"
                       size="small"
                       sx={{ minWidth: "120px", width: "auto", m: 0.5, p: 0.5 }}
-                      onClick={handleConfirmClick}
+                      onClick={() => {
+                        setSelectedId(item.id);
+                        setConfirmModalOpen(true);
+                      }}
                     >
                       Xác nhận
                     </Button>
@@ -158,7 +207,10 @@ const CancelTickets = () => {
                       color="error"
                       size="small"
                       sx={{ minWidth: "120px", width: "auto", m: 0.5, p: 0.5 }}
-                      onClick={handleCancelClick}
+                      onClick={() => {
+                        setSelectedId(item.id);
+                        setDeclineModalOpen(true);
+                      }}
                     >
                       Từ chối
                     </Button>
@@ -177,6 +229,23 @@ const CancelTickets = () => {
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+
+      <YesNoModal
+        title="Xác nhận"
+        content="Xác nhận yêu cầu hủy vé này?"
+        open={confirmModalOpen}
+        setOpen={setConfirmModalOpen}
+        onYes={() => handleConfirmClick(selectedId)}
+        onNo={() => setConfirmModalOpen(false)}
+      />
+      <YesNoModal
+        title="Từ chối"
+        content="Từ chối yêu cầu hủy vé này?"
+        open={declineModalOpen}
+        setOpen={setDeclineModalOpen}
+        onYes={() => handleCancelClick(selectedId)}
+        onNo={() => setDeclineModalOpen(false)}
       />
     </Box>
   );

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_BASE_URL } from './config';
 import Cookies from 'js-cookie';
 import AuthService from '../services/authService';
+import { toast } from 'react-toastify';
 
 const axiosConfig = axios.create({
   baseURL: API_BASE_URL,
@@ -29,16 +30,17 @@ axiosConfig.interceptors.response.use(
     return response;
   },
   async (error) => {
-    // if (error.response?.status === 401) {
-    //   const refreshToken = Cookies.get('refreshToken');
-    //   await AuthService.logout(refreshToken).then(() => {
-    //     window.location.href = '/signin';
-    //   });
-    // }
+    if (error.response?.status === 401) {
+      const refreshToken = Cookies.get('refreshToken');
+      toast.info("Phiên đăng nhập đã hết hạn");
+      await AuthService.logout(refreshToken).then(() => {
+        window.location.href = '/signin';
+      });
+    }
 
-    // if (error.response?.status !== 410) {
-    //   toast.error(error.response?.data?.message || error?.message);
-    // }
+    if (error.response?.status !== 410) {
+      toast.error(error.response?.data?.message || error?.message);
+    }
 
     const originalRequest = error.config;
     if (error.response && error.response.status === 401 && !originalRequest._retry) {

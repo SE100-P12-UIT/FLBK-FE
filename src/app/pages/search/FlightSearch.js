@@ -111,7 +111,7 @@ const FlightSearch = () => {
           }}
         >
           <Typography variant="h1" sx={{ color: "white" }}>
-            Make your travel wishlist, we’ll do the rest
+            Make your travel wishlist, we'll do the rest
           </Typography>
           <Typography variant="body1" sx={{ color: "white" }}>
             Special offers to suit your plan
