@@ -1,6 +1,5 @@
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import DescriptionIcon from '@mui/icons-material/Description';
 import FlightIcon from '@mui/icons-material/Flight';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
@@ -46,11 +45,11 @@ const demoTheme = createTheme({
         },
         action: {
           hover: '#B2E8D6',
-          selected: '#78C8A5', 
-          focus: '#78C8A5', 
-          hoverOpacity: 0.1, 
-          selectedOpacity:0.3,
-          activatedOpacity: 0.12, 
+          selected: '#78C8A5',
+          focus: '#78C8A5',
+          hoverOpacity: 0.1,
+          selectedOpacity: 0.3,
+          activatedOpacity: 0.12,
         },
       },
     },
@@ -66,11 +65,11 @@ const demoTheme = createTheme({
           paper: '#112211',
         },
         action: {
-          hover: '#2A433A', 
-          selected: '#FFFFFF', 
-          focus: '#A3D6C6', 
+          hover: '#2A433A',
+          selected: '#FFFFFF',
+          focus: '#A3D6C6',
           hoverOpacity: 0.1,
-          selectedOpacity:0.5,
+          selectedOpacity: 0.5,
           activatedOpacity: 0.12,
         },
       },
@@ -78,9 +77,9 @@ const demoTheme = createTheme({
   },
   typography: {
     fontFamily: [
-      'unbounded', 'sans-serif','montserrat'
+      'unbounded', 'sans-serif', 'montserrat'
     ].join(','),
-    
+
   },
   breakpoints: {
     values: {
@@ -91,7 +90,7 @@ const demoTheme = createTheme({
       xl: 1536,
     },
   },
-  
+
 });
 
 
@@ -132,7 +131,7 @@ function Dashboard(props) {
       const resultAction = await dispatch(userLogout()).unwrap();
       if (resultAction) {
         toast.success('Đăng xuất thành công');
-        navigate('/signin'); 
+        navigate('/signin');
       }
     } catch (error) {
       toast.error('Đã có lỗi xảy ra');
@@ -165,18 +164,6 @@ function Dashboard(props) {
       segment: 'Lapbaocao',
       title: 'Lập báo cáo',
       icon: <BarChartIcon />,
-      children: [
-        {
-          segment: 'Doanhthutheothang',
-          title: 'Doanh thu theo tháng',
-          icon: <DescriptionIcon />,
-        },
-        {
-          segment: 'Doanhthutheonam',
-          title: 'Doanh thu theo năm',
-          icon: <DescriptionIcon />,
-        },
-      ],
     },
     {
       kind: 'divider',
@@ -206,55 +193,55 @@ function Dashboard(props) {
           my: 2,
           mx: 1,
           overflow: 'hidden',
-          borderRadius:'8px',
+          borderRadius: '8px',
         }}
       >
         <Button
           startIcon={<LogoutIcon />}
           onClick={() => setOpenLogoutModal(true)}
           sx={{
-            justifyContent:  mini?'center':'flex-start',
+            justifyContent: mini ? 'center' : 'flex-start',
             width: '100%',
             height: '48px',
             padding: '8px 16px',
             textAlign: 'left',
             borderRadius: '8px',
             color: 'text.primary',
-            position: 'relative', 
+            position: 'relative',
             transition: 'all 0.2s',
             backgroundColor: 'transparent',
             '.MuiButton-startIcon': {
-              margin: mini ? 'auto' : '0 px 0 0', 
+              margin: mini ? 'auto' : '0 px 0 0',
             },
             '&:hover': {
-              backgroundColor:  'action.hover', 
+              backgroundColor: 'action.hover',
             },
           }}
         >
           {/* Chỉ hiện icon hover khi mini */}
-          
-            <Typography
-              sx={{
-                fontSize: '1rem',
-                fontWeight: 600,
-                textTransform: 'none',
-                position: 'absolute', 
-                left: '48px', 
-                whiteSpace: 'nowrap', 
-                overflow: 'hidden', 
-                visibility: mini? 'hidden': 'visible', 
-              }}
-            >
-              Đăng xuất
-            </Typography>
-          
+
+          <Typography
+            sx={{
+              fontSize: '1rem',
+              fontWeight: 600,
+              textTransform: 'none',
+              position: 'absolute',
+              left: '48px',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              visibility: mini ? 'hidden' : 'visible',
+            }}
+          >
+            Đăng xuất
+          </Typography>
+
         </Button>
       </Box>
     );
   }
-  
-  
-  
+
+
+
   SidebarFooter.propTypes = {
     mini: PropTypes.bool.isRequired,
   };
@@ -267,22 +254,22 @@ function Dashboard(props) {
   return (
     <Box>
       <AppProvider
-      
-      navigation={NAVIGATION}
-      branding={{
-        logo: <img src={Logo} alt="Logo" />,
-        title: 'FLBK',
-      }}
-      router={router}
-      theme={demoTheme}
-      window={demoWindow}
-    >
-      <DashboardLayout slots={{
-        sidebarFooter: SidebarFooter,
-      }}>
-        <DemoPageContent pathname={router.pathname} />
-      </DashboardLayout>
-    </AppProvider>
+
+        navigation={NAVIGATION}
+        branding={{
+          logo: <img src={Logo} alt="Logo" />,
+          title: 'FLBK',
+        }}
+        router={router}
+        theme={demoTheme}
+        window={demoWindow}
+      >
+        <DashboardLayout slots={{
+          sidebarFooter: SidebarFooter,
+        }}>
+          <DemoPageContent pathname={router.pathname} />
+        </DashboardLayout>
+      </AppProvider>
 
       <YesNoModal
         title="Đăng xuất"

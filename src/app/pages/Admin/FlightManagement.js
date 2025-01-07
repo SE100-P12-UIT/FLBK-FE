@@ -143,15 +143,15 @@ const FlightManagement = () => {
                 }
             }
             console.log(payLoad);
-            await FlightService.createFlight(payLoad);
-
-            //gọi lại api
-            const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1);
-            setData(response || {});
-            console.log(response);
-            toast.success("Thêm chuyến bay thành công");
-            // Đóng hộp thoại
-            handleAddDialogClose();
+            const createFlight = await FlightService.createFlight(payLoad);
+            if (createFlight.code === 201) {
+                //gọi lại api
+                const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1);
+                setData(response || {});
+                console.log(response);
+                toast.success("Thêm chuyến bay thành công");
+            }
+            handleAddDialogClose();// Đóng hộp thoại
         } catch (error) {
             console.error('Lỗi khi thêm chuyến bay:', error);
             toast.error('Không thể thêm chuyến bay. Vui lòng thử lại!');

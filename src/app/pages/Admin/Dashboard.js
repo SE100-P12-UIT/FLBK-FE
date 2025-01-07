@@ -1,5 +1,4 @@
 import BarChartIcon from "@mui/icons-material/BarChart";
-import DescriptionIcon from "@mui/icons-material/Description";
 import FlightIcon from "@mui/icons-material/Flight";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
@@ -11,17 +10,17 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { useDemoRouter } from "@toolpad/core/internal";
 import PropTypes from "prop-types";
 import * as React from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Logo from "../../assets/icon/Logo.svg";
+import YesNoModal from "../../components/YesNoModal";
+import { userLogout } from "../../stores/actions/authActions";
 import CustomerList from "./CustomerList";
 import EmployeeList from "./EmployeeList";
 import FlightManagement from "./FlightManagement";
 import PlaneList from "./PlaneList";
-import YesNoModal from "../../components/YesNoModal";
-import { userLogout } from "../../stores/actions/authActions";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
-import { toast } from "react-toastify";
 
 const NAVIGATION = [
   {
@@ -53,18 +52,6 @@ const NAVIGATION = [
     segment: "Lapbaocao",
     title: "Lập báo cáo",
     icon: <BarChartIcon />,
-    children: [
-      {
-        segment: "Doanhthutheothang",
-        title: "Doanh thu theo tháng",
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: "Doanhthutheonam",
-        title: "Doanh thu theo năm",
-        icon: <DescriptionIcon />,
-      },
-    ],
   },
   {
     kind: "divider",
