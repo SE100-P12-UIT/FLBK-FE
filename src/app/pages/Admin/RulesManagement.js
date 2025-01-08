@@ -37,7 +37,7 @@ const FlightConfig = () => {
       try {
         const response = await TicketTypeService.getTicketTypes();
         console.log("Fetched Ticket Types:", response);
-        setTicketTypes(response || []); // Assuming `results` contains the array
+        setTicketTypes(response || []);
         setMinDuration(45); // Example default value for minimum flight duration
         setLoading(false);
       } catch (error) {
