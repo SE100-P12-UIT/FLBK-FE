@@ -63,12 +63,12 @@ const FlightConfig = () => {
   const handleEditSave = async () => {
     try {
       const updatedTicketType = await TicketTypeService.updateTicketTypeById(
-        currentTicketType._id,
+        currentTicketType.id,
         { coefficient: currentTicketType.coefficient }
       );
       setTicketTypes((prev) =>
         prev.map((ticket) =>
-          ticket._id === updatedTicketType._id ? updatedTicketType : ticket
+          ticket.id === updatedTicketType.id ? updatedTicketType : ticket
         )
       );
       handleEditClose();
@@ -169,11 +169,11 @@ const FlightConfig = () => {
           <TextField
             type="number"
             label="Hệ số"
-            value={currentTicketType.coefficient || ""}
+            value={currentTicketType.coefficient ? currentTicketType.coefficient.$numberDecimal : ""}
             onChange={(e) =>
               setCurrentTicketType({
                 ...currentTicketType,
-                coefficient: parseFloat(e.target.value),
+                coefficient: { $numberDecimal: e.target.value },
               })
             }
             fullWidth
