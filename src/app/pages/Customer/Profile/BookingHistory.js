@@ -218,7 +218,7 @@ const BookingHistory = () => {
                         Ghế: {ticket.seatName}
                       </Typography>
                       <Typography variant="body2">
-                        Tổng tiền: {formatCurrency((ticket.totalPrice / receipt.totalTickets))}
+                        Tổng tiền: {formatCurrency((ticket.totalPrice ))}
                       </Typography>
                       <Typography variant="body2">
                         Trạng thái vé: {getStatusInVietnamese(ticket.status)}
