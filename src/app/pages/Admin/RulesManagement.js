@@ -169,11 +169,11 @@ const FlightConfig = () => {
           <TextField
             type="number"
             label="Hệ số"
-            value={currentTicketType.coefficient || ""}
+            value={currentTicketType.coefficient ? currentTicketType.coefficient.$numberDecimal : ""}
             onChange={(e) =>
               setCurrentTicketType({
                 ...currentTicketType,
-                coefficient: parseFloat(e.target.value),
+                coefficient: { $numberDecimal: e.target.value },
               })
             }
             fullWidth
