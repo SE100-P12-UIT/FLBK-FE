@@ -4,16 +4,16 @@ import {
   Autocomplete,
   Box,
   Button,
-  Checkbox,
   FormControlLabel,
   FormGroup,
   Grid,
-  Slider,
+  Radio,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import ScrollToTopButton from "../../components/ScrollToTopButton";
 import Footer from "../../layouts/Footer";
 import Header from "../../layouts/Header";
@@ -23,17 +23,6 @@ import BambooAirways from "./../../assets/images/Bamboo.png";
 import VietJet from "./../../assets/images/VJet.png";
 import VietnamAirlines from "./../../assets/images/VNAir.png";
 
-// List of ticket types
-const ticketTypes = ["Common", "Business"];
-
-// List of passenger options
-const passengerOptions = [
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-];
 
 const formatCurrency = (amount) => {
   if (typeof amount !== "number") {
@@ -48,7 +37,7 @@ const formatCurrency = (amount) => {
 const FlightSearch = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { departure, destination, flightDate, passengerCount, ticketType } =
+  const { departure, destination, flightDate} =
     location.state || {};
 
   const [flights, setFlights] = useState([]); // State to hold flight data
@@ -58,103 +47,61 @@ const FlightSearch = () => {
   const [departureValue, setDeparture] = useState(departure || "");
   const [destinationValue, setDestination] = useState(destination || "");
   const [flightDateValue, setFlightDate] = useState(flightDate || "");
-  const [passengerCountValue, setPassengerCount] = useState(
-    passengerCount || ""
-  );
-  const [ticketTypeValue, setTicketType] = useState(ticketType || "");
-  const [priceRange, setPriceRange] = useState([50, 1200]);
-  const [timeRange, setTimeRange] = useState([1, 1436]);
-  const [selectedAirlines, setSelectedAirlines] = useState([]);
+
+
+  const [selectedAirlines, setSelectedAirlines] = useState("");
   const [filteredFlights, setFilteredFlights] = useState(flights);
+  const [filters, setFilters] = useState({});
 
   const handleSearch = () => {
-    alert("Searching flights...");
+    const getFilteredFlight = async (filters) => {
+      try {
+        const response = await FlightService.getFilteredFlight(filters.departureAirport, filters.arrivalAirport, filters.departureTime, filters.airline);
+        setFilteredFlights(response);
+        return response;
+      } catch (error) {
+        toast.error("Có lỗi không xác định đã xảy ra");
+      }
+    }
+    getFilteredFlight(filters);
   };
 
-  function normalizeString(str) {
-    return str
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/đ/g, "d")
-      .replace(/[^a-z0-9 ]/g, "")
-      .trim();
-  }
+  // function normalizeString(str) {
+  //   return str
+  //     .toLowerCase()
+  //     .normalize("NFD")
+  //     .replace(/[\u0300-\u036f]/g, "")
+  //     .replace(/đ/g, "d")
+  //     .replace(/[^a-z0-9 ]/g, "")
+  //     .trim();
+  // }
 
   const handleAirlineChange = (airline) => {
-    console.log(filteredFlights);
-    setSelectedAirlines((prev) =>
-      prev.includes(airline)
-        ? prev.filter((a) => a !== airline)
-        : [...prev, airline]
-    );
+    setSelectedAirlines(airline);
   };
 
   // Re-filter flights when filters change
   useEffect(() => {
-    const filters = {
-      price: priceRange,
-      time: timeRange,
-      selectedAirlines,
-      departure: departureValue,
-      destination: destinationValue,
-      flightDate: flightDateValue,
-      passengerCount: passengerCountValue,
+    const tempFilters = {
+      // price: priceRange,
+      // time: timeRange,
+      airline:selectedAirlines,
+      departureAirport: departureValue,
+      arrivalAirport: destinationValue,
+      departureTime: flightDateValue ? new Date(flightDateValue).toISOString() : "",
+      // passengerCount: passengerCountValue,
     };
-    const filterFlights = () => {
-      return flights.filter((flight) => {
-        // const matchesPrice = flight.price >= filters.price[0] && flight.price <= filters.price[1];
-        // const departureTime = new Date(flight.departureTime).getHours();
-        // const matchesTime =
-        //   departureTime >= filters.time[0] && departureTime <= filters.time[1];
-        const airline = flight?.plane.airline
-          ? flight.plane.airline.includes(filters.selectedAirlines)
-          : true;
-        const matchesAirline =
-          !filters.selectedAirlines.length ||
-          filters.selectedAirlines.includes(airline);
-
-        // Additional filters
-        const matchesDeparture = filters.departure
-          ? flight.departureAirport.includes(normalizeString(filters.departure))
-          : true;
-        const matchesDestination = filters.destination
-          ? flight.arrivalAirport.includes(normalizeString(filters.destination))
-          : true;
-        const matchesFlightDate = filters.flightDate
-          ? new Date(flight.departureTime).toDateString() ===
-            new Date(filters.flightDate).toDateString()
-          : true;
-
-        console.log(new Date(flight.departureTime).toDateString());
-        console.log(new Date(filters.flightDate).toDateString());
-        
-
-        return (
-          /* matchesPrice && */ /* matchesTime && */ matchesAirline &&
-          matchesDeparture &&
-          matchesDestination &&
-          matchesFlightDate
-        );
-      });
-    };
-    
-    setFilteredFlights(filterFlights());
+    console.log("Filters: ", tempFilters);
+    setFilters(tempFilters);
   }, [
     flights,
     departureValue,
     destinationValue,
     flightDateValue,
-    priceRange,
-    timeRange,
+
     selectedAirlines,
-    passengerCountValue,
   ]);
 
-  // const getAirlineByPlaneId = (planeId) => {
-  //   const plane = planes.find((p) => p.planeId === planeId);
-  //   return plane ? plane.airline : "Unknown Airline";
-  // };
 
   const getAirlineLogo = (airline) => {
     switch (airline) {
@@ -176,24 +123,36 @@ const FlightSearch = () => {
   };
 
   // Function to format time
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
-    const formattedMinutes = minutes.toString().padStart(2, "0"); // Ensure two digits
-    return `${formattedHours}:${formattedMinutes} ${period}`;
-  };
+  // const formatTime = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const hours = date.getHours();
+  //   const minutes = date.getMinutes();
+  //   const period = hours >= 12 ? "PM" : "AM";
+  //   const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+  //   const formattedMinutes = minutes.toString().padStart(2, "0"); // Ensure two digits
+  //   return `${formattedHours}:${formattedMinutes} ${period}`;
+  // };
 
-  function formatTimeSlider(value) {
-    const hours = Math.floor(value / 60);
-    const minutes = value % 60;
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 === 0 ? 12 : hours % 12; // Handle 12-hour format
-    const formattedMinutes = minutes.toString().padStart(2, "0"); // Ensure two digits
-    return `${formattedHours}:${formattedMinutes} ${period}`;
-  }
+  const formatDateTime = (isoString) => {
+    const date = new Date(isoString);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng trong JS bắt đầu từ 0
+    const year = date.getFullYear();
+
+    return `${hours}:${minutes}:${seconds}, ${day}/${month}/${year}`;
+};
+
+  // function formatTimeSlider(value) {
+  //   const hours = Math.floor(value / 60);
+  //   const minutes = value % 60;
+  //   const period = hours >= 12 ? "PM" : "AM";
+  //   const formattedHours = hours % 12 === 0 ? 12 : hours % 12; // Handle 12-hour format
+  //   const formattedMinutes = minutes.toString().padStart(2, "0"); // Ensure two digits
+  //   return `${formattedHours}:${formattedMinutes} ${period}`;
+  // }
 
   const handleBooking = (flight) => {
     // const associatedPlane = planes.find(plane => plane.planeId === flight.planeId);
@@ -202,7 +161,6 @@ const FlightSearch = () => {
       state: {
         flightData: {
           flightData: flight,
-          seatType:ticketType,
           // planeData: associatedPlane
         },
       },
@@ -215,11 +173,11 @@ const FlightSearch = () => {
     return `${hours}h ${minutes}m`; // Example output: "2h 30m"
   };
 
-  const calculateArrivalTime = (departureTime, duration) => {
-    const departureDate = new Date(departureTime);
-    const arrivalDate = new Date(departureDate.getTime() + duration * 60000); // Convert duration from minutes to milliseconds
-    return arrivalDate;
-  };
+  // const calculateArrivalTime = (departureTime, duration) => {
+  //   const departureDate = new Date(departureTime);
+  //   const arrivalDate = new Date(departureDate.getTime() + duration * 60000); // Convert duration from minutes to milliseconds
+  //   return arrivalDate;
+  // };
 
   useEffect(() => {
     const fetchFlights = async () => {
@@ -234,21 +192,7 @@ const FlightSearch = () => {
         setLoadingFlights(false);
       }
     };
-
-    // const fetchPlanes = async () => {
-    //   setLoadingPlanes(true);
-    //   try {
-    //     const response = await PlaneService.getAllPlane("", "asc", 10, 1); // Adjust parameters as needed
-    //     setPlanes(response.results || []); // Assuming the response has a results property
-    //     setLoadingPlanes(false);
-    //   } catch (error) {
-    //     setErrorPlanes('Không thể tải dữ liệu máy bay');
-    //     setLoadingPlanes(false);
-    //   }
-    // };
-
     fetchFlights();
-    // fetchPlanes();
   }, []);
 
   if (loadingFlights)
@@ -279,7 +223,7 @@ const FlightSearch = () => {
         }}
       >
         <Grid container spacing={1} alignItems="center" sx={{ p: 2 }}>
-          <Grid item xs={12} sm={3} md={2.2}>
+          <Grid item xs={12} sm={3.5} md={3.5}>
             <Autocomplete
               value={departureValue}
               onChange={(event, newValue) => setDeparture(newValue)}
@@ -290,7 +234,7 @@ const FlightSearch = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={3} md={2.2}>
+          <Grid item xs={12} sm={3.5} md={3.5}>
             <Autocomplete
               value={destinationValue}
               onChange={(event, newValue) => setDestination(newValue)}
@@ -301,7 +245,7 @@ const FlightSearch = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={3} md={2.2}>
+          <Grid item xs={12} sm={3.5} md={3.5}>
             <TextField
               label="Ngày bay"
               type="date"
@@ -314,7 +258,7 @@ const FlightSearch = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={3} md={2.2}>
+          {/* <Grid item xs={12} sm={3} md={2.2}>
             <Autocomplete
               value={passengerCountValue}
               onChange={(event, newValue) => setPassengerCount(newValue)}
@@ -334,9 +278,9 @@ const FlightSearch = () => {
                 <TextField {...params} label="Loại vé" />
               )}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} sm={3} md={1}>
+          <Grid item xs={12} sm={1.5} md={1.5}>
             <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
               <Button
                 variant="contained"
@@ -379,14 +323,14 @@ const FlightSearch = () => {
           <Typography variant="h5">Bộ lọc</Typography>
 
           {/* Price Filter */}
-          <Box sx={{ width: "70%", p: 2, borderBottom: "1px solid #112211" }}>
-            <Typography variant="h6">Giá</Typography>
+          {/* <Box sx={{ width: "70%", p: 2, borderBottom: "1px solid #112211" }}>
+            <Typography variant="h6">Giá (VNĐ)</Typography>
             <Slider
               value={priceRange}
               onChange={(e, newValue) => setPriceRange(newValue)}
               valueLabelDisplay="auto"
-              min={50}
-              max={1200}
+              min={1000000}
+              max={12000000}
               sx={{
                 color: "#8DD3BB",
                 "& .MuiSlider-thumb": {
@@ -398,10 +342,10 @@ const FlightSearch = () => {
               <Typography>{priceRange[0]}</Typography>
               <Typography>{priceRange[1]}</Typography>
             </Box>
-          </Box>
+          </Box> */}
 
           {/* Time Filter */}
-          <Box sx={{ width: "70%", p: 2, borderBottom: "1px solid #112211" }}>
+          {/* <Box sx={{ width: "70%", p: 2, borderBottom: "1px solid #112211" }}>
             <Typography variant="h6">Thời gian đi</Typography>
             <Slider
               value={timeRange}
@@ -421,7 +365,7 @@ const FlightSearch = () => {
               <Typography>{formatTimeSlider(timeRange[0])}</Typography>
               <Typography>{formatTimeSlider(timeRange[1])}</Typography>
             </Box>
-          </Box>
+          </Box> */}
 
           {/* Flight Filter */}
           <Box sx={{ width: "70%", p: 2, borderBottom: "1px solid #112211" }}>
@@ -431,7 +375,7 @@ const FlightSearch = () => {
                 <FormControlLabel
                   key={airline}
                   control={
-                    <Checkbox
+                    <Radio
                       checked={selectedAirlines.includes(airline)}
                       onChange={() => handleAirlineChange(airline)}
                     />
@@ -524,7 +468,6 @@ const FlightSearch = () => {
                       mt: 1,
                     }}
                   >
-                    <Checkbox />
                     <Box
                       sx={{
                         display: "flex",
@@ -533,15 +476,15 @@ const FlightSearch = () => {
                       }}
                     >
                       <Typography variant="h6">
-                        {formatTime(flight.departureTime)} -{" "}
-                        {formatTime(
-                          calculateArrivalTime(
-                            flight.departureTime,
-                            flight.duration
-                          )
-                        )}
+                        Khởi hành:
                       </Typography>
-                      <Typography variant="body2">
+                      <Typography variant="body1">
+                        {formatDateTime(flight.departureTime) }
+                      </Typography>
+                      <Typography variant="h6">
+                        Điểm đi:
+                      </Typography>
+                      <Typography variant="body1">
                         {flight.departureAirport}
                       </Typography>
                     </Box>
@@ -556,9 +499,15 @@ const FlightSearch = () => {
                       }}
                     >
                       <Typography variant="h6" color="textSecondary">
+                        Thời gian bay:
+                      </Typography>
+                      <Typography variant="body1" color="textSecondary">
                         {formatDuration(flight.duration)}
                       </Typography>
-                      <Typography variant="body2" color="textSecondary">
+                      <Typography variant="h6">
+                        Điểm đến:
+                      </Typography>
+                      <Typography variant="body1" color="textSecondary">
                         {flight.arrivalAirport}
                       </Typography>
                     </Box>

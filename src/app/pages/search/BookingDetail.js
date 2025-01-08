@@ -98,7 +98,7 @@ function BookingDetail() {
   const basePrice = parseFloat(flightData?.flightData.price || "240");
 
   const total = basePrice * coefficient * passengerCount;
-
+  const ticketPrice = basePrice * coefficient;
   const formatCurrency = (amount) => {
     if (typeof amount !== "number") {
       return "Số tiền không hợp lệ";
@@ -207,7 +207,7 @@ function BookingDetail() {
         arrivalAirport: flightData.flightData.arrivalAirport,
         departureTime: flightData.flightData.departureTime,
         seatType: seatType,
-        totalPrice: total,
+        totalPrice: ticketPrice,
       },
     };
     return payload;

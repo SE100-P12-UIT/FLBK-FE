@@ -26,23 +26,11 @@ import SriLanka4 from "./../../assets/images/SriLanka4.png";
 
 import vietnamCities from "../../util/publicData";
 
-// List of ticket types
-const ticketTypes = ["Common", "Business"];
 
-// List of passenger options
-const passengerOptions = [
-  "1 Passenger",
-  "2 Passengers",
-  "3 Passengers",
-  "4 Passengers",
-  "5+ Passengers",
-];
 
 const FlightSearch = () => {
   const [departure, setDeparture] = React.useState(null);
   const [destination, setDestination] = React.useState(null);
-  const [ticketType, setTicketType] = React.useState(null);
-  const [passengerCount, setPassengerCount] = React.useState(null);
   const [flightDate, setFlightDate] = React.useState(null);
   const Navigate = useNavigate();
   
@@ -52,8 +40,6 @@ const FlightSearch = () => {
         departure,
         destination,
         flightDate,
-        passengerCount,
-        ticketType,
       },
     });
   };
@@ -134,7 +120,7 @@ const FlightSearch = () => {
         </Box>
 
         <Grid container spacing={2} alignItems="center" sx={{ p: 2 }}>
-          <Grid item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+          <Grid item xs={12} sm={6} md={4} sx={{ flexGrow: 1 }}>
             <Autocomplete
               value={departure}
               onChange={(event, newValue) => setDeparture(newValue)}
@@ -145,7 +131,7 @@ const FlightSearch = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+          <Grid item xs={12} sm={6} md={4} sx={{ flexGrow: 1 }}>
             <Autocomplete
               value={destination}
               onChange={(event, newValue) => setDestination(newValue)}
@@ -156,7 +142,7 @@ const FlightSearch = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+          <Grid item xs={12} sm={6} md={4} sx={{ flexGrow: 1 }}>
             <TextField
               label="Ngày bay"
               type="date"
@@ -169,7 +155,7 @@ const FlightSearch = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+          {/* <Grid item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
             <Autocomplete
               value={passengerCount}
               onChange={(event, newValue) => setPassengerCount(newValue)}
@@ -189,7 +175,7 @@ const FlightSearch = () => {
                 <TextField {...params} label="Loại vé" />
               )}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>

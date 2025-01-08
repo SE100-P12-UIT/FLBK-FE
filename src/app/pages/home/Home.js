@@ -17,22 +17,12 @@ import vietnamCities from "../../util/publicData";
 import flight from "./../../assets/images/flight.png";
 import homepage from "./../../assets/images/homepage.png";
 
-const ticketTypes = ["Common", "Business"];
 
-// List of passenger options
-const passengerOptions = [
-  "1 Passenger",
-  "2 Passengers",
-  "3 Passengers",
-  "4 Passengers",
-  "5+ Passengers",
-];
 
 const Home = () => {
   const [departure, setDeparture] = useState(null);
   const [destination, setDestination] = useState(null);
-  const [ticketType, setTicketType] = useState(null);
-  const [passengerCount, setPassengerCount] = useState(null);
+
   const [flightDate, setFlightDate] = useState(null);
   const navigate = useNavigate();
 
@@ -42,8 +32,7 @@ const Home = () => {
         departure,
         destination,
         flightDate,
-        passengerCount,
-        ticketType,
+  
       },
     });
   };
@@ -120,7 +109,7 @@ const Home = () => {
         </Box>
 
         <Grid2 container spacing={2} alignItems="center" sx={{ p: 2 }}>
-                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                  <Grid2 item xs={12} sm={6} md={4} sx={{ flexGrow: 1 }}>
                     <Autocomplete
                       value={departure}
                       onChange={(event, newValue) => setDeparture(newValue)}
@@ -131,7 +120,7 @@ const Home = () => {
                     />
                   </Grid2>
         
-                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                  <Grid2 item xs={12} sm={6} md={4} sx={{ flexGrow: 1 }}>
                     <Autocomplete
                       value={destination}
                       onChange={(event, newValue) => setDestination(newValue)}
@@ -142,7 +131,7 @@ const Home = () => {
                     />
                   </Grid2>
         
-                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                  <Grid2 item xs={12} sm={6} md={4} sx={{ flexGrow: 1 }}>
                     <TextField
                       label="Ngày bay"
                       type="date"
@@ -155,7 +144,7 @@ const Home = () => {
                     />
                   </Grid2>
         
-                  <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
+                  {/* <Grid2 item xs={12} sm={6} md={2.4} sx={{ flexGrow: 1 }}>
                     <Autocomplete
                       value={passengerCount}
                       onChange={(event, newValue) => setPassengerCount(newValue)}
@@ -175,7 +164,7 @@ const Home = () => {
                         <TextField {...params} label="Loại vé" />
                       )}
                     />
-                  </Grid2>
+                  </Grid2> */}
                 </Grid2>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
