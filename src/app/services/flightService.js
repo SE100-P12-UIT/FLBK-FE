@@ -20,8 +20,8 @@ const getAllFlights = async (planeid, sortBy, limit, page) => {
     try {
         const response = await axiosConfig.get(`${USER_ENDPOINT}`, {
             params: {
-                planeid,
-                sortBy,
+
+
                 limit,
                 page,
             },
@@ -62,25 +62,25 @@ const deleteFlightById = async (id) => {
 
 const getFilteredFlight = async (departureAirport, arrivalAirport, departureTime, airline) => {
     try {
-      // Chỉ giữ lại các trường có giá trị
-      const params = {};
-      if (departureAirport) params.departureAirport = departureAirport;
-      if (arrivalAirport) params.arrivalAirport = arrivalAirport;
-      if (departureTime) params.departureTime = departureTime;
-      if (airline) params.airline = airline;
-  
-      const response = await axiosConfig.post(`${USER_ENDPOINT}/getPlanes`, {
-        params,
-      });
-  
-      return response.data;
+        // Chỉ giữ lại các trường có giá trị
+        const params = {};
+        if (departureAirport) params.departureAirport = departureAirport;
+        if (arrivalAirport) params.arrivalAirport = arrivalAirport;
+        if (departureTime) params.departureTime = departureTime;
+        if (airline) params.airline = airline;
+
+        const response = await axiosConfig.post(`${USER_ENDPOINT}/getPlanes`, {
+            params,
+        });
+
+        return response.data;
     } catch (error) {
-      if (error.response) {
-        throw error.response.data;
-      }
-      return error.message;
+        if (error.response) {
+            throw error.response.data;
+        }
+        return error.message;
     }
-  };
+};
 
 
 const FlightService = {
