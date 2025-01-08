@@ -134,32 +134,32 @@ const FlightConfig = () => {
           <Typography variant="h6" gutterBottom>
             Hệ số của hạng vé
           </Typography>
-            <TableContainer component={Paper}>
-                <Table>
-                <TableHead>
-                    <TableRow>
-                    <TableCell>Loại vé</TableCell>
-                    <TableCell>Hệ số vé</TableCell>
-                    <TableCell>Điều chỉnh</TableCell>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Loại vé</TableCell>
+                  <TableCell>Hệ số vé</TableCell>
+                  <TableCell>Điều chỉnh</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.isArray(ticketTypes) &&
+                  ticketTypes.map((ticket) => (
+                    <TableRow key={ticket.id}>
+                      <TableCell>{ticket.typeName}</TableCell>
+                      <TableCell>{ticket.coefficient.$numberDecimal}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => handleEditOpen(ticket)}>
+                          <EditIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
-                </TableHead>
-                <TableBody>
-                    {Array.isArray(ticketTypes) &&
-                    ticketTypes.map((ticket) => (
-                        <TableRow key={ticket.id}>
-                        <TableCell>{ticket.typeName}</TableCell>
-                        <TableCell>{ticket.coefficient.$numberDecimal}</TableCell>
-                        <TableCell>
-                            <IconButton onClick={() => handleEditOpen(ticket)}>
-                            <EditIcon />
-                            </IconButton>
-                        </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-                </Table>
-            </TableContainer>
-      </CardContent>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
       </Card>
 
       {/* Edit Coefficient Dialog */}

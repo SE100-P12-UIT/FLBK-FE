@@ -144,7 +144,8 @@ const FlightManagement = () => {
             }
             console.log(payLoad);
             const createFlight = await FlightService.createFlight(payLoad);
-            if (createFlight.code === 201) {
+            console.log(createFlight);
+            if (createFlight.status === 201) {
                 //gọi lại api
                 const response = await FlightService.getAllFlights("", "asc", rowsPerPage, page + 1);
                 setData(response || {});
