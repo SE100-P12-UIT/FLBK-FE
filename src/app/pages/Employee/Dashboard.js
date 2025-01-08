@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import Revenue from '../Admin/Revenue';
 
 
 
@@ -111,6 +112,7 @@ function DemoPageContent({ pathname }) {
       {pathname === "/Lichchuyenbay" ? (<FlightManagement />) : <></>}
       {pathname === "/Ghinhandatve" ? (<VerifyTickets />) : <></>}
       {pathname === "/Ghinhanhuyve" ? (<CancelTickets />) : <></>}
+      {pathname === "/LapBaoCao" ? <Revenue /> : <></>}
       {/* <Typography>Dashboard content for {pathname}</Typography> */}
     </Box>
   );
@@ -161,7 +163,7 @@ function Dashboard(props) {
       icon: <DeleteForeverIcon />,
     },
     {
-      segment: 'Lapbaocao',
+      segment: 'LapBaoCao',
       title: 'Lập báo cáo',
       icon: <BarChartIcon />,
     },

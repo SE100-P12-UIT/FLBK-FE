@@ -21,6 +21,7 @@ import CustomerList from "./CustomerList";
 import EmployeeList from "./EmployeeList";
 import FlightManagement from "./FlightManagement";
 import PlaneList from "./PlaneList";
+import Revenue from "./Revenue";
 
 const NAVIGATION = [
   {
@@ -49,7 +50,7 @@ const NAVIGATION = [
     icon: <FlightIcon />,
   },
   {
-    segment: "Lapbaocao",
+    segment: "LapBaoCao",
     title: "Lập báo cáo",
     icon: <BarChartIcon />,
   },
@@ -149,6 +150,7 @@ function DemoPageContent({ pathname }) {
       {pathname === "/QuanLyNhanVien" ? <EmployeeList /> : <></>}
       {pathname === "/QuanLyChuyenBay" ? <FlightManagement /> : <></>}
       {pathname === "/QuanLyMayBay" ? <PlaneList /> : <></>}
+      {pathname === "/LapBaoCao" ? <Revenue /> : <></>}
       {/* <Typography>Dashboard content for {pathname}</Typography> */}
     </Box>
   );
