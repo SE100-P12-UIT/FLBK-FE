@@ -21,6 +21,7 @@ import CustomerList from "./CustomerList";
 import EmployeeList from "./EmployeeList";
 import FlightManagement from "./FlightManagement";
 import PlaneList from "./PlaneList";
+import RulesManagement from "./RulesManagement";
 
 const NAVIGATION = [
   {
@@ -149,6 +150,7 @@ function DemoPageContent({ pathname }) {
       {pathname === "/QuanLyNhanVien" ? <EmployeeList /> : <></>}
       {pathname === "/QuanLyChuyenBay" ? <FlightManagement /> : <></>}
       {pathname === "/QuanLyMayBay" ? <PlaneList /> : <></>}
+      {pathname === "/QuanLyQuyDinh" ? <RulesManagement /> : <></>}
       {/* <Typography>Dashboard content for {pathname}</Typography> */}
     </Box>
   );
