@@ -146,9 +146,9 @@ const FlightConfig = () => {
                 <TableBody>
                     {Array.isArray(ticketTypes) &&
                     ticketTypes.map((ticket) => (
-                        <TableRow key={ticket._id}>
+                        <TableRow key={ticket.id}>
                         <TableCell>{ticket.typeName}</TableCell>
-                        <TableCell>{ticket.coefficient}</TableCell>
+                        <TableCell>{ticket.coefficient.$numberDecimal}</TableCell>
                         <TableCell>
                             <IconButton onClick={() => handleEditOpen(ticket)}>
                             <EditIcon />
