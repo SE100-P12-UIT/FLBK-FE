@@ -173,7 +173,7 @@ const FlightConfig = () => {
             onChange={(e) =>
               setCurrentTicketType({
                 ...currentTicketType,
-                coefficient: { $numberDecimal: e.target.value },
+                coefficient: parseFloat(e.target.value),
               })
             }
             fullWidth
