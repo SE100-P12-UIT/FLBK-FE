@@ -40,9 +40,9 @@ const FlightConfig = () => {
         setTicketTypes(response.results || []); // Assuming `results` contains the array
         setMinDuration(45); // Example default value for minimum flight duration
         setLoading(false);
-      } catch (err) {
-        console.error("Failed to fetch ticket types", err);
-        setError("Unable to fetch ticket types");
+      } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+        setError("Không thể tải dữ liệu");
         setLoading(false);
       }
     };
@@ -72,9 +72,9 @@ const FlightConfig = () => {
         )
       );
       handleEditClose();
-    } catch (err) {
-      console.error("Failed to update ticket type coefficient", err);
-      alert("Failed to update coefficient. Please try again.");
+    } catch (error) {
+      console.error("Cập nhật hệ số bị lỗi", error);
+      alert("Cập nhật hệ số bị lỗi. Xin vui lòng thử lại.");
     }
   };
 
@@ -94,9 +94,9 @@ const FlightConfig = () => {
     <Box sx={{ padding: 4 }}>
       {/* Header */}
       <Box sx={{ borderBottom: "1px solid #ddd", marginBottom: 2 }}>
-        <Typography variant="h4">Rules Management</Typography>
+        <Typography variant="h4">Quản lý các quy định</Typography>
         <Typography variant="body2">
-          Manage minimum flight duration and ticket type coefficients below.
+          Chỉnh sửa quy định về thời gian bay tối thiểu và hệ số của hạng vé tại đây.
         </Typography>
       </Box>
 
@@ -168,7 +168,7 @@ const FlightConfig = () => {
         <DialogContent>
           <TextField
             type="number"
-            label="Coefficient"
+            label="Hệ số"
             value={currentTicketType.coefficient || ""}
             onChange={(e) =>
               setCurrentTicketType({
