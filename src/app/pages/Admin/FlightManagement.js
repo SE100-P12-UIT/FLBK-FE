@@ -250,7 +250,7 @@ const FlightManagement = () => {
                     flight.id === flightData.id ? { ...flight, ...updatedFlight } : flight
                 ),
             }));
-            toast.success("Sửa chuyến bay thành công");
+            
             // Đóng hộp thoại chỉnh sửa
             handleEditDialogClose();
         } catch (error) {
@@ -352,15 +352,15 @@ const FlightManagement = () => {
                 />
             </Box>
             <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
-                <Table sx={{ borderBottom: '1px solid #ddd', whiteSpace: 'nowrap' }}>
+                <Table sx={{ borderBottom: '1px solid #ddd', whiteSpace: 'break-spaces' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Số thứ tự</TableCell>
+                            <TableCell>STT</TableCell>
                             <TableCell>Tên chuyến bay</TableCell>
                             <TableCell>Điểm đi</TableCell>
                             <TableCell>Điểm đến</TableCell>
                             <TableCell>Thời gian khởi hành</TableCell>
-                            <TableCell>Thời gian bay dự kiến</TableCell>
+                            <TableCell>Thời gian bay {"\n"}dự kiến</TableCell>
                             <TableCell>Giá vé</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
