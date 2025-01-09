@@ -1,6 +1,7 @@
+import { Box, Button, Card, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab, Box, Typography, Button, Card } from "@mui/material";
 import { useSelector } from "react-redux";
+import UserService from "../../../services/userService";
 import BookingHistory from "./BookingHistory";
 
 const TabSection = () => {
@@ -16,12 +17,36 @@ const TabSection = () => {
         return isoString.replace(/Z$/, '').slice(0, 10);
     };
 
+    const getDiscountCoefficient = (point) => {
+        if (point < 5000000)
+            return 1;
+        if (point < 10000000)
+            return 0.95;
+        if (point < 15000000)
+            return 0.90;
+        if (point < 20000000)
+            return 0.85;
+        if (point >= 20000000)
+            return 0.8;
+
+    };
 
     const data = useSelector((state) => state.user.user)
     useEffect(() => {
-        setuser(data);
-        console.log(data);
-    }, [data])
+        
+        const fetchData = async () => {
+            try {
+                const userData = await UserService.getUserById(data.id);
+                console.log("api data: ", userData);
+                
+                setuser(userData);
+            } catch (error) {
+                console.log(error);
+                
+            }
+        }
+        fetchData();
+    }, [data.id])
 
 
     const [user, setuser] = useState({
@@ -101,6 +126,14 @@ const TabSection = () => {
                                 </Typography>
                                 <Typography variant="body2" sx={{ pl: 2 }}>
                                     {convertToDateTimeLocal(user.dateOfBirth)}
+                                </Typography>
+                            </Box>
+                            <Box sx={{ mb: 2 }}>
+                                <Typography variant="h6" sx={{ pb: 1, pl: 2 }}>
+                                    Hiện bạn đã tích được số điểm giảm giá:
+                                </Typography>
+                                <Typography variant="body2" sx={{ pl: 2 }}>
+                                    {user?.point || 0} | Tương đương giảm giá: { Math.round((1 - getDiscountCoefficient(user?.point || 0)) * 100) || 0} %
                                 </Typography>
                             </Box>
                             <Button variant="contained" color="primary">

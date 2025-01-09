@@ -9,11 +9,12 @@ import {
   Box,
   Breadcrumbs,
   Button,
+  Checkbox,
   Divider,
   Link,
   Radio,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
@@ -30,19 +31,40 @@ import TicketTypeService from "../../services/ticketTypeService";
 import BambooAirways from "./../../assets/images/Bamboo.png";
 import VietJet from "./../../assets/images/VJet.png";
 import VietnamAirlines from "./../../assets/images/VNAir.png";
+import { useSelector } from "react-redux";
+import UserService from "../../services/userService";
 
 function BookingDetail() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { flightData /* , planeData */ } = location.state || {}; // Comment because of unnecessary data without usage will cause error in deployment
-  const userData = JSON.parse(localStorage.getItem("userInfo")); // Thông tin người đặt vé - dùng cho payload
+  const { flightData /* , planeData */ } = location.state || {}; // Thông tin người đặt vé - dùng cho payload
   const [passengerCount, setPassengerCount] = useState(1);
   const [passengers, setPassengers] = useState([
     { title: "Ông", name: "", dateOfBirth: null },
   ]);
+  const [userData, setuser] = useState({});
+
+  const data = useSelector((state) => state.user.user)
+    useEffect(() => {
+        
+        const fetchData = async () => {
+            try {
+                const userData = await UserService.getUserById(data.id);
+                console.log("api data: ", userData);
+                
+                setuser(userData);
+            } catch (error) {
+                console.log(error);
+                
+            }
+        }
+        fetchData();
+    }, [data.id])
   const [seatType, setSeatType] = useState("common");
   const [coefficient, setCoefficient] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [isDiscountSelected, setIsDiscountSelected] = useState(false);
+
   console.log("Passengers Data: ", passengers);
 
   const passengerOptions = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -94,16 +116,35 @@ function BookingDetail() {
     setPassengers(updatedPassengers);
   };
 
+  const handleDiscountCheck = () => {
+    setIsDiscountSelected(!isDiscountSelected);
+  };
+
   const convertToDateTimeLocal = (isoString) => {
     // Bỏ phần múi giờ và cắt đến "yyyy-MM-ddThh:mm"
     return isoString ? isoString.replace(/Z$/, "").slice(0, 16) : "";
   };
 
   // Calculate total price
+  const getDiscountCoefficient = (point) => {
+    if (point < 5000000) return 1;
+    if (point < 10000000) return 0.95;
+    if (point < 15000000) return 0.9;
+    if (point < 20000000) return 0.85;
+    if (point >= 20000000) return 0.8;
+  };
   const basePrice = parseFloat(flightData?.flightData.price || "240");
 
-  const total = basePrice * coefficient * passengerCount;
-  const ticketPrice = basePrice * coefficient;
+  const total = isDiscountSelected
+    ? basePrice *
+      coefficient *
+      getDiscountCoefficient(userData?.point || 0) *
+      passengerCount
+    : basePrice * coefficient * passengerCount;
+  const ticketPrice = isDiscountSelected
+    ? basePrice * coefficient * getDiscountCoefficient(userData?.point || 0)
+    : basePrice * coefficient;
+
   const formatCurrency = (amount) => {
     if (typeof amount !== "number") {
       return "Số tiền không hợp lệ";
@@ -276,7 +317,7 @@ function BookingDetail() {
           <Link
             underline="hover"
             color="inherit"
-            onClick={()=>navigate("/search")}
+            onClick={() => navigate("/search")}
             sx={{ color: "#112211" }}
           >
             Tìm chuyến bay
@@ -284,7 +325,7 @@ function BookingDetail() {
           <Link
             underline="hover"
             color="inherit"
-            onClick={()=>navigate("/booking")}
+            onClick={() => navigate("/booking")}
             sx={{ color: "#112211" }}
           >
             Đặt vé
@@ -327,7 +368,9 @@ function BookingDetail() {
               </Typography>
               <Typography variant="caption">
                 Khởi hành:{" "}
-                {formatDateTime(convertToDateTimeLocal(flightData?.flightData.departureTime)) || "N/A"}
+                {formatDateTime(
+                  convertToDateTimeLocal(flightData?.flightData.departureTime)
+                ) || "N/A"}
               </Typography>
             </Box>
             <Box>
@@ -695,7 +738,9 @@ function BookingDetail() {
               sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
             >
               <Typography>Giá vé</Typography>
-              <Typography>{formatCurrency(flightData?.flightData.price)}</Typography>
+              <Typography>
+                {formatCurrency(flightData?.flightData.price)}
+              </Typography>
             </Box>
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
@@ -703,10 +748,28 @@ function BookingDetail() {
               <Typography>Số lượng</Typography>
               <Typography>{passengerCount}</Typography>
             </Box>
-            {/* <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-              <Typography>Thuế và phí</Typography>
-              <Typography>{flightData?.flightData.price * 0.15}</Typography>
-            </Box> */}
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+            >
+              <Typography>Áp dụng giảm giá</Typography>
+              <Checkbox
+                checked={isDiscountSelected}
+                onChange={() => handleDiscountCheck()}
+              ></Checkbox>
+            </Box>
+            {isDiscountSelected ? (
+              <Box>
+                <Typography variant="body2" sx={{ pl: 2 }}>
+                  Giảm giá:{" "}
+                  {Math.round(
+                    (1 - getDiscountCoefficient(userData?.point || 0)) * 100
+                  ) || 0}{" "}
+                  %
+                </Typography>
+              </Box>
+            ) : (
+              <></>
+            )}
             <Box
               sx={{
                 display: "flex",
@@ -718,7 +781,7 @@ function BookingDetail() {
             >
               <Typography fontWeight="bold">Tổng</Typography>
               <Typography fontWeight="bold">
-                {loading ? ". . ." : formatCurrency(total || 0) }
+                {loading ? ". . ." : formatCurrency(total || 0)}
               </Typography>
             </Box>
 

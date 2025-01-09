@@ -96,6 +96,7 @@ export default function SignUpCard() {
       phoneNumber: formData.phone,
       dateOfBirth: birthDate ? dayjs(birthDate).format("YYYY-MM-DD") : "",
       citizenId: formData.cccd,
+      point: 0,
       address: {
         district: address.district,
         province: address.province,
