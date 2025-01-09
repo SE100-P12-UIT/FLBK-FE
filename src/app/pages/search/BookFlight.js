@@ -4,10 +4,10 @@ import {
   Autocomplete,
   Box,
   Button,
+  Checkbox,
   FormControlLabel,
   FormGroup,
   Grid,
-  Radio,
   TextField,
   Typography
 } from "@mui/material";
@@ -49,7 +49,7 @@ const FlightSearch = () => {
   const [flightDateValue, setFlightDate] = useState(flightDate || "");
 
 
-  const [selectedAirlines, setSelectedAirlines] = useState("");
+  const [selectedAirlines, setSelectedAirlines] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState(flights);
   const [filters, setFilters] = useState({});
 
@@ -77,7 +77,11 @@ const FlightSearch = () => {
   // }
 
   const handleAirlineChange = (airline) => {
-    setSelectedAirlines(airline);
+    setSelectedAirlines((prev) =>
+      prev.includes(airline)
+        ? prev.filter((a) => a !== airline)
+        : [...prev, airline]
+    );
   };
 
   // Re-filter flights when filters change
@@ -98,9 +102,33 @@ const FlightSearch = () => {
     departureValue,
     destinationValue,
     flightDateValue,
-
     selectedAirlines,
   ]);
+
+  useEffect(() => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const convertToUTCISOString = (date) => {
+       // Lấy giờ UTC từ đối tượng Date
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+
+  // Kết hợp thành chuỗi ISO với múi giờ +00:00
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}+00:00`;
+    };
+    console.log(convertToUTCISOString(today));
+    
+    try {
+      const response = FlightService.getFlightByDepartureTime(convertToUTCISOString(today));
+      console.log(response.data);
+    } catch (error) {
+      toast.error(error);
+    }
+  },[])
 
 
   const getAirlineLogo = (airline) => {
@@ -380,7 +408,7 @@ const FlightSearch = () => {
                 <FormControlLabel
                   key={airline}
                   control={
-                    <Radio
+                    <Checkbox
                       checked={selectedAirlines.includes(airline)}
                       onChange={() => handleAirlineChange(airline)}
                     />

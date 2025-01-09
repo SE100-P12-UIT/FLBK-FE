@@ -47,6 +47,18 @@ const createFlight = async (flight) => {
     }
 }
 
+const getFlightByDepartureTime = async (date) => {
+    try {
+        const response = await axiosConfig.get(`${USER_ENDPOINT}/getFlightByDepartureTime/${date}`);
+        return response;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+}
+
 const deleteFlightById = async (id) => {
     try {
         const response = await axiosConfig.delete(`${USER_ENDPOINT}/${id}`);
@@ -89,6 +101,7 @@ const FlightService = {
     getAllFlights,
     createFlight,
     deleteFlightById,
+    getFlightByDepartureTime,
 };
 
 export default FlightService;
