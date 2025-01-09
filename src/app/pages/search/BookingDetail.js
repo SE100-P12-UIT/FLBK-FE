@@ -94,6 +94,11 @@ function BookingDetail() {
     setPassengers(updatedPassengers);
   };
 
+  const convertToDateTimeLocal = (isoString) => {
+    // Bỏ phần múi giờ và cắt đến "yyyy-MM-ddThh:mm"
+    return isoString ? isoString.replace(/Z$/, "").slice(0, 16) : "";
+  };
+
   // Calculate total price
   const basePrice = parseFloat(flightData?.flightData.price || "240");
 
@@ -322,7 +327,7 @@ function BookingDetail() {
               </Typography>
               <Typography variant="caption">
                 Khởi hành:{" "}
-                {formatDateTime(flightData?.flightData.departureTime) || "N/A"}
+                {formatDateTime(convertToDateTimeLocal(flightData?.flightData.departureTime)) || "N/A"}
               </Typography>
             </Box>
             <Box>

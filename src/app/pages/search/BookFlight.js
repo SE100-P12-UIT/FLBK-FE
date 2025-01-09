@@ -173,6 +173,11 @@ const FlightSearch = () => {
     return `${hours}h ${minutes}m`; // Example output: "2h 30m"
   };
 
+  const convertToDateTimeLocal = (isoString) => {
+    // Bỏ phần múi giờ và cắt đến "yyyy-MM-ddThh:mm"
+    return isoString ? isoString.replace(/Z$/, "").slice(0, 16) : "";
+  };
+
   // const calculateArrivalTime = (departureTime, duration) => {
   //   const departureDate = new Date(departureTime);
   //   const arrivalDate = new Date(departureDate.getTime() + duration * 60000); // Convert duration from minutes to milliseconds
@@ -479,7 +484,7 @@ const FlightSearch = () => {
                         Khởi hành:
                       </Typography>
                       <Typography variant="body1">
-                        {formatDateTime(flight.departureTime) }
+                        {formatDateTime(convertToDateTimeLocal(flight.departureTime)) }
                       </Typography>
                       <Typography variant="h6">
                         Điểm đi:
