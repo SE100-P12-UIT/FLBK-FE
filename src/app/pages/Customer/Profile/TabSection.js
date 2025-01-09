@@ -133,7 +133,7 @@ const TabSection = () => {
                                     Hiện bạn đã tích được số điểm giảm giá:
                                 </Typography>
                                 <Typography variant="body2" sx={{ pl: 2 }}>
-                                    {user?.point || 0} | Tương đương giảm giá: { Math.round((1 - getDiscountCoefficient(user?.point || 0)) * 100) || 0} %
+                                    {Math.round(user?.point) || 0} | Tương đương giảm giá: { Math.round((1 - getDiscountCoefficient(user?.point || 0)) * 100) || 0} %
                                 </Typography>
                             </Box>
                             <Button variant="contained" color="primary">
